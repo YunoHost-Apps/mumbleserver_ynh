@@ -3,7 +3,7 @@
     "id": "mumbleserver",
     "description": {
         "en": "Mumble is an open source, low-latency, high quality voice chat software primarily intended for use while gaming.",
-        "fr": "Mumbleest un logiciel libre de voix sur IP (VoIP), son principal usage étant la communication pendant les parties de jeux en réseau."
+        "fr": "Mumble est un logiciel libre de voix sur IP (VoIP), son principal usage étant la communication pendant les parties de jeux en réseau."
     },
     "developer": {
         "name": "Thorvald Natvig",
@@ -53,13 +53,13 @@
                     "fr": "Entrez un port pour votre serveur. Laissez par défaut si vous ne voulez pas en changer"
                 },
                 "example": "64738",
-                "default": "64738'"
+                "default": "64738"
             },
             {
                 "name": "registername",
                 "ask": {
                     "en": "Choose a name for the root channel",
-                    "fr": "Entrez un nom pour le channel racines"
+                    "fr": "Entrez un nom pour le channel racine"
                 },
                 "example": "Root",
                 "default": "Root'"
