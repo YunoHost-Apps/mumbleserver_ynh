@@ -2,5 +2,5 @@
 
 app=mumbleserver
 $port=$(sudo yunohost app setting $app port)
-sudo apt-get autoremove -y mumble-server
+sudo apt-get autoremove -y mumble-server > /dev/null 2>&1
 sudo yunohost firewall disallow Both $port > /dev/null 2>&1
