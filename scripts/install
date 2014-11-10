@@ -1,6 +1,8 @@
 #!/bin/bash
-exec > >(tee /tmp/mumble-install.log)
-exec 2>&1
+
+#debug commands
+#exec > >(tee /tmp/mumble-install.log)
+#exec 2>&1
 app=mumbleserver
 
 # Retrieve arguments
@@ -11,21 +13,14 @@ port=$4
 registerName=$5
 
 mumble_conf=/etc/mumble-server.ini
-# Check user
-sudo yunohost user list --json | grep -q "\"username\": \"$admin\""
-if [[ ! $? -eq 0 ]]; then
-echo "Wrong user"
-	exit 1
-fi
+
 # Check port availability
 sudo yunohost app checkport $port
 if [[ ! $? -eq 0 ]]; then
 	exit 1
 fi
 
-
 # Save app settings
-sudo yunohost app setting $app admin -v "$admin"
 sudo yunohost app setting $app port -v "$port"
 
 # install via apt-get
