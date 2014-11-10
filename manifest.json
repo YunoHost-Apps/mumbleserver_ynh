@@ -45,14 +45,13 @@
                     "en": "Choose a port for your server. Let as default if you don't want to change it",
                     "fr": "Entrez un port pour votre serveur. Laissez par défaut si vous ne voulez pas en changer"
                 },
-                "example": "64738",
-                "default": "64738"
+                "example": "64738"
             },
             {
                 "name": "registername",
                 "ask": {
-                    "en": "Choose a name for the root channel",
-                    "fr": "Entrez un nom pour le channel racine"
+                    "en": "Choose a name for the root channel (your mumble server name)",
+                    "fr": "Entrez un nom pour le channel racine (le nom de votre serveur mumble)"
                 },
                 "example": "Root",
                 "default": "Root"
