@@ -7,4 +7,4 @@ SETUP
 ======
 -install it via github
 
--do like said here : http://wiki.mumble.info/wiki/Murmurguide#Connecting_to_Murmur_Server
+-do like said here to add the first admin user: http://wiki.mumble.info/wiki/Murmurguide#Connecting_to_Murmur_Server
