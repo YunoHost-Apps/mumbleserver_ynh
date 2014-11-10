@@ -4,12 +4,11 @@ exec 2>&1
 app=mumbleserver
 
 # Retrieve arguments
-domain=$1
-admin=$2
-server_password=$3
-welcometext=$4
-port=$5
-registerName=$6
+admin=$1
+server_password=$2
+welcometext=$3
+port=$4
+registerName=$5
 
 mumble_conf=/etc/mumble-server.ini
 # Check user

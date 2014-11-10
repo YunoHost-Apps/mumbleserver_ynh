@@ -15,14 +15,6 @@
     "arguments": {
         "install" : [
             {
-                "name": "domain",
-                "ask": {
-                    "en": "Choose a domain for your Mumble Server",
-                    "fr": "Choisissez un domaine pour votre serveur Mumble"
-                },
-                "example": "domain.org"
-            },
-            {
                 "name": "admin",
                 "ask": {
                     "en": "Choose an admin user for Mumble Server",
