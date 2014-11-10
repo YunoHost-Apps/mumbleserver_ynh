@@ -15,14 +15,6 @@
     "arguments": {
         "install" : [
             {
-                "name": "admin",
-                "ask": {
-                    "en": "Choose an admin user for Mumble Server",
-                    "fr": "Choisissez un administrateur pour le serveur Mumble"
-                },
-                "example": "homer"
-            },
-            {
                 "name": "password",
                 "ask": {
                     "en": "Choose a password for your mumble server. This password is given to persons who want to join",
