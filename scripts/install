@@ -3,7 +3,7 @@
 #debug commands
 #exec > >(tee /tmp/mumble-install.log)
 #exec 2>&1
-ls pwd
+pwd
 app=mumbleserver
 
 # Retrieve arguments
