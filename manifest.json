@@ -1,0 +1,71 @@
+{
+    "name": "Mumble Server",
+    "id": "mumbleserver",
+    "description": {
+        "en": "Mumble is an open source, low-latency, high quality voice chat software primarily intended for use while gaming.",
+        "fr": "Mumbleest un logiciel libre de voix sur IP (VoIP), son principal usage étant la communication pendant les parties de jeux en réseau."
+    },
+    "developer": {
+        "name": "Thorvald Natvig",
+        "email": "BSD",
+        "url": "http://www.mumble.info"
+    },
+    "multi_instance": "false",
+    "license": "Beerware",
+    "arguments": {
+        "install" : [
+            {
+                "name": "domain",
+                "ask": {
+                    "en": "Choose a domain for your Mumble Server",
+                    "fr": "Choisissez un domaine pour votre serveur Mumble"
+                },
+                "example": "domain.org"
+            },
+            {
+                "name": "admin",
+                "ask": {
+                    "en": "Choose an admin user for Mumble Server",
+                    "fr": "Choisissez un administrateur pour le serveur Mumble"
+                },
+                "example": "homer"
+            },
+            {
+                "name": "password",
+                "ask": {
+                    "en": "Choose a password for your mumble server. Type nothing if you don't want to set a password",
+                    "fr": "Choisissez un mot de passe pour votre serveur Mumble. Ne rien rentrer si vous ne souhaitez pas mettre de mot de passe"
+                },
+                "example": "super_secret_password"
+            },
+            {
+                "name": "welcometext",
+                "ask": {
+                    "en": "Choose a welcome text for your server",
+                    "fr": "Choisissez un message de bienvenue pour le serveur"
+                },
+                "example": "Welcome to my mumble server"
+            },
+            {
+                "name": "port",
+                "ask": {
+                    "en": "Choose a port for your server. Let as default if you don't want to change it",
+                    "fr": "Entrez un port pour votre serveur. Laissez par défaut si vous ne voulez pas en changer"
+                },
+                "example": "64738",
+                "default": "64738'"
+            },
+            {
+                "name": "registername",
+                "ask": {
+                    "en": "Choose a name for the root channel",
+                    "fr": "Entrez un nom pour le channel racines"
+                },
+                "example": "Root",
+                "default": "Root'"
+            },
+
+
+        ]
+    }
+}
