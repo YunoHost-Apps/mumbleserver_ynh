@@ -13,7 +13,7 @@ registerName=$6
 
 mumble_conf=/etc/mumble-server.ini
 # Check user
-sudo yunohost user list --json | grep -q "\"username\": \"$user\""
+sudo yunohost user list --json | grep -q "\"username\": \"$admin\""
 if [[ ! $? -eq 0 ]]; then
 echo "Wrong user"
 	exit 1
