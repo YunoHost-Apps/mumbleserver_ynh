@@ -31,7 +31,7 @@ sudo apt-get install -y mumble-server > /dev/null 2>&1
 sudo sed -i "s/welcometext=.*/welcometext=$welcometext/g" $mumble_conf
 sudo sed -i "s/port=.*/port=$port/g" $mumble_conf
 sudo sed -i "s/serverpassword=.*/serverpassword=$server_password/g" $mumble_conf
-sudo sed -i "s/*registerName=.*/registerName=$registerName/g" $mumble_conf
+sudo sed -i "s/#registerName=.*/registerName=$registerName/g" $mumble_conf
 
 #open port in firewall
 sudo yunohost firewall allow Both $port > /dev/null 2>&1
