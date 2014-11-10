@@ -6,12 +6,12 @@
         "fr": "Mumble est un logiciel libre de voix sur IP (VoIP), son principal usage étant la communication pendant les parties de jeux en réseau."
     },
     "developer": {
-        "name": "Thorvald Natvig",
-        "email": "BSD",
+        "name": "Matlink",
+        "email": "matlink@matlink.fr",
         "url": "http://www.mumble.info"
     },
     "multi_instance": "false",
-    "license": "Beerware",
+    "license": "BSD",
     "arguments": {
         "install" : [
             {
@@ -25,8 +25,17 @@
             {
                 "name": "password",
                 "ask": {
-                    "en": "Choose a password for your mumble server. Type nothing if you don't want to set a password",
-                    "fr": "Choisissez un mot de passe pour votre serveur Mumble. Ne rien rentrer si vous ne souhaitez pas mettre de mot de passe"
+                    "en": "Choose a password for your mumble server. This password is given to persons who want to join",
+                    "fr": "Choisissez un mot de passe pour votre serveur Mumble. Ce mot de passe sera donné aux personnes qui veulent rejoindre le serveur"
+                },
+                "example": "super_secret_password",
+                "default": ""
+            },
+            {
+                "name": "su_password",
+                "ask": {
+                    "en": "Choose a password for the SuperUser. This is different from the server password and allows you to create the first admin.",
+                    "fr": "Choisissez un mot de passe pour le SuperUser. Il est différent du mot de passe du serveur est permet de créer le premier Administrateur."
                 },
                 "example": "super_secret_password"
             },

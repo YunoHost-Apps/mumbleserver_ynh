@@ -1,7 +1,7 @@
 mumble_yunohost
 ===============
 A yunohost compatible version of Mumble server (Murmur).
-This download it via the repository of debian and configures it with given settings.
+This downloads it via the repository of debian and configures it with given settings.
 
 SETUP
 ======
