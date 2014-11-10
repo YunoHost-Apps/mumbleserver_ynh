@@ -41,6 +41,8 @@ sudo sed -i "s/*serverpassword=.*/registerName=$registerName/g" $mumble_conf
 #generating random password for super-user
 su_passwd=$(dd if=/dev/urandom bs=1 count=200 2> /dev/null | tr -c -d '[A-Za-z0-9]' | sed -n 's/\(.\{24\}\).*/\1/p')
 
+#save superuser password
+sudo yunohost app setting $app superuser_password -v "$su_passwd"
 #open port in firewall
 sudo yunohost firewall allow Both $port > /dev/null 2>&1
 

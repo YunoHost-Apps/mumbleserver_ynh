@@ -54,7 +54,7 @@
                     "fr": "Entrez un nom pour le channel racine"
                 },
                 "example": "Root",
-                "default": "Root'"
+                "default": "Root"
             }
 
 
