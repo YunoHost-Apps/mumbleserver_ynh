@@ -45,7 +45,8 @@
                     "en": "Choose a port for your server. Let as default if you don't want to change it",
                     "fr": "Entrez un port pour votre serveur. Laissez par défaut si vous ne voulez pas en changer"
                 },
-                "example": "64738"
+                "example": "64738",
+                "default": "64738"
             },
             {
                 "name": "registername",
