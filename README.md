@@ -1,4 +1,4 @@
-mumble_yunohost
+mumbleserver_ynh
 ===============
 A yunohost compatible version of Mumble server (Murmur).
 This downloads it via the repository of debian and configures it with given settings.
