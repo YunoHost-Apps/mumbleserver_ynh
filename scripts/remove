@@ -1,7 +1,11 @@
 #!/bin/bash
 
 app=mumbleserver
+#getting port used by mumble to close it
 port=$(sudo yunohost app setting $app port)
+#uninstall mumble and its dependencies
 sudo apt-get autoremove -y mumble-server > /dev/null 2>&1
+#close ports
 sudo yunohost firewall disallow Both $port > /dev/null 2>&1
+#removing config file 
 sudo rm -f /etc/mumble-server.ini
