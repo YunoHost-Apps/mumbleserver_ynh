@@ -45,6 +45,7 @@ sudo sed -i "s/#registerName=.*/registerName=$registerName/g" $mumble_conf
 
 #open port in firewall
 sudo yunohost firewall allow Both $port > /dev/null 2>&1
+sudo yunohost firewall allow --ipv6 Both $port > /dev/null 2>&1
 
 #starting mumble server 
 sudo /etc/init.d/mumble-server start

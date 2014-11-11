@@ -15,7 +15,7 @@
     "arguments": {
         "install" : [
             {
-                "name": "password",
+                "name": "server_login_password",
                 "ask": {
                     "en": "Choose a password for your mumble server. This password is given to persons who want to join",
                     "fr": "Choisissez un mot de passe pour votre serveur Mumble. Ce mot de passe sera donné aux personnes qui veulent rejoindre le serveur"
@@ -24,7 +24,7 @@
                 "default": ""
             },
             {
-                "name": "su_password",
+                "name": "password",
                 "ask": {
                     "en": "Choose a password for the SuperUser. This is different from the server password and allows you to create the first admin.",
                     "fr": "Choisissez un mot de passe pour le SuperUser. Il est différent du mot de passe du serveur est permet de créer le premier Administrateur."
