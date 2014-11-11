@@ -55,3 +55,5 @@ sudo murmurd -supw $su_passwd
 #restart mumble server
 sudo /etc/init.d/mumble-server restart
 
+#adding mumble as a service
+sudo yunohost service add mumble-server -l /var/log/mumble-server/mumble-server.log
