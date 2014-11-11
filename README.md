@@ -9,4 +9,4 @@ SETUP
 
 -do like said here to add the first admin user: http://wiki.mumble.info/wiki/Murmurguide#Connecting_to_Murmur_Server
 
-email me at matlink@opmbx.org if you need something or to give me feedback about this app.
+email me at matlink@matlink.fr if you need something or to give me feedback about this app.
