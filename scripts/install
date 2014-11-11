@@ -35,6 +35,7 @@ sudo apt-get install -y mumble-server > /dev/null 2>&1
 #copying conf file
 sudo cp ../conf/mumble-server.ini $mumble_conf
 sudo chmod 660  $mumble_conf
+sudo chown :mumble-server $mumble_conf
 
 #configuring with given settings
 sudo sed -i "s/welcometext=.*/welcometext=$welcometext/g" $mumble_conf
