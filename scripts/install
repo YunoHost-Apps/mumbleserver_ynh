@@ -21,7 +21,7 @@ if [[ ! $? -eq 0 ]]; then
 fi
 
 #check if su_password is not empty
-if [[ -n "$su_passwd" ]]; then
+if [[ -z "$su_passwd" ]]; then
 	exit 1
 fi
 
