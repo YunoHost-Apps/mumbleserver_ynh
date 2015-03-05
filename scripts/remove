@@ -7,6 +7,7 @@ port=$(sudo yunohost app setting $app port)
 sudo apt-get autoremove -y mumble-server > /dev/null 2>&1
 #close ports
 sudo yunohost firewall disallow Both $port > /dev/null 2>&1
+sudo yunohost firewall disallow --ipv6 Both $port > /dev/null 2>&1
 #removing config file 
 sudo rm -f /etc/mumble-server.ini
 
