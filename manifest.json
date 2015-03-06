@@ -27,7 +27,7 @@
                 "name": "password",
                 "ask": {
                     "en": "Choose a password for the SuperUser. This is different from the server password and allows you to create the first admin.",
-                    "fr": "Choisissez un mot de passe pour le SuperUser. Il est différent du mot de passe du serveur est permet de créer le premier Administrateur."
+                    "fr": "Choisissez un mot de passe pour le SuperUser. Il est différent du mot de passe du serveur et permet de créer le premier Administrateur."
                 },
                 "example": "super_secret_password"
             },
