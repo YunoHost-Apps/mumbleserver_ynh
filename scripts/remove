@@ -11,5 +11,5 @@ sudo yunohost firewall disallow --ipv6 Both $port > /dev/null 2>&1
 #removing config file 
 sudo rm -f /etc/mumble-server.ini
 
-#removing mumble-server from services
-sudo yunohost services remove mumble-server
+# Remove mumble-server service
+sudo yunohost service remove mumble-server
