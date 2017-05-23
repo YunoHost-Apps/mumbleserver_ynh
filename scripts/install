@@ -31,21 +31,22 @@ fi
 # Save app settings
 ynh_app_setting_set $app port "$port"
 
-# install via apt-get
-sudo apt-get update > /dev/null 2>&1
-sudo apt-get install -y mumble-server > /dev/null 2>&1
+# Install Mumble Debian package via apt
+sudo apt update > /dev/null 2>&1
+sudo apt install -y mumble-server > /dev/null 2>&1
+
+# Configuring with given settings
+mumble_conf="../conf/mumble-server.ini"
+sudo sed -i "s/welcometext=.*/welcometext=$welcometext/g" $mumble_conf
+sudo sed -i "s/port=.*/port=$port/g" $mumble_conf
+sudo sed -i "s/serverpassword=.*/serverpassword=$server_password/g" $mumble_conf
+sudo sed -i "s/#registerName=.*/registerName=$registerName/g" $mumble_conf
 
 # Copying conf file
 mumble_conf="/etc/mumble-server.ini"
 sudo cp ../conf/mumble-server.ini $mumble_conf
 sudo chmod 660  $mumble_conf
 sudo chown :mumble-server $mumble_conf
-
-#configuring with given settings
-sudo sed -i "s/welcometext=.*/welcometext=$welcometext/g" $mumble_conf
-sudo sed -i "s/port=.*/port=$port/g" $mumble_conf
-sudo sed -i "s/serverpassword=.*/serverpassword=$server_password/g" $mumble_conf
-sudo sed -i "s/#registerName=.*/registerName=$registerName/g" $mumble_conf
 
 #open port in firewall
 sudo yunohost firewall allow Both $port > /dev/null 2>&1
