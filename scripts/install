@@ -48,17 +48,17 @@ sudo cp ../conf/mumble-server.ini $mumble_conf
 sudo chmod 660  $mumble_conf
 sudo chown :mumble-server $mumble_conf
 
-#open port in firewall
+# Open port in firewall
 sudo yunohost firewall allow Both $port > /dev/null 2>&1
-sudo yunohost firewall allow --ipv6 Both $port > /dev/null 2>&1
 
-#starting mumble server 
+# Start Mumble server
 sudo /etc/init.d/mumble-server start
 
-#setting super-user password
+# Set super-user password
 sudo murmurd -supw $su_passwd
-#restart mumble server
+
+# Restart Mumble server
 sudo /etc/init.d/mumble-server restart
 
-#adding mumble as a service
+# Add Mumble as a YunoHost service
 sudo yunohost service add mumble-server -l /var/log/mumble-server/mumble-server.log
