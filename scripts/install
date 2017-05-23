@@ -1,17 +1,18 @@
 #!/bin/bash
-
 #debug commands
 #exec > >(tee /tmp/mumble-install.log)
 #exec 2>&1
 
-app=mumbleserver
+# Exit on command errors and treat unset variables as an error
+set -eu
 
 # Retrieve arguments
-server_password=$1
-su_passwd=$2
-welcometext=$3
-port=$4
-registerName=$5
+app="mumbleserver"
+server_password=$YNH_APP_ARG_SERVER_LOGIN_PASSWORD
+su_passwd=$YNH_APP_ARG_PASSWORD
+welcometext=$YNH_APP_ARG_WELCOMETEXT
+port=$YNH_APP_ARG_PORT
+registerName=$YNH_APP_ARG_REGISTERNAME
 
 # Source YunoHost helpers
 source /usr/share/yunohost/helpers
