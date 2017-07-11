@@ -1,14 +1,23 @@
 #!/bin/bash
 
+# Exit and treat unset variables as an error
+set -u
+
+# Source YunoHost helpers
+source /usr/share/yunohost/helpers
+
 app=mumbleserver
-#getting port used by mumble to close it
-port=$(sudo yunohost app setting $app port)
-#uninstall mumble and its dependencies
-sudo apt-get autoremove -y mumble-server > /dev/null 2>&1
-#close ports
+
+# Getting port used by mumble to close it
+port=$(ynh_app_setting_get $app port)
+
+# Uninstall Mumble and its dependencies
+sudo apt autoremove -y mumble-server > /dev/null 2>&1
+
+# Close ports
 sudo yunohost firewall disallow Both $port > /dev/null 2>&1
-sudo yunohost firewall disallow --ipv6 Both $port > /dev/null 2>&1
-#removing config file 
+
+# Removing config file
 sudo rm -f /etc/mumble-server.ini
 
 # Remove mumble-server service

@@ -6,11 +6,14 @@
         "en": "Mumble is a libre, low-latency, high quality voice chat software primarily intended for use while gaming.",
         "fr": "Mumble est un logiciel libre de voix sur IP (VoIP), son principal usage étant la communication pendant les parties de jeux en réseau."
     },
-    "url": "http://mumble.info",
+    "url": "https://mumble.info",
     "license": "free",
     "maintainer": {
-        "name": "Matlink",
-        "email": "matlink@matlink.fr"
+        "name": "Moul",
+        "email": "moul@moul.re"
+    },
+    "requirements": {
+        "yunohost": ">> 2.4.0"
     },
     "multi_instance": false,
     "services": [
