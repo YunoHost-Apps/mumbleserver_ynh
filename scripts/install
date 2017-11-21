@@ -33,14 +33,14 @@ registerName=$YNH_APP_ARG_REGISTERNAME
 #=================================================
 
 # Check port availability
-yunohost app checkport $port
-if [[ ! $? -eq 0 ]]; then
-	ynh_die
+
+if [[ ! $(yunohost app checkport "$port") -eq 0 ]]; then
+	ynh_die "Port is not available"
 fi
 
 # Check if su_password is not empty
 if [[ -z "$su_passwd" ]]; then
-	ynh_die
+	ynh_die "Password is not set"
 fi
 
 #=================================================
@@ -48,8 +48,11 @@ fi
 #=================================================
 
 # Save app settings
-ynh_app_setting_set $app port "$port"
-
+ynh_app_setting_set "$app" port            "$port"
+ynh_app_setting_set "$app" server_password "$server_password"
+ynh_app_setting_set "$app" su_passwd       "$su_passwd"
+ynh_app_setting_set "$app" welcometext     "$welcometext"
+ynh_app_setting_set "$app" registerName    "$registerName"
 
 #=================================================
 # STANDARD MODIFICATIONS
@@ -58,16 +61,14 @@ ynh_app_setting_set $app port "$port"
 #=================================================
 
 # Open port in firewall
-yunohost firewall allow Both $port > /dev/null 2>&1
+yunohost firewall allow Both "$port"
 
 #=================================================
 # INSTALL DEPENDENCIES
 #=================================================
 
 # Install Mumble Debian package via apt
-apt update > /dev/null 2>&1
-apt install -y mumble-server > /dev/null 2>&1
-
+ynh_install_app_dependencies mumble-server
 
 #=================================================
 # SPECIFIC SETUP
@@ -77,21 +78,21 @@ apt install -y mumble-server > /dev/null 2>&1
 # TODO: clean this
 
 # Configuring with given settings
-mumble_conf="../conf/mumble-server.ini"
-sed -i "s/welcometext=.*/welcometext=$welcometext/" $mumble_conf
-sed -i "s/port=.*/port=$port/" $mumble_conf
-sed -i "s/serverpassword=.*/serverpassword=$server_password/" $mumble_conf
-sed -i "s/#registerName=.*/registerName=$registerName/" $mumble_conf
-
-# Copying conf file
 mumble_conf="/etc/mumble-server.ini"
-cp ../conf/mumble-server.ini $mumble_conf
+
+cp ../conf/mumble-server.ini "$mumble_conf"
+
+ynh_replace_string "__WELCOME__"  "$welcometext"     "$mumble_conf"
+ynh_replace_string "__PORT__"     "$port"            "$mumble_conf"
+ynh_replace_string "__SRV_PWD__"  "$server_password" "$mumble_conf"
+ynh_replace_string "__REGISTER__" "$registerName"    "$mumble_conf"
 
 #=================================================
 # STORE THE CHECKSUM OF THE CONFIG FILE
 #=================================================
 
 # TODO: add this checksum step
+ynh_store_file_checksum "$mumble_conf"
 
 #=================================================
 # Start services
@@ -101,7 +102,7 @@ cp ../conf/mumble-server.ini $mumble_conf
 /etc/init.d/mumble-server start
 
 # Set super-user password
-murmurd -ini $mumble_conf -supw $su_passwd
+murmurd -ini "$mumble_conf" -supw "$su_passwd"
 
 # Restart Mumble server
 /etc/init.d/mumble-server restart
@@ -112,8 +113,8 @@ murmurd -ini $mumble_conf -supw $su_passwd
 # SECURE FILES AND DIRECTORIES
 #=================================================
 
-chmod 660  $mumble_conf
-chown :mumble-server $mumble_conf
+chmod 660 "$mumble_conf"
+chown :mumble-server "$mumble_conf"
 
 #=================================================
 # ADVERTISE SERVICE IN ADMIN PANEL
