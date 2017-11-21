@@ -28,6 +28,10 @@ welcometext=$YNH_APP_ARG_WELCOMETEXT
 port=$YNH_APP_ARG_PORT
 registerName=$YNH_APP_ARG_REGISTERNAME
 
+#=================================================
+# CHECK IF THE APP CAN BE INSTALLED WITH THESE ARGS
+#=================================================
+
 # Check port availability
 yunohost app checkport $port
 if [[ ! $? -eq 0 ]]; then
@@ -39,12 +43,38 @@ if [[ -z "$su_passwd" ]]; then
 	ynh_die
 fi
 
+#=================================================
+# STORE SETTINGS FROM MANIFEST
+#=================================================
+
 # Save app settings
 ynh_app_setting_set $app port "$port"
+
+
+#=================================================
+# STANDARD MODIFICATIONS
+#=================================================
+# FIND AND OPEN A PORT
+#=================================================
+
+# Open port in firewall
+yunohost firewall allow Both $port > /dev/null 2>&1
+
+#=================================================
+# INSTALL DEPENDENCIES
+#=================================================
 
 # Install Mumble Debian package via apt
 apt update > /dev/null 2>&1
 apt install -y mumble-server > /dev/null 2>&1
+
+
+#=================================================
+# SPECIFIC SETUP
+#=================================================
+# mumble server conf.ini
+#=================================================
+# TODO: clean this
 
 # Configuring with given settings
 mumble_conf="../conf/mumble-server.ini"
@@ -56,20 +86,38 @@ sed -i "s/#registerName=.*/registerName=$registerName/" $mumble_conf
 # Copying conf file
 mumble_conf="/etc/mumble-server.ini"
 cp ../conf/mumble-server.ini $mumble_conf
-chmod 660  $mumble_conf
-chown :mumble-server $mumble_conf
 
-# Open port in firewall
-yunohost firewall allow Both $port > /dev/null 2>&1
+#=================================================
+# STORE THE CHECKSUM OF THE CONFIG FILE
+#=================================================
+
+# TODO: add this checksum step
+
+#=================================================
+# Start services
+#=================================================
 
 # Start Mumble server
 /etc/init.d/mumble-server start
 
 # Set super-user password
-murmurd -supw $su_passwd
+murmurd -ini $mumble_conf -supw $su_passwd
 
 # Restart Mumble server
 /etc/init.d/mumble-server restart
+
+#=================================================
+# GENERIC FINALIZATION
+#=================================================
+# SECURE FILES AND DIRECTORIES
+#=================================================
+
+chmod 660  $mumble_conf
+chown :mumble-server $mumble_conf
+
+#=================================================
+# ADVERTISE SERVICE IN ADMIN PANEL
+#=================================================
 
 # Add Mumble as a YunoHost service
 yunohost service add mumble-server -l /var/log/mumble-server/mumble-server.log
