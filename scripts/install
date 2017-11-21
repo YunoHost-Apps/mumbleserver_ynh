@@ -1,24 +1,35 @@
 #!/bin/bash
-#debug commands
-#exec > >(tee /tmp/mumble-install.log)
-#exec 2>&1
 
-# Exit on command errors and treat unset variables as an error
-set -eu
+#=================================================
+# GENERIC START
+#=================================================
+# IMPORT GENERIC HELPERS
+#=================================================
+
+source _common.sh
+source /usr/share/yunohost/helpers
+
+#=================================================
+# MANAGE SCRIPT FAILURE
+#=================================================
+
+# Exit if an error occurs during the execution of the script
+ynh_abort_if_errors
+
+#=================================================
+# RETRIEVE ARGUMENTS FROM THE MANIFEST
+#=================================================
 
 # Retrieve arguments
-app="mumbleserver"
+app=$YNH_APP_INSTANCE_NAME
 server_password=$YNH_APP_ARG_SERVER_LOGIN_PASSWORD
 su_passwd=$YNH_APP_ARG_PASSWORD
 welcometext=$YNH_APP_ARG_WELCOMETEXT
 port=$YNH_APP_ARG_PORT
 registerName=$YNH_APP_ARG_REGISTERNAME
 
-# Source YunoHost helpers
-source /usr/share/yunohost/helpers
-
 # Check port availability
-sudo yunohost app checkport $port
+yunohost app checkport $port
 if [[ ! $? -eq 0 ]]; then
 	ynh_die
 fi
@@ -32,33 +43,33 @@ fi
 ynh_app_setting_set $app port "$port"
 
 # Install Mumble Debian package via apt
-sudo apt update > /dev/null 2>&1
-sudo apt install -y mumble-server > /dev/null 2>&1
+apt update > /dev/null 2>&1
+apt install -y mumble-server > /dev/null 2>&1
 
 # Configuring with given settings
 mumble_conf="../conf/mumble-server.ini"
-sudo sed -i "s/welcometext=.*/welcometext=$welcometext/" $mumble_conf
-sudo sed -i "s/port=.*/port=$port/" $mumble_conf
-sudo sed -i "s/serverpassword=.*/serverpassword=$server_password/" $mumble_conf
-sudo sed -i "s/#registerName=.*/registerName=$registerName/" $mumble_conf
+sed -i "s/welcometext=.*/welcometext=$welcometext/" $mumble_conf
+sed -i "s/port=.*/port=$port/" $mumble_conf
+sed -i "s/serverpassword=.*/serverpassword=$server_password/" $mumble_conf
+sed -i "s/#registerName=.*/registerName=$registerName/" $mumble_conf
 
 # Copying conf file
 mumble_conf="/etc/mumble-server.ini"
-sudo cp ../conf/mumble-server.ini $mumble_conf
-sudo chmod 660  $mumble_conf
-sudo chown :mumble-server $mumble_conf
+cp ../conf/mumble-server.ini $mumble_conf
+chmod 660  $mumble_conf
+chown :mumble-server $mumble_conf
 
 # Open port in firewall
-sudo yunohost firewall allow Both $port > /dev/null 2>&1
+yunohost firewall allow Both $port > /dev/null 2>&1
 
 # Start Mumble server
-sudo /etc/init.d/mumble-server start
+/etc/init.d/mumble-server start
 
 # Set super-user password
-sudo murmurd -supw $su_passwd
+murmurd -supw $su_passwd
 
 # Restart Mumble server
-sudo /etc/init.d/mumble-server restart
+/etc/init.d/mumble-server restart
 
 # Add Mumble as a YunoHost service
-sudo yunohost service add mumble-server -l /var/log/mumble-server/mumble-server.log
+yunohost service add mumble-server -l /var/log/mumble-server/mumble-server.log

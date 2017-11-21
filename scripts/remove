@@ -1,9 +1,12 @@
 #!/bin/bash
 
-# Exit and treat unset variables as an error
-set -u
+#=================================================
+# GENERIC START
+#=================================================
+# IMPORT GENERIC HELPERS
+#=================================================
 
-# Source YunoHost helpers
+source _common.sh
 source /usr/share/yunohost/helpers
 
 app=mumbleserver
@@ -12,13 +15,13 @@ app=mumbleserver
 port=$(ynh_app_setting_get $app port)
 
 # Uninstall Mumble and its dependencies
-sudo apt autoremove -y mumble-server > /dev/null 2>&1
+apt autoremove -y mumble-server > /dev/null 2>&1
 
 # Close ports
-sudo yunohost firewall disallow Both $port > /dev/null 2>&1
+yunohost firewall disallow Both $port > /dev/null 2>&1
 
 # Removing config file
-sudo rm -f /etc/mumble-server.ini
+rm -f /etc/mumble-server.ini
 
 # Remove mumble-server service
-sudo yunohost service remove mumble-server
+yunohost service remove mumble-server

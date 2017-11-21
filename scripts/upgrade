@@ -1,4 +1,13 @@
 #!/bin/bash
 
-# Exit on command errors and treat unset variables as an error
-set -eu
+#=================================================
+# GENERIC START
+#=================================================
+# IMPORT GENERIC HELPERS
+#=================================================
+source _common.sh
+source /usr/share/yunohost/helpers
+
+ynh_abort_if_errors
+
+ynh_die "There is no upgrade yet"
