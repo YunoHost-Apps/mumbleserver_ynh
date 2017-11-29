@@ -32,9 +32,13 @@ registerName=$YNH_APP_ARG_REGISTERNAME
 # CHECK IF THE APP CAN BE INSTALLED WITH THESE ARGS
 #=================================================
 
+final_path=/var/www/$app
+test ! -e "$final_path" || ynh_die "This path already contains a folder"
+
 # Check port availability
 
-if [[ ! $(yunohost app checkport "$port") -eq 0 ]]; then
+yunohost app checkport "$port"
+if [[ ! $? -eq 0 ]]; then
 	ynh_die "Port is not available"
 fi
 
@@ -75,37 +79,41 @@ ynh_install_app_dependencies mumble-server
 #=================================================
 # mumble server conf.ini
 #=================================================
-# TODO: clean this
+
+mkdir -p "$final_path"
+ynh_app_setting_set "$app" final_path "$final_path"
 
 # Configuring with given settings
-mumble_conf="/etc/mumble-server.ini"
+mumble_conf="$final_path/mumble-server.ini"
 
 cp ../conf/mumble-server.ini "$mumble_conf"
 
+ynh_replace_string "__FINALPATH__" "$final_path"     "$mumble_conf"
+ynh_replace_string "__APP__"      "$app"             "$mumble_conf"
 ynh_replace_string "__WELCOME__"  "$welcometext"     "$mumble_conf"
 ynh_replace_string "__PORT__"     "$port"            "$mumble_conf"
 ynh_replace_string "__SRV_PWD__"  "$server_password" "$mumble_conf"
 ynh_replace_string "__REGISTER__" "$registerName"    "$mumble_conf"
 
 #=================================================
+# SETUP SYSTEMD
+#=================================================
+
+# Create a dedicated systemd config
+ynh_add_systemd_config
+
+#=================================================
 # STORE THE CHECKSUM OF THE CONFIG FILE
 #=================================================
 
-# TODO: add this checksum step
 ynh_store_file_checksum "$mumble_conf"
 
 #=================================================
 # Start services
 #=================================================
 
-# Start Mumble server
-/etc/init.d/mumble-server start
-
-# Set super-user password
+mkdir -p /var/run/mumble-server/
 murmurd -ini "$mumble_conf" -supw "$su_passwd"
-
-# Restart Mumble server
-/etc/init.d/mumble-server restart
 
 #=================================================
 # GENERIC FINALIZATION
@@ -113,12 +121,21 @@ murmurd -ini "$mumble_conf" -supw "$su_passwd"
 # SECURE FILES AND DIRECTORIES
 #=================================================
 
-chmod 660 "$mumble_conf"
-chown :mumble-server "$mumble_conf"
+chmod -R 770 "$final_path"
+chown -R :mumble-server "$final_path"
+
+#=================================================
+# Disable default server installed by Debian's package
+#=================================================
+
+systemctl stop mumble-server
+systemctl disable mumble-server
 
 #=================================================
 # ADVERTISE SERVICE IN ADMIN PANEL
 #=================================================
 
 # Add Mumble as a YunoHost service
-yunohost service add mumble-server -l /var/log/mumble-server/mumble-server.log
+yunohost service add "$app" -l "/var/log/mumble-server/$app.log"
+
+systemctl restart "$app"

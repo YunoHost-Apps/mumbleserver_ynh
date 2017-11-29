@@ -7,7 +7,7 @@
         "fr": "Mumble est un logiciel libre de voix sur IP (VoIP), son principal usage étant la communication pendant les parties de jeux en réseau."
     },
     "url": "https://mumble.info",
-    "license": "free",
+    "license": "BSD-3-Clause",
     "maintainer": {
         "name": "Moul",
         "email": "moul@moul.re"
@@ -15,6 +15,7 @@
     "requirements": {
         "yunohost": ">> 2.4.0"
     },
+    "version": "1.2.8-1",
     "multi_instance": false,
     "services": [
     ],

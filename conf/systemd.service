@@ -1,0 +1,15 @@
+[Unit]
+Description=Mumble Server (Murmur, app __APP__)
+Requires=network-online.target
+After=network.target
+
+[Service]
+User=mumble-server
+Group=mumble-server
+Type=forking
+ExecStart=/usr/sbin/murmurd -ini __FINALPATH__/mumble-server.ini
+PIDFile=/var/run/mumble-server/__APP__.pid
+ExecReload=/bin/kill -s HUP $MAINPID
+
+[Install]
+WantedBy=multi-user.target

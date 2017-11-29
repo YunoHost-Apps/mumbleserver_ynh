@@ -4,7 +4,7 @@
 		server_login_password="super_secret_password"	(PASSWORD)
 		password="super_secret_password"
 		welcometext="Welcome to my mumble server"
-		port="64738"	(PORT)
+		port=64738	(PORT)
 		registername="Root"
 	; Checks
 		pkg_linter=1
