@@ -13,10 +13,10 @@
         "email": "moul@moul.re"
     },
     "requirements": {
-        "yunohost": ">> 2.4.0"
+        "yunohost": ">> 2.7.0"
     },
     "version": "1.2.8-1",
-    "multi_instance": false,
+    "multi_instance": true,
     "services": [
     ],
     "arguments": {
@@ -46,15 +46,6 @@
                     "fr": "Choisissez un message de bienvenue pour le serveur"
                 },
                 "example": "Welcome to my mumble server"
-            },
-            {
-                "name": "port",
-                "ask": {
-                    "en": "Choose a port for your server. Let as default if you don't want to change it",
-                    "fr": "Entrez un port pour votre serveur. Laissez par défaut si vous ne voulez pas en changer"
-                },
-                "example": "64738",
-                "default": "64738"
             },
             {
                 "name": "registername",

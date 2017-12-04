@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# doc: https://wiki.mumble.info/wiki/Running_Murmur
+
 #=================================================
 # GENERIC START
 #=================================================
@@ -25,7 +27,6 @@ app=$YNH_APP_INSTANCE_NAME
 server_password=$YNH_APP_ARG_SERVER_LOGIN_PASSWORD
 su_passwd=$YNH_APP_ARG_PASSWORD
 welcometext=$YNH_APP_ARG_WELCOMETEXT
-port=$YNH_APP_ARG_PORT
 registerName=$YNH_APP_ARG_REGISTERNAME
 
 #=================================================
@@ -34,13 +35,6 @@ registerName=$YNH_APP_ARG_REGISTERNAME
 
 final_path=/var/www/$app
 test ! -e "$final_path" || ynh_die "This path already contains a folder"
-
-# Check port availability
-
-yunohost app checkport "$port"
-if [[ ! $? -eq 0 ]]; then
-	ynh_die "Port is not available"
-fi
 
 # Check if su_password is not empty
 if [[ -z "$su_passwd" ]]; then
@@ -52,7 +46,6 @@ fi
 #=================================================
 
 # Save app settings
-ynh_app_setting_set "$app" port            "$port"
 ynh_app_setting_set "$app" server_password "$server_password"
 ynh_app_setting_set "$app" su_passwd       "$su_passwd"
 ynh_app_setting_set "$app" welcometext     "$welcometext"
@@ -63,6 +56,9 @@ ynh_app_setting_set "$app" registerName    "$registerName"
 #=================================================
 # FIND AND OPEN A PORT
 #=================================================
+
+port=$(ynh_find_port 64738)
+ynh_app_setting_set "$app" port "$port"
 
 # Open port in firewall
 yunohost firewall allow Both "$port"
@@ -114,6 +110,23 @@ ynh_store_file_checksum "$mumble_conf"
 
 mkdir -p /var/run/mumble-server/
 murmurd -ini "$mumble_conf" -supw "$su_passwd"
+
+#=================================================
+# Start services
+#=================================================
+message="
+Port                   : $port
+Password to join server: $server_password
+SuperUser Password     : $su_passwd
+Welcome text           : $welcometext
+Root channel (your mumble server name): $registerName
+Final path (where to find your files) : $final_path
+mumble configuration file             : $mumble_conf
+
+Are you facing an issue, want to improve this app or say thank you?
+Please open a new issue in this project: https://github.com/YunoHost-Apps/mumbleserver_ynh
+"
+send_readme_to_admin $message
 
 #=================================================
 # GENERIC FINALIZATION
