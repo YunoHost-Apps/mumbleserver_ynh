@@ -21,6 +21,14 @@
     ],
     "arguments": {
         "install" : [
+	   {
+    	        "name": "domain",
+	        "type": "domain",
+	        "ask": {
+                    "en": "Choose a domain (used to select the correct certificate)"
+	        },
+	        "example": "domain.org"
+	    },
             {
                 "name": "server_login_password",
 		"type": "password",

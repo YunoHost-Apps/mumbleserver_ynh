@@ -16,17 +16,17 @@ send_readme_to_admin() {
 
 	mail_subject="☁️🆈🅽🅷☁️: \`$app\` was just installed!"
 	mail_message="
-	This is an automated message from your beloved YunoHost server.
+This is an automated message from your beloved YunoHost server.
 
-	-----
-	Specific information for this application ($app)
-	-----
-	$app_message
+-----
+Specific information for this application ($app)
+-----
+$app_message
 
-	-----
-	Automatic diagnosis data from YunoHost
-	-----
-	$ynh_info
+-----
+Automatic diagnosis data from YunoHost
+-----
+$ynh_info
 	"
 
 	# Email server admin - for ACTION
