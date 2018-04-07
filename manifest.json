@@ -9,8 +9,8 @@
     "url": "https://mumble.info",
     "license": "BSD-3-Clause",
     "maintainer": {
-        "name": "Moul",
-        "email": "moul@moul.re"
+        "name": "jibec",
+        "email": "jean-baptiste@holcroft.fr"
     },
     "requirements": {
         "yunohost": ">= 2.7.10"
