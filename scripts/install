@@ -70,7 +70,7 @@ yunohost firewall allow Both "$port"
 #=================================================
 
 # Install Mumble Debian package via apt
-ynh_install_app_dependencies mumble-server
+ynh_install_app_dependencies mumble-server mailutils
 
 #=================================================
 # SPECIFIC SETUP
@@ -94,18 +94,14 @@ ynh_replace_string "__SRV_PWD__"  "$server_password" "$mumble_conf"
 ynh_replace_string "__REGISTER__" "$registerName"    "$mumble_conf"
 ynh_replace_string "__DOMAIN__"   "$domain"          "$mumble_conf"
 
+ynh_store_file_checksum "$mumble_conf"
+
 #=================================================
 # SETUP SYSTEMD
 #=================================================
 
 # Create a dedicated systemd config
 ynh_add_systemd_config
-
-#=================================================
-# STORE THE CHECKSUM OF THE CONFIG FILE
-#=================================================
-
-ynh_store_file_checksum "$mumble_conf"
 
 #=================================================
 # Start services
@@ -129,7 +125,7 @@ mumble configuration file             : $mumble_conf
 Are you facing an issue, want to improve this app or say thank you?
 Please open a new issue in this project: https://github.com/YunoHost-Apps/mumbleserver_ynh
 "
-send_readme_to_admin "$message"
+ynh_send_readme_to_admin "$message"
 
 #=================================================
 # GENERIC FINALIZATION
