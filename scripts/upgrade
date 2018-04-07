@@ -48,12 +48,22 @@ if [ -z "$server_password" ]; then
 		| grep "registerName=" \
 		| sed "s/registerName=//")
 
+	# we don't know what the previous password was, let's regenerate it
+	su_passwd=$(ynh_string_random)
+
+	domain=$(yunohost domain list \
+		| grep "\- " \
+		| head -1 \
+		| sed -r "s/.* (([a-z])*\.([a-z])*).*/\1/g")
+
 	ynh_app_setting_set "$app" server_password "$server_password"
 	ynh_app_setting_set "$app" welcometext     "$welcometext"
 	ynh_app_setting_set "$app" registerName    "$registerName"
+	ynh_app_setting_set "$app" su_passwd       "$su_passwd"
+	ynh_app_setting_set "$app" domain          "$domain"
 
 	systemctl stop mumble-server
-	dpkg-reconfigure mumble-server --frontend=Noninteractiv
+	dpkg-reconfigure mumble-server --frontend=Noninteractive
 	systemctl stop mumble-server
 	systemctl disable mumble-server
 fi
