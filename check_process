@@ -2,8 +2,6 @@
 	auto_remove=1
 	; Manifest
 		domain="domain.tld"	(DOMAIN)
-		server_login_password="super_secret_password"	(PASSWORD)
-		password="super_secret_password"
 		welcometext="Welcome to my mumble server"
 		registername="Root"
 	; Checks
