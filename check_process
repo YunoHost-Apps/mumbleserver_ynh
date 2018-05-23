@@ -1,10 +1,8 @@
 ;; Test complet
 	auto_remove=1
 	; Manifest
-		server_login_password="super_secret_password"	(PASSWORD)
-		password="super_secret_password"
+		domain="domain.tld"	(DOMAIN)
 		welcometext="Welcome to my mumble server"
-		port="64738"	(PORT)
 		registername="Root"
 	; Checks
 		pkg_linter=1
@@ -14,15 +12,14 @@
 		setup_private=0
 		setup_public=0
 		upgrade=1
+		# latest published in community.json
+		upgrade=1		from_commit=c3f4863564b17be1cb8193f6962668bcc0d92072
 		backup_restore=1
-		multi_instance=0
+		multi_instance=1
 		wrong_user=0
 		wrong_path=0
 		incorrect_path=0
-		corrupt_source=0
-		fail_download_source=0
-		port_already_use=1
-		final_path_already_use=0
+		port_already_use=0
 ;;; Levels
 	Level 1=auto
 	Level 2=auto

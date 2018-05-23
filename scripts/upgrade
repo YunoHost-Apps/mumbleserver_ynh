@@ -1,4 +1,184 @@
 #!/bin/bash
 
-# Exit on command errors and treat unset variables as an error
-set -eu
+#=================================================
+# GENERIC START
+#=================================================
+# IMPORT GENERIC HELPERS
+#=================================================
+source _common.sh
+source /usr/share/yunohost/helpers
+
+#=================================================
+# LOAD SETTINGS
+#=================================================
+
+app=$YNH_APP_INSTANCE_NAME
+
+domain=$(ynh_app_setting_get "$app" domain)
+server_password=$(ynh_app_setting_get "$app" server_password)
+su_passwd=$(ynh_app_setting_get "$app" su_passwd)
+welcometext=$(ynh_app_setting_get "$app" welcometext)
+registerName=$(ynh_app_setting_get "$app" registerName)
+port=$(ynh_app_setting_get "$app" port)
+final_path=$(ynh_app_setting_get "$app" final_path)
+
+#=================================================
+# ENSURE DOWNWARD COMPATIBILITY
+#=================================================
+
+# If final_path doesn't exist, create it
+if [ -z "$final_path" ]; then
+	final_path=/var/www/$app
+	ynh_app_setting_set "$app" final_path "$final_path"
+fi
+
+# test old time
+if [ -z "$server_password" ]; then
+	old_mumble_conf="/etc/mumble-server.ini"
+
+	server_password=$(cat "$old_mumble_conf" \
+		| grep "serverpassword=" \
+		| sed "s/serverpassword=//")
+
+	welcometext=$(cat "$old_mumble_conf" \
+		| grep "welcometext=" \
+		| sed "s/welcometext=//")
+
+	registerName=$(cat "$old_mumble_conf" \
+		| grep "registerName=" \
+		| sed "s/registerName=//")
+
+	# we don't know what the previous password was, let's regenerate it
+	su_passwd=$(ynh_string_random)
+
+	domain=$(yunohost domain list \
+		| grep "\- " \
+		| head -1 \
+		| sed -r "s/.* (([a-z])*\.([a-z])*).*/\1/g")
+
+	ynh_app_setting_set "$app" server_password "$server_password"
+	ynh_app_setting_set "$app" welcometext     "$welcometext"
+	ynh_app_setting_set "$app" registerName    "$registerName"
+	ynh_app_setting_set "$app" su_passwd       "$su_passwd"
+	ynh_app_setting_set "$app" domain          "$domain"
+
+	systemctl stop mumble-server
+	dpkg-reconfigure mumble-server --frontend=Noninteractive
+	systemctl stop mumble-server
+	systemctl disable mumble-server
+fi
+
+#=================================================
+# BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
+#=================================================
+
+# Backup the current version of the app
+# ynh_backup_before_upgrade
+# ynh_clean_setup () {
+	# restore it if the upgrade fails
+# 	ynh_restore_upgradebackup
+# }
+
+# Exit if an error occurs during the execution of the script
+ynh_abort_if_errors
+
+#=================================================
+# STANDARD UPGRADE STEPS
+#=================================================
+
+# source and user are provided by debian's package, no web interface
+
+#=================================================
+# INSTALL DEPENDENCIES
+#=================================================
+
+# Install Mumble Debian package via apt
+ynh_install_app_dependencies mumble-server mailutils
+
+#=================================================
+# SPECIFIC UPGRADE
+#=================================================
+# mumble server conf.ini
+#=================================================
+
+mkdir -p $final_path
+
+# Configuring with given settings
+mumble_conf="$final_path/mumble-server.ini"
+
+cp ../conf/mumble-server.ini "$mumble_conf"
+
+ynh_replace_string "__FINALPATH__" "$final_path"     "$mumble_conf"
+ynh_replace_string "__APP__"      "$app"             "$mumble_conf"
+ynh_replace_string "__WELCOME__"  "$welcometext"     "$mumble_conf"
+ynh_replace_string "__PORT__"     "$port"            "$mumble_conf"
+ynh_replace_string "__SRV_PWD__"  "$server_password" "$mumble_conf"
+ynh_replace_string "__REGISTER__" "$registerName"    "$mumble_conf"
+ynh_replace_string "__DOMAIN__"   "$domain"          "$mumble_conf"
+
+ynh_store_file_checksum "$mumble_conf"
+
+#=================================================
+# SETUP SYSTEMD
+#=================================================
+
+# Create a dedicated systemd config
+ynh_add_systemd_config
+
+#=================================================
+# Start services
+#=================================================
+
+mkdir -p /var/run/mumble-server/
+murmurd -ini "$mumble_conf" -supw "$su_passwd"
+
+#=================================================
+# Start services
+#=================================================
+
+message="
+Mumbleserver was updated!
+
+Port                   : $port
+Password to join server: $server_password
+SuperUser Password     : $su_passwd
+Welcome text           : $welcometext
+Root channel (your mumble server name): $registerName
+Final path (where to find your files) : $final_path
+mumble configuration file             : $mumble_conf
+
+Are you facing an issue, want to improve this app or say thank you?
+Please open a new issue in this project: https://github.com/YunoHost-Apps/mumbleserver_ynh
+"
+ynh_send_readme_to_admin "$message"
+
+#=================================================
+# GENERIC FINALIZATION
+#=================================================
+# SECURE FILES AND DIRECTORIES
+#=================================================
+
+chmod -R 770 "$final_path"
+chown -R :mumble-server "$final_path"
+
+#=================================================
+# Add user to ssl-cert so it can read certificates
+#=================================================
+
+usermod --append --groups ssl-cert mumble-server
+
+#=================================================
+# Disable default server installed by Debian's package
+#=================================================
+
+systemctl stop mumble-server
+systemctl disable mumble-server
+
+#=================================================
+# ADVERTISE SERVICE IN ADMIN PANEL
+#=================================================
+
+# Add Mumble as a YunoHost service
+yunohost service add "$app" -l "/var/log/mumble-server/$app.log"
+
+systemctl restart "$app"

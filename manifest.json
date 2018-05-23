@@ -7,37 +7,28 @@
         "fr": "Mumble est un logiciel libre de voix sur IP (VoIP), son principal usage étant la communication pendant les parties de jeux en réseau."
     },
     "url": "https://mumble.info",
-    "license": "free",
+    "license": "BSD-3-Clause",
     "maintainer": {
-        "name": "Moul",
-        "email": "moul@moul.re"
+        "name": "jibec",
+        "email": "jean-baptiste@holcroft.fr"
     },
     "requirements": {
-        "yunohost": ">> 2.4.0"
+        "yunohost": ">= 2.7.10"
     },
-    "multi_instance": false,
+    "version": "1.2.8-2",
+    "multi_instance": true,
     "services": [
     ],
     "arguments": {
         "install" : [
-            {
-                "name": "server_login_password",
-		"type": "password",
-                "ask": {
-                    "en": "Choose a password for your mumble server. This password is given to persons who want to join",
-                    "fr": "Choisissez un mot de passe pour votre serveur Mumble. Ce mot de passe sera donné aux personnes qui veulent rejoindre le serveur"
-                },
-                "example": "super_secret_password"
-            },
-            {
-                "name": "password",
-		"type": "password",
-                "ask": {
-                    "en": "Choose a password for the SuperUser. This is different from the server password and allows you to create the first admin.",
-                    "fr": "Choisissez un mot de passe pour le SuperUser. Il est différent du mot de passe du serveur et permet de créer le premier Administrateur."
-                },
-                "example": "super_secret_password"
-            },
+	   {
+    	        "name": "domain",
+	        "type": "domain",
+	        "ask": {
+                    "en": "Choose a domain (used to select the correct certificate)"
+	        },
+	        "example": "domain.org"
+	    },
             {
                 "name": "welcometext",
                 "ask": {
@@ -45,15 +36,6 @@
                     "fr": "Choisissez un message de bienvenue pour le serveur"
                 },
                 "example": "Welcome to my mumble server"
-            },
-            {
-                "name": "port",
-                "ask": {
-                    "en": "Choose a port for your server. Let as default if you don't want to change it",
-                    "fr": "Entrez un port pour votre serveur. Laissez par défaut si vous ne voulez pas en changer"
-                },
-                "example": "64738",
-                "default": "64738"
             },
             {
                 "name": "registername",

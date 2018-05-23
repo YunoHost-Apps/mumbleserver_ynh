@@ -1,64 +1,155 @@
 #!/bin/bash
-#debug commands
-#exec > >(tee /tmp/mumble-install.log)
-#exec 2>&1
 
-# Exit on command errors and treat unset variables as an error
-set -eu
+# doc: https://wiki.mumble.info/wiki/Running_Murmur
 
-# Retrieve arguments
-app="mumbleserver"
-server_password=$YNH_APP_ARG_SERVER_LOGIN_PASSWORD
-su_passwd=$YNH_APP_ARG_PASSWORD
-welcometext=$YNH_APP_ARG_WELCOMETEXT
-port=$YNH_APP_ARG_PORT
-registerName=$YNH_APP_ARG_REGISTERNAME
+#=================================================
+# GENERIC START
+#=================================================
+# IMPORT GENERIC HELPERS
+#=================================================
 
-# Source YunoHost helpers
+source _common.sh
 source /usr/share/yunohost/helpers
 
-# Check port availability
-sudo yunohost app checkport $port
-if [[ ! $? -eq 0 ]]; then
-	ynh_die
-fi
+#=================================================
+# MANAGE SCRIPT FAILURE
+#=================================================
 
-# Check if su_password is not empty
-if [[ -z "$su_passwd" ]]; then
-	ynh_die
-fi
+# Exit if an error occurs during the execution of the script
+ynh_abort_if_errors
+
+#=================================================
+# RETRIEVE ARGUMENTS FROM THE MANIFEST
+#=================================================
+
+# Retrieve arguments
+domain=$YNH_APP_ARG_DOMAIN
+app=$YNH_APP_INSTANCE_NAME
+welcometext=$YNH_APP_ARG_WELCOMETEXT
+registerName=$YNH_APP_ARG_REGISTERNAME
+
+server_password=$(ynh_string_random)
+su_passwd=$(ynh_string_random)
+
+#=================================================
+# CHECK IF THE APP CAN BE INSTALLED WITH THESE ARGS
+#=================================================
+
+final_path=/var/www/$app
+test ! -e "$final_path" || ynh_die "This path already contains a folder"
+
+#=================================================
+# STORE SETTINGS FROM MANIFEST
+#=================================================
 
 # Save app settings
-ynh_app_setting_set $app port "$port"
+ynh_app_setting_set "$app" domain          "$domain"
+ynh_app_setting_set "$app" server_password "$server_password"
+ynh_app_setting_set "$app" su_passwd       "$su_passwd"
+ynh_app_setting_set "$app" welcometext     "$welcometext"
+ynh_app_setting_set "$app" registerName    "$registerName"
 
-# Install Mumble Debian package via apt
-sudo apt update > /dev/null 2>&1
-sudo apt install -y mumble-server > /dev/null 2>&1
+#=================================================
+# STANDARD MODIFICATIONS
+#=================================================
+# FIND AND OPEN A PORT
+#=================================================
 
-# Configuring with given settings
-mumble_conf="../conf/mumble-server.ini"
-sudo sed -i "s/welcometext=.*/welcometext=$welcometext/" $mumble_conf
-sudo sed -i "s/port=.*/port=$port/" $mumble_conf
-sudo sed -i "s/serverpassword=.*/serverpassword=$server_password/" $mumble_conf
-sudo sed -i "s/#registerName=.*/registerName=$registerName/" $mumble_conf
-
-# Copying conf file
-mumble_conf="/etc/mumble-server.ini"
-sudo cp ../conf/mumble-server.ini $mumble_conf
-sudo chmod 660  $mumble_conf
-sudo chown :mumble-server $mumble_conf
+port=$(ynh_find_port 64738)
+ynh_app_setting_set "$app" port "$port"
 
 # Open port in firewall
-sudo yunohost firewall allow Both $port > /dev/null 2>&1
+yunohost firewall allow Both "$port"
 
-# Start Mumble server
-sudo /etc/init.d/mumble-server start
+#=================================================
+# INSTALL DEPENDENCIES
+#=================================================
 
-# Set super-user password
-sudo murmurd -supw $su_passwd
+# Install Mumble Debian package via apt
+ynh_install_app_dependencies mumble-server mailutils
 
-# Restart Mumble server
-sudo /etc/init.d/mumble-server restart
+#=================================================
+# SPECIFIC SETUP
+#=================================================
+# mumble server conf.ini
+#=================================================
+
+mkdir -p "$final_path"
+ynh_app_setting_set "$app" final_path "$final_path"
+
+# Configuring with given settings
+mumble_conf="$final_path/mumble-server.ini"
+
+cp ../conf/mumble-server.ini "$mumble_conf"
+
+ynh_replace_string "__FINALPATH__" "$final_path"     "$mumble_conf"
+ynh_replace_string "__APP__"      "$app"             "$mumble_conf"
+ynh_replace_string "__WELCOME__"  "$welcometext"     "$mumble_conf"
+ynh_replace_string "__PORT__"     "$port"            "$mumble_conf"
+ynh_replace_string "__SRV_PWD__"  "$server_password" "$mumble_conf"
+ynh_replace_string "__REGISTER__" "$registerName"    "$mumble_conf"
+ynh_replace_string "__DOMAIN__"   "$domain"          "$mumble_conf"
+
+ynh_store_file_checksum "$mumble_conf"
+
+#=================================================
+# SETUP SYSTEMD
+#=================================================
+
+# Create a dedicated systemd config
+ynh_add_systemd_config
+
+#=================================================
+# Start services
+#=================================================
+
+mkdir -p /var/run/mumble-server/
+murmurd -ini "$mumble_conf" -supw "$su_passwd"
+
+#=================================================
+# Start services
+#=================================================
+message="
+Port                   : $port
+Password to join server: $server_password
+SuperUser Password     : $su_passwd
+Welcome text           : $welcometext
+Root channel (your mumble server name): $registerName
+Final path (where to find your files) : $final_path
+mumble configuration file             : $mumble_conf
+
+Are you facing an issue, want to improve this app or say thank you?
+Please open a new issue in this project: https://github.com/YunoHost-Apps/mumbleserver_ynh
+"
+ynh_send_readme_to_admin "$message"
+
+#=================================================
+# GENERIC FINALIZATION
+#=================================================
+# SECURE FILES AND DIRECTORIES
+#=================================================
+
+chmod -R 770 "$final_path"
+chown -R :mumble-server "$final_path"
+
+#=================================================
+# Add user to ssl-cert so it can read certificates
+#=================================================
+
+usermod --append --groups ssl-cert mumble-server
+
+#=================================================
+# Disable default server installed by Debian's package
+#=================================================
+
+systemctl stop mumble-server
+systemctl disable mumble-server
+
+#=================================================
+# ADVERTISE SERVICE IN ADMIN PANEL
+#=================================================
 
 # Add Mumble as a YunoHost service
-sudo yunohost service add mumble-server -l /var/log/mumble-server/mumble-server.log
+yunohost service add "$app" -l "/var/log/mumble-server/$app.log"
+
+systemctl restart "$app"
