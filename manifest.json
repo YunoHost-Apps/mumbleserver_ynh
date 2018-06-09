@@ -35,7 +35,8 @@
                     "en": "Choose a welcome text for your server",
                     "fr": "Choisissez un message de bienvenue pour le serveur"
                 },
-                "example": "Welcome to my mumble server"
+                "example": "Welcome to my mumble server",
+                "default": "Welcome"
             },
             {
                 "name": "registername",
