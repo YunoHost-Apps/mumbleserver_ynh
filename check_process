@@ -13,7 +13,6 @@
 		setup_public=0
 		upgrade=1
 		# latest published in community.json
-		upgrade=1		from_commit=c3f4863564b17be1cb8193f6962668bcc0d92072
 		backup_restore=1
 		multi_instance=1
 		wrong_user=0
@@ -32,3 +31,6 @@
 	Level 8=0
 	Level 9=0
 	Level 10=0
+;;; Options
+Email=jean-baptiste@holcroft.fr
+Notification=all
