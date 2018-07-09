@@ -43,7 +43,7 @@ test ! -e "$final_path" || ynh_die "This path already contains a folder"
 #=================================================
 
 # Save app settings
-ynh_app_setting_set "$app" domain          "$domain"
+ynh_app_setting_set "$app" domain_mumble   "$domain"
 ynh_app_setting_set "$app" server_password "$server_password"
 ynh_app_setting_set "$app" su_passwd       "$su_passwd"
 ynh_app_setting_set "$app" welcometext     "$welcometext"

@@ -14,7 +14,7 @@ source /usr/share/yunohost/helpers
 
 app=$YNH_APP_INSTANCE_NAME
 
-domain=$(ynh_app_setting_get "$app" domain)
+domain=$(ynh_app_setting_get "$app" domain_mumble)
 server_password=$(ynh_app_setting_get "$app" server_password)
 su_passwd=$(ynh_app_setting_get "$app" su_passwd)
 welcometext=$(ynh_app_setting_get "$app" welcometext)
@@ -68,16 +68,25 @@ if [ -z "$server_password" ]; then
 	systemctl disable mumble-server
 fi
 
+# Fix SSO issue
+# https://github.com/YunoHost-Apps/mumbleserver_ynh/issues/19
+if [ -z "$domain" ]; then
+	domain=$(ynh_app_setting_get "$app" domain)
+	ynh_app_setting_set "$app" domain_mumble "$domain"
+	ynh_app_setting_delete "$app" domain
+fi
+
+
 #=================================================
 # BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
 #=================================================
 
 # Backup the current version of the app
-# ynh_backup_before_upgrade
-# ynh_clean_setup () {
+ynh_backup_before_upgrade
+ynh_clean_setup () {
 	# restore it if the upgrade fails
-# 	ynh_restore_upgradebackup
-# }
+ 	ynh_restore_upgradebackup
+}
 
 # Exit if an error occurs during the execution of the script
 ynh_abort_if_errors

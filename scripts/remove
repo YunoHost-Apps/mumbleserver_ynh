@@ -15,7 +15,7 @@ source /usr/share/yunohost/helpers
 
 app=$YNH_APP_INSTANCE_NAME
 
-domain=$(ynh_app_setting_get "$app" domain)
+domain=$(ynh_app_setting_get "$app" domain_mumble)
 port=$(ynh_app_setting_get "$app" port)
 final_path=$(ynh_app_setting_get "$app" final_path)
 
