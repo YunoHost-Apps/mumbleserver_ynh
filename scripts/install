@@ -27,6 +27,7 @@ domain=$YNH_APP_ARG_DOMAIN
 app=$YNH_APP_INSTANCE_NAME
 welcometext=$YNH_APP_ARG_WELCOMETEXT
 registerName=$YNH_APP_ARG_REGISTERNAME
+instance_id=$YNH_APP_INSTANCE_NUMBER
 
 server_password=$(ynh_string_random)
 su_passwd=$(ynh_string_random)
@@ -48,6 +49,7 @@ ynh_app_setting_set "$app" server_password "$server_password"
 ynh_app_setting_set "$app" su_passwd       "$su_passwd"
 ynh_app_setting_set "$app" welcometext     "$welcometext"
 ynh_app_setting_set "$app" registerName    "$registerName"
+ynh_app_setting_set "$app" instance_id     "$instance_id"
 
 #=================================================
 # STANDARD MODIFICATIONS
@@ -102,13 +104,6 @@ ynh_add_systemd_config
 #=================================================
 # Start services
 #=================================================
-
-mkdir -p /var/run/mumble-server/
-murmurd -ini "$mumble_conf" -supw "$su_passwd"
-
-#=================================================
-# Start services
-#=================================================
 message="
 Port                   : $port
 Password to join server: $server_password
@@ -139,6 +134,13 @@ chown mumble-server /var/run/mumble-server/
 #=================================================
 
 usermod --append --groups ssl-cert mumble-server
+
+#=================================================
+# Set SuperUser password
+#=================================================
+
+mkdir -p /var/run/mumble-server/
+murmurd -ini "$mumble_conf" -supw "$su_passwd" "$instance_id"
 
 #=================================================
 # Disable default server installed by Debian's package

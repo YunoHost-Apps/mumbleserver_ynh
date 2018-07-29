@@ -21,6 +21,7 @@ welcometext=$(ynh_app_setting_get "$app" welcometext)
 registerName=$(ynh_app_setting_get "$app" registerName)
 port=$(ynh_app_setting_get "$app" port)
 final_path=$(ynh_app_setting_get "$app" final_path)
+instance_id=$(ynh_app_setting_get "$app" instance_id)
 
 #=================================================
 # ENSURE DOWNWARD COMPATIBILITY
@@ -74,6 +75,12 @@ if [ -z "$domain" ]; then
 	domain=$(ynh_app_setting_get "$app" domain)
 	ynh_app_setting_set "$app" domain_mumble "$domain"
 	ynh_app_setting_delete "$app" domain
+fi
+
+# Fix multi installation
+if [ -z "$instance_id" ]; then
+	instance_id=$YNH_APP_INSTANCE_NUMBER
+	ynh_app_setting_set "$app" instance_id "$instance_id"
 fi
 
 
@@ -138,13 +145,6 @@ ynh_add_systemd_config
 # Start services
 #=================================================
 
-mkdir -p /var/run/mumble-server/
-murmurd -ini "$mumble_conf" -supw "$su_passwd"
-
-#=================================================
-# Start services
-#=================================================
-
 message="
 Mumbleserver was updated!
 
@@ -177,6 +177,13 @@ chown mumble-server /var/run/mumble-server/
 #=================================================
 
 usermod --append --groups ssl-cert mumble-server
+
+#=================================================
+# Set SuperUser password
+#=================================================
+
+mkdir -p /var/run/mumble-server/
+murmurd -ini "$mumble_conf" -supw "$su_passwd" "$instance_id"
 
 #=================================================
 # Disable default server installed by Debian's package
