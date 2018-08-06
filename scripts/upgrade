@@ -61,7 +61,7 @@ if [ -z "$server_password" ]; then
 	ynh_app_setting_set "$app" welcometext     "$welcometext"
 	ynh_app_setting_set "$app" registerName    "$registerName"
 	ynh_app_setting_set "$app" su_passwd       "$su_passwd"
-	ynh_app_setting_set "$app" domain          "$domain"
+	ynh_app_setting_set "$app" domain_mumble   "$domain"
 
 	systemctl stop mumble-server
 	dpkg-reconfigure mumble-server --frontend=Noninteractive
