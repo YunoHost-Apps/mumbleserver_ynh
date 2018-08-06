@@ -170,6 +170,7 @@ ynh_send_readme_to_admin "$message"
 chmod -R 770 "$final_path"
 chown -R :mumble-server "$final_path"
 # Prevent "PID file /var/run/mumble-server/*.pid not readable (yet?) after start."
+mkdir -p /var/run/mumble-server/
 chown mumble-server /var/run/mumble-server/
 
 #=================================================
@@ -182,7 +183,6 @@ usermod --append --groups ssl-cert mumble-server
 # Set SuperUser password
 #=================================================
 
-mkdir -p /var/run/mumble-server/
 murmurd -ini "$mumble_conf" -supw "$su_passwd" "$instance_id"
 
 #=================================================
