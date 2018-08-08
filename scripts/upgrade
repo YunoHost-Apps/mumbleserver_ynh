@@ -122,6 +122,8 @@ mkdir -p $final_path
 # Configuring with given settings
 mumble_conf="$final_path/mumble-server.ini"
 
+ynh_backup_if_checksum_is_different "$mumble_conf"
+
 cp ../conf/mumble-server.ini "$mumble_conf"
 
 ynh_replace_string "__FINALPATH__" "$final_path"     "$mumble_conf"
@@ -140,26 +142,6 @@ ynh_store_file_checksum "$mumble_conf"
 
 # Create a dedicated systemd config
 ynh_add_systemd_config
-
-#=================================================
-# Start services
-#=================================================
-
-message="
-Mumbleserver was updated!
-
-Port                   : $port
-Password to join server: $server_password
-SuperUser Password     : $su_passwd
-Welcome text           : $welcometext
-Root channel (your mumble server name): $registerName
-Final path (where to find your files) : $final_path
-mumble configuration file             : $mumble_conf
-
-Are you facing an issue, want to improve this app or say thank you?
-Please open a new issue in this project: https://github.com/YunoHost-Apps/mumbleserver_ynh
-"
-ynh_send_readme_to_admin "$message"
 
 #=================================================
 # GENERIC FINALIZATION
@@ -200,3 +182,26 @@ systemctl disable mumble-server
 yunohost service add "$app" -l "/var/log/mumble-server/$app.log"
 
 systemctl restart "$app"
+
+#=================================================
+# SEND README TO ADMIN
+#=================================================
+
+message="
+Mumbleserver was updated!
+
+Port                   : $port
+Password to join server: $server_password
+SuperUser Password     : $su_passwd
+Welcome text           : $welcometext
+Root channel (your mumble server name): $registerName
+Final path (where to find your files) : $final_path
+Mumble configuration file             : $mumble_conf
+
+Note about config file: this package will regenerate the config file on upgrade.
+If you changed it manually and upgrade mumble, you'll find a backup in $final_path.
+
+Are you facing an issue, want to improve this app or say thank you?
+Please open a new issue in this project: https://github.com/YunoHost-Apps/mumbleserver_ynh
+"
+ynh_send_readme_to_admin "$message"
