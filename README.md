@@ -25,10 +25,10 @@ Password and other usefull information will be sent to you after installation.
 
 * to be confirmed
   * [x] ARM support
+  * [x] Improve systemd protection
 
 * to be added:
   * [ ] Improve log file and add logrotate
-  * [ ] Improve systemd protection (see: https://github.com/YunoHost-Apps/kresus_ynh/issues/20)
 
 ## Links
 
