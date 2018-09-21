@@ -14,7 +14,8 @@ source /usr/share/yunohost/helpers
 
 app=$YNH_APP_INSTANCE_NAME
 
-domain=$(ynh_app_setting_get "$app" domain_mumble)
+domain=$(ynh_app_setting_get "$app" domain)
+no_sso=$(ynh_app_setting_get "$app" no_sso)
 server_password=$(ynh_app_setting_get "$app" server_password)
 su_passwd=$(ynh_app_setting_get "$app" su_passwd)
 welcometext=$(ynh_app_setting_get "$app" welcometext)
@@ -61,7 +62,7 @@ if [ -z "$server_password" ]; then
 	ynh_app_setting_set "$app" welcometext     "$welcometext"
 	ynh_app_setting_set "$app" registerName    "$registerName"
 	ynh_app_setting_set "$app" su_passwd       "$su_passwd"
-	ynh_app_setting_set "$app" domain_mumble   "$domain"
+	ynh_app_setting_set "$app" domain          "$domain"
 
 	systemctl stop mumble-server
 	dpkg-reconfigure mumble-server --frontend=Noninteractive
@@ -72,9 +73,15 @@ fi
 # Fix SSO issue
 # https://github.com/YunoHost-Apps/mumbleserver_ynh/issues/19
 if [ -z "$domain" ]; then
-	domain=$(ynh_app_setting_get "$app" domain)
-	ynh_app_setting_set "$app" domain_mumble "$domain"
-	ynh_app_setting_delete "$app" domain
+	domain=$(ynh_app_setting_get "$app" domain_mumble)
+	ynh_app_setting_set "$app" domain "$domain"
+	ynh_app_setting_delete "$app" domain_mumble
+fi
+
+# Fix SSO issue
+# https://github.com/YunoHost-Apps/mumbleserver_ynh/issues/19
+if [ -z "$no_sso" ]; then
+	ynh_app_setting_set "$app" no_sso "true"
 fi
 
 # Fix multi installation
