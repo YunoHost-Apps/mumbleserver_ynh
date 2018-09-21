@@ -11,8 +11,28 @@ Password and other usefull information will be sent to you after installation.
 #### Maintainers & history
 ----------------
 
-2014: Package creation was maid by [matlink]](https://github.com/Matlink)
+* 2014: Package creation was maid by [matlink]](https://github.com/Matlink)
+* 2016: improved and maintained by [Moul](https://github.com/M5oul)
+* 2018: full rewrite and now maintained by [Jibec](https://github.com/Jibec)
 
-2016: improved and maintained by [Moul](https://github.com/M5oul)
+**Shipped version:** 1.2.8 (source package provided by Debian) 
 
-2018: full rewrote and now maintained by [Jibec](https://github.com/Jibec)
+# State of this package
+
+* works fine:
+
+  * [x] install/remove/backup/remove/upgrade/multi-instance with x86_64
+
+* to be confirmed
+  * [x] ARM support
+
+* to be added:
+  * [ ] Improve log file and add logrotate
+  * [ ] Improve systemd protection (see: https://github.com/YunoHost-Apps/kresus_ynh/issues/20)
+
+## Links
+
+ * Report a bug about this package: https://github.com/YunoHost-Apps/mumbleserver_ynh
+ * Report a bug about Mumble itself: https://github.com/mumble-voip/mumble
+ * Mumble website: https://mumble.info
+ * YunoHost website: https://yunohost.org
