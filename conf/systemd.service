@@ -7,6 +7,7 @@ After=network.target
 User=mumble-server
 Group=mumble-server
 Type=forking
+ExecStartPre=mkdir -p /var/run/mumble-server
 ExecStart=/usr/sbin/murmurd -ini __FINALPATH__/mumble-server.ini
 PIDFile=/var/run/mumble-server/__APP__.pid
 ExecReload=/bin/kill -s HUP $MAINPID
