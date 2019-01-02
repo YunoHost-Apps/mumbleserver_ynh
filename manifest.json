@@ -9,13 +9,13 @@
     "url": "https://mumble.info",
     "license": "BSD-3-Clause",
     "maintainer": {
-        "name": "jibec",
+        "name": "Jean-Baptiste Holcroft",
         "email": "jean-baptiste@holcroft.fr"
     },
     "requirements": {
         "yunohost": ">= 3.1.0"
     },
-    "version": "1.2.8~ynh5",
+    "version": "1.2.8~ynh6",
     "multi_instance": true,
     "services": [
     ],

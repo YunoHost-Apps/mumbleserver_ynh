@@ -111,10 +111,6 @@ ynh_add_systemd_config
 chmod -R 770 "$final_path"
 chown -R :mumble-server "$final_path"
 
-# Prevent "PID file /var/run/mumble-server/*.pid not readable (yet?) after start."
-mkdir -p /var/run/mumble-server/
-chown mumble-server /var/run/mumble-server/
-
 #=================================================
 # Add user to ssl-cert so it can read certificates
 #=================================================
