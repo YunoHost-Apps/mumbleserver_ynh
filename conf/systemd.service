@@ -10,6 +10,13 @@ Type=forking
 ExecStart=/usr/sbin/murmurd -ini __FINALPATH__/mumble-server.ini
 PIDFile=/var/run/mumble-server/__APP__.pid
 ExecReload=/bin/kill -s HUP $MAINPID
+PrivateDevices=true
+PrivateTmp=true
+ProtectHome=true
+ProtectSystem=strict
+ProtectControlGroups=yes
+ProtectKernelModules=yes
+ReadWritePaths=__FINALPATH__ /var/log/mumble-server /var/run/mumble-server
 
 [Install]
 WantedBy=multi-user.target
