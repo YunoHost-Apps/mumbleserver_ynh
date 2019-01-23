@@ -1,5 +1,8 @@
 # Mumble server package for YunoHost
 
+[![Integration level](https://dash.yunohost.org/integration/mumbleserver.svg)](https://dash.yunohost.org/appci/app/mumbleserver)  
+[![Install with YunoHost](https://install-app.yunohost.org/install-with-yunohost.png)](https://install-app.yunohost.org/?app=mumbleserver)
+
 It installs the Debian package and configures it with given settings.
 
 Password and other usefull information will be sent to you after installation.
