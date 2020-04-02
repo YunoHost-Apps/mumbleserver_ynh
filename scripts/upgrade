@@ -23,6 +23,7 @@ registerName=$(ynh_app_setting_get "$app" registerName)
 port=$(ynh_app_setting_get "$app" port)
 final_path=$(ynh_app_setting_get "$app" final_path)
 instance_id=$(ynh_app_setting_get "$app" instance_id)
+mumbleweb=$(ynh_app_setting_get "$app" mumbleweb)
 
 #=================================================
 # ENSURE DOWNWARD COMPATIBILITY
@@ -116,7 +117,7 @@ ynh_abort_if_errors
 #=================================================
 
 # Install Mumble Debian package via apt
-ynh_install_app_dependencies mumble-server mailutils
+ynh_install_app_dependencies mumble-server mailutils websockify
 
 #=================================================
 # SPECIFIC UPGRADE

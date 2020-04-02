@@ -46,6 +46,14 @@
                 },
                 "example": "Root",
                 "default": "Root"
+            },
+            {
+                "name": "mumbleweb",
+                "type": "boolean",
+                "ask": {
+                    "en": "Install the web application? (mumble-web)"
+                },
+                "default": false
             }
         ]
     }

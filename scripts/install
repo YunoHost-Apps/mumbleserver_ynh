@@ -28,6 +28,7 @@ app=$YNH_APP_INSTANCE_NAME
 welcometext=$YNH_APP_ARG_WELCOMETEXT
 registerName=$YNH_APP_ARG_REGISTERNAME
 instance_id=$YNH_APP_INSTANCE_NUMBER
+mumbleweb=$YNH_APP_ARG_MUMBLEWEB
 
 server_password=$(ynh_string_random)
 su_passwd=$(ynh_string_random)
@@ -51,6 +52,7 @@ ynh_app_setting_set "$app" su_passwd       "$su_passwd"
 ynh_app_setting_set "$app" welcometext     "$welcometext"
 ynh_app_setting_set "$app" registerName    "$registerName"
 ynh_app_setting_set "$app" instance_id     "$instance_id"
+ynh_app_setting_set "$app" mumbleweb       "$mumbleweb"
 
 #=================================================
 # STANDARD MODIFICATIONS
@@ -69,7 +71,20 @@ yunohost firewall allow Both "$port"
 #=================================================
 
 # Install Mumble Debian package via apt
-ynh_install_app_dependencies mumble-server mailutils
+ynh_install_app_dependencies mumble-server mailutils websockify
+
+ynh_install_nodejs --nodejs_version="10"
+
+#=================================================
+# INSTALL Mumble-web
+#=================================================
+
+if [ "$mumbleweb" -eq 1 ] ; then
+    ynh_use_nodejs
+    (
+        npm install mumble-web@0.5.1
+    )
+fi
 
 #=================================================
 # SPECIFIC SETUP
@@ -101,6 +116,7 @@ ynh_store_file_checksum "$mumble_conf"
 
 # Create a dedicated systemd config
 ynh_add_systemd_config
+ynh_add_systemd_config mumble-web
 
 #=================================================
 # GENERIC FINALIZATION

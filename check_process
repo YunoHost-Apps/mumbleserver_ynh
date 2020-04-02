@@ -4,6 +4,7 @@
 		domain="domain.tld"	(DOMAIN)
 		welcometext="Welcome to my mumble server"
 		registername="Root"
+		mumbleweb=1
 	; Checks
 		pkg_linter=1
 		setup_sub_dir=0
@@ -11,10 +12,10 @@
 		setup_nourl=1
 		setup_private=0
 		setup_public=0
-		upgrade=1
+		upgrade=0
 		# latest published in community.json
-		backup_restore=1
-		multi_instance=1
+		backup_restore=0
+		multi_instance=0
 		wrong_user=0
 		wrong_path=0
 		incorrect_path=0
