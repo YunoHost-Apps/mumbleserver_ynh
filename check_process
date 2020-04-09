@@ -2,23 +2,21 @@
 	auto_remove=1
 	; Manifest
 		domain="domain.tld"	(DOMAIN)
+		path="/path"		(PATH)
+		is_public=1		(PUBLIC|public=1|private=0)
 		welcometext="Welcome to my mumble server"
 		registername="Root"
 		mumbleweb=1
 	; Checks
 		pkg_linter=1
-		setup_sub_dir=0
-		setup_root=0
+		setup_sub_dir=1
+		setup_root=1
 		setup_nourl=1
-		setup_private=0
-		setup_public=0
-		upgrade=0
-		# latest published in community.json
-		backup_restore=0
-		multi_instance=0
-		wrong_user=0
-		wrong_path=0
-		incorrect_path=0
+		setup_private=1
+		setup_public=1
+		upgrade=1
+		backup_restore=1
+		multi_instance=1
 		port_already_use=0
 ;;; Levels
 	Level 1=auto

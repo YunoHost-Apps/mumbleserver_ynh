@@ -24,11 +24,13 @@ ynh_abort_if_errors
 
 # Retrieve arguments
 domain=$YNH_APP_ARG_DOMAIN
+path=$YNH_APP_ARG_PATH
 app=$YNH_APP_INSTANCE_NAME
 welcometext=$YNH_APP_ARG_WELCOMETEXT
 registerName=$YNH_APP_ARG_REGISTERNAME
 instance_id=$YNH_APP_INSTANCE_NUMBER
 mumbleweb=$YNH_APP_ARG_MUMBLEWEB
+is_public=$YNH_APP_ARG_IS_PUBLIC
 
 server_password=$(ynh_string_random)
 su_passwd=$(ynh_string_random)
@@ -53,6 +55,7 @@ ynh_app_setting_set "$app" welcometext     "$welcometext"
 ynh_app_setting_set "$app" registerName    "$registerName"
 ynh_app_setting_set "$app" instance_id     "$instance_id"
 ynh_app_setting_set "$app" mumbleweb       "$mumbleweb"
+ynh_app_setting_set "$app" is_public       "$is_public"
 
 #=================================================
 # STANDARD MODIFICATIONS
@@ -66,34 +69,60 @@ ynh_app_setting_set "$app" port "$port"
 # Open port in firewall
 yunohost firewall allow Both "$port"
 
+if [ "$mumbleweb" -eq 1 ] ; then
+    port_web=$(ynh_find_port 64738)
+    ynh_app_setting_set "$app" port_web "$port_web"
+fi
+
 #=================================================
 # INSTALL DEPENDENCIES
 #=================================================
 
 # Install Mumble Debian package via apt
-ynh_install_app_dependencies mumble-server mailutils websockify
+ynh_install_app_dependencies $pkg_dependencies
 
-ynh_install_nodejs --nodejs_version="10"
+if [ "$mumbleweb" -eq 1 ] ; then
+    ynh_install_nodejs --nodejs_version="10"
+fi
 
 #=================================================
 # INSTALL Mumble-web
 #=================================================
 
+
+ynh_app_setting_set "$app" final_path "$final_path"
+mkdir -p "$final_path"
+
+
 if [ "$mumbleweb" -eq 1 ] ; then
-    ynh_use_nodejs
-    (
-        npm install mumble-web@0.5.1
-    )
+    ynh_setup_source --dest_dir="$final_path"
 fi
+
+
+#=================================================
+# NGINX CONFIGURATION
+#=================================================
+ynh_script_progression --message="Configuring nginx web server..." --time --weight=1
+
+### `ynh_add_nginx_config` will use the file conf/nginx.conf
+
+# Create a dedicated nginx config
+
+ynh_add_nginx_config "port_web"
+
+#=================================================
+# CREATE DEDICATED USER
+#=================================================
+ynh_script_progression --message="Configuring system user..." --weight=3
+
+# Create a dedicated system user
+ynh_system_user_create --username="$app" --home_dir="$final_path"
 
 #=================================================
 # SPECIFIC SETUP
 #=================================================
 # mumble server conf.ini
 #=================================================
-
-mkdir -p "$final_path"
-ynh_app_setting_set "$app" final_path "$final_path"
 
 # Configuring with given settings
 mumble_conf="$final_path/mumble-server.ini"
@@ -110,13 +139,27 @@ ynh_replace_string "__DOMAIN__"   "$domain"          "$mumble_conf"
 
 ynh_store_file_checksum "$mumble_conf"
 
+if [ "$mumbleweb" -eq 1 ] ; then
+	ynh_use_nodejs
+	(
+	    cd "$final_path"
+	    chown -R "$app": "$final_path"
+	    ynh_exec_as "$app" PATH="$nodejs_path:$PATH" "$nodejs_path/npm" install --save --loglevel warn
+	    ynh_exec_as "$app" PATH="$nodejs_path:$PATH" "$nodejs_path/npm" run build
+	    ls -lah
+	)
+fi
+
 #=================================================
 # SETUP SYSTEMD
 #=================================================
 
 # Create a dedicated systemd config
 ynh_add_systemd_config
-ynh_add_systemd_config mumble-web
+
+if [ "$mumbleweb" -eq 1 ] ; then
+	ynh_add_systemd_config "$app-web" mumble-web.service
+fi
 
 #=================================================
 # GENERIC FINALIZATION
@@ -156,6 +199,25 @@ yunohost service add "$app" -l "/var/log/mumble-server/$app.log"
 systemctl restart "$app"
 
 #=================================================
+# SETUP SSOWAT
+#=================================================
+ynh_script_progression --message="Configuring SSOwat..." --time --weight=1
+
+# Make app public if necessary
+if [ "$is_public" -eq 1 ]
+then
+	# unprotected_uris allows SSO credentials to be passed anyway.
+	ynh_app_setting_set --app="$app" --key=unprotected_uris --value="/"
+fi
+
+#=================================================
+# RELOAD NGINX
+#=================================================
+ynh_script_progression --message="Reloading nginx web server..." --time --weight=1
+
+ynh_systemd_action --service_name=nginx --action=reload
+
+#=================================================
 # SEND README TO ADMIN
 #=================================================
 
@@ -175,3 +237,10 @@ Are you facing an issue, want to improve this app or say thank you?
 Please open a new issue in this project: https://github.com/YunoHost-Apps/mumbleserver_ynh
 "
 ynh_send_readme_to_admin "$message"
+
+
+#=================================================
+# END OF SCRIPT
+#=================================================
+
+ynh_script_progression --message="Installation of $app completed" --time --last

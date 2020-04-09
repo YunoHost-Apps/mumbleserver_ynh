@@ -1,5 +1,7 @@
 #!/bin/bash
 
+pkg_dependencies="mumble-server mailutils websockify"
+
 # Send an email to inform the administrator
 #
 # usage: ynh_send_readme_to_admin app_message [recipients]
@@ -61,3 +63,16 @@ $(yunohost tools diagnosis | grep -B 100 "services:" | sed '/services:/d')"
 	echo "$mail_message" | $mail_bin -a "Content-Type: text/plain; charset=UTF-8" -s "$mail_subject" "$recipients"
 }
 
+
+# Execute a command as another user
+# usage: ynh_exec_as USER COMMAND [ARG ...]
+ynh_exec_as() {
+  local USER=$1
+  shift 1
+
+  if [[ $USER = $(whoami) ]]; then
+    eval "$@"
+  else
+    sudo -u "$USER" "$@"
+  fi
+}

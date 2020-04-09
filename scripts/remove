@@ -16,6 +16,7 @@ source /usr/share/yunohost/helpers
 app=$YNH_APP_INSTANCE_NAME
 
 domain=$(ynh_app_setting_get "$app" domain)
+path=$(ynh_app_setting_get "$app" path)
 port=$(ynh_app_setting_get "$app" port)
 final_path=$(ynh_app_setting_get "$app" final_path)
 
@@ -60,6 +61,14 @@ ynh_remove_nodejs
 ynh_secure_remove "$final_path"
 
 #=================================================
+# REMOVE NGINX CONFIGURATION
+#=================================================
+ynh_script_progression --message="Removing nginx web server configuration..." --time --weight=1
+
+# Remove the dedicated nginx config
+ynh_remove_nginx_config
+
+#=================================================
 # CLOSE A PORT
 #=================================================
 
@@ -76,3 +85,13 @@ fi
 #=================================================
 
 ynh_secure_remove "/var/log/mumble-server/$app.log"
+
+#=================================================
+# GENERIC FINALIZATION
+#=================================================
+# REMOVE DEDICATED USER
+#=================================================
+ynh_script_progression --message="Removing the dedicated system user..." --time --weight=1
+
+# Delete a system user
+ynh_system_user_delete --username="$app"

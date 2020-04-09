@@ -6,12 +6,7 @@
 # IMPORT GENERIC HELPERS
 #=================================================
 
-if [ ! -e _common.sh ]; then
-	# Get the _common.sh file if it's not in the current directory
-	cp ../settings/scripts/_common.sh ./_common.sh
-	chmod a+rx _common.sh
-fi
-source _common.sh
+source ../settings/scripts/_common.sh
 source /usr/share/yunohost/helpers
 
 #=================================================
@@ -29,17 +24,43 @@ ynh_abort_if_errors
 app=$YNH_APP_INSTANCE_NAME
 
 final_path=$(ynh_app_setting_get $app final_path)
+domain=$(ynh_app_setting_get --app=$app --key=domain)
 
 #=================================================
 # STANDARD BACKUP STEPS
 #=================================================
+# STOP SYSTEMD SERVICE
+#=================================================
+ynh_script_progression --message="Stopping a systemd service..." --time --weight=1
+
+ynh_systemd_action --service_name="$app" --action="stop"
+ynh_systemd_action --service_name="$app-web" --action="stop"
+
+#=================================================
 # BACKUP THE APP MAIN DIR
 #=================================================
+ynh_script_progression --message="Backing up the main app directory..." --time --weight=1
 
 ynh_backup "$final_path"
 
+#=================================================
+# BACKUP THE NGINX CONFIGURATION
+#=================================================
+ynh_script_progression --message="Backing up nginx web server configuration..." --time --weight=1
+
+ynh_backup --src_path="/etc/nginx/conf.d/$domain.d/$app.conf"
+
+#=================================================
+# SPECIFIC BACKUP
 #=================================================
 # BACKUP SYSTEMD
 #=================================================
 
 ynh_backup "/etc/systemd/system/$app.service"
+ynh_backup "/etc/systemd/system/$app-web.service"
+
+#=================================================
+# END OF SCRIPT
+#=================================================
+
+ynh_script_progression --message="Backup script completed for $app. (YunoHost will then actually copy those files to the archive)." --time --last

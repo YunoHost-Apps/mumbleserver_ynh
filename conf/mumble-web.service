@@ -1,15 +1,15 @@
 [Unit]
-Description=Mumble web interface
+Description=Mumble web interface (app: __APP__)
 Documentation=https://github.com/johni0702/mumble-web
 Requires=network.target mumble-server.service
 After=network.target mumble-server.service
 
 [Service]
 Type=simple
-User=www-data
+User=__APP__
 Environment="PATH=__ENV_PATH__"
 Environment=NODE_ENV=production
-ExecStart=/usr/bin/websockify --web=/usr/lib/node_modules/mumble-web/dist --ssl-target localhost:64737 localhost:64738
+ExecStart=/usr/bin/websockify --web=__FINALPATH__/dist/ --ssl-target localhost:__PORT_WEB__ localhost:__PORT__
 
 [Install]
 WantedBy=multi-user.target

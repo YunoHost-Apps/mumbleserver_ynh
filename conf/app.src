@@ -1,0 +1,6 @@
+SOURCE_URL=https://github.com/Johni0702/mumble-web/archive/8f97d6326cfdafd89995d91b039a568c3a479276.tar.gz
+SOURCE_SUM=8e54bba1259472e2f50b72dceae8e2a1637293bf3682c3fddefb2a94630bddeb
+SOURCE_SUM_PRG=sha256sum
+ARCH_FORMAT=tar.gz
+SOURCE_IN_SUBDIR=true
+SOURCE_FILENAME=
