@@ -70,7 +70,7 @@ ynh_app_setting_set "$app" port "$port"
 yunohost firewall allow Both "$port"
 
 if [ "$mumbleweb" -eq 1 ] ; then
-    port_web=$(ynh_find_port 64738)
+    port_web=$(ynh_find_port 64800)
     ynh_app_setting_set "$app" port_web "$port_web"
     # Open port in firewall
     yunohost firewall allow Both "$port_web"
