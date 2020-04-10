@@ -202,6 +202,8 @@ ynh_script_progression --message="Upgrading systemd configuration..." --time --w
 ynh_add_systemd_config
 
 if [ "$mumbleweb" -eq 1 ] ; then
+    ynh_replace_string "__PORT__"   "$port"    "../conf/mumble-web.service"
+    ynh_replace_string "__PORT_WEB__"   "$port_web"    "../conf/mumble-web.service"
 	ynh_add_systemd_config "$app-web" mumble-web.service
 fi
 

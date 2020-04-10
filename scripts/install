@@ -24,7 +24,7 @@ ynh_abort_if_errors
 
 # Retrieve arguments
 domain=$YNH_APP_ARG_DOMAIN
-path=$YNH_APP_ARG_PATH
+path_url=$YNH_APP_ARG_PATH
 app=$YNH_APP_INSTANCE_NAME
 welcometext=$YNH_APP_ARG_WELCOMETEXT
 registerName=$YNH_APP_ARG_REGISTERNAME
@@ -72,6 +72,8 @@ yunohost firewall allow Both "$port"
 if [ "$mumbleweb" -eq 1 ] ; then
     port_web=$(ynh_find_port 64738)
     ynh_app_setting_set "$app" port_web "$port_web"
+    # Open port in firewall
+    yunohost firewall allow Both "$port_web"
 fi
 
 #=================================================
@@ -158,6 +160,8 @@ fi
 ynh_add_systemd_config
 
 if [ "$mumbleweb" -eq 1 ] ; then
+    ynh_replace_string "__PORT__"   "$port"    "../conf/mumble-web.service"
+    ynh_replace_string "__PORT_WEB__"   "$port_web"    "../conf/mumble-web.service"
 	ynh_add_systemd_config "$app-web" mumble-web.service
 fi
 

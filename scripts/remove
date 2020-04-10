@@ -18,8 +18,9 @@ app=$YNH_APP_INSTANCE_NAME
 domain=$(ynh_app_setting_get "$app" domain)
 path=$(ynh_app_setting_get "$app" path)
 port=$(ynh_app_setting_get "$app" port)
+port_web=$(ynh_app_setting_get "$app" port_web)
+mumbleweb=$(ynh_app_setting_get "$app" mumbleweb)
 final_path=$(ynh_app_setting_get "$app" final_path)
-
 #=================================================
 # STANDARD REMOVE
 #=================================================
@@ -76,6 +77,14 @@ if yunohost firewall list | grep -q "\- $port$"
 then
 	echo "Close port $port"
 	yunohost firewall disallow Both "$port" > /dev/null 2>&1
+fi
+
+if [ "$mumbleweb" -eq 1 ] ; then
+    if yunohost firewall list | grep -q "\- $port_web$"
+    then
+        echo "Close port $port_web"
+        yunohost firewall disallow Both "$port_web" > /dev/null 2>&1
+    fi
 fi
 
 #=================================================
