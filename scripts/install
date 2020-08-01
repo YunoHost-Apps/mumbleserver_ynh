@@ -44,13 +44,13 @@ test ! -e "$final_path" || ynh_die "This path already contains a folder"
 #=================================================
 
 # Save app settings
-ynh_app_setting_set "$app" domain          "$domain"
-ynh_app_setting_set "$app" no_sso          "true"
-ynh_app_setting_set "$app" server_password "$server_password"
-ynh_app_setting_set "$app" su_passwd       "$su_passwd"
-ynh_app_setting_set "$app" welcometext     "$welcometext"
-ynh_app_setting_set "$app" registerName    "$registerName"
-ynh_app_setting_set "$app" instance_id     "$instance_id"
+ynh_app_setting_set --app=$app --key=domain          --value="$domain"
+ynh_app_setting_set --app=$app --key=no_sso          --value="true"
+ynh_app_setting_set --app=$app --key=server_password --value="$server_password"
+ynh_app_setting_set --app=$app --key=su_passwd       --value="$su_passwd"
+ynh_app_setting_set --app=$app --key=welcometext     --value="$welcometext"
+ynh_app_setting_set --app=$app --key=registerName    --value="$registerName"
+ynh_app_setting_set --app=$app --key=instance_id     --value="$instance_id"
 
 #=================================================
 # STANDARD MODIFICATIONS
@@ -79,7 +79,7 @@ ynh_install_app_dependencies $pkg_dependencies
 #=================================================
 
 mkdir -p "$final_path"
-ynh_app_setting_set "$app" final_path "$final_path"
+ynh_app_setting_set --app=$app --key=final_path --value=$final_path
 
 # Configuring with given settings
 mumble_conf="$final_path/mumble-server.ini"
@@ -134,11 +134,12 @@ systemctl stop $app
 systemctl disable $app
 
 #=================================================
-# ADVERTISE SERVICE IN ADMIN PANEL
+# INTEGRATE SERVICE IN YUNOHOST
 #=================================================
+ynh_script_progression --message="Integrating service in YunoHost..."
 
 # Add Mumble as a YunoHost service
-yunohost service add "$app" -l "/var/log/mumble-server/$app.log"
+yunohost service add $app --description "Mumble server" --log="/var/log/$app/$app.log"
 
 systemctl restart "$app"
 
@@ -162,3 +163,9 @@ Are you facing an issue, want to improve this app or say thank you?
 Please open a new issue in this project: https://github.com/YunoHost-Apps/mumbleserver_ynh
 "
 ynh_send_readme_to_admin "$message"
+
+#=================================================
+# END OF SCRIPT
+#=================================================
+
+ynh_script_progression --message="Installation of $app completed" --last

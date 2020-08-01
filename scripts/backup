@@ -6,12 +6,7 @@
 # IMPORT GENERIC HELPERS
 #=================================================
 
-if [ ! -e _common.sh ]; then
-	# Get the _common.sh file if it's not in the current directory
-	cp ../settings/scripts/_common.sh ./_common.sh
-	chmod a+rx _common.sh
-fi
-source _common.sh
+source ../settings/scripts/_common.sh
 source /usr/share/yunohost/helpers
 
 #=================================================
@@ -21,14 +16,19 @@ source /usr/share/yunohost/helpers
 # Exit if an error occurs during the execution of the script
 ynh_abort_if_errors
 
-
 #=================================================
 # LOAD SETTINGS
 #=================================================
+ynh_print_info --message="Loading installation settings..."
 
 app=$YNH_APP_INSTANCE_NAME
 
-final_path=$(ynh_app_setting_get $app final_path)
+final_path=$(ynh_app_setting_get --app=$app --key=final_path)
+
+#=================================================
+# DECLARE DATA AND CONF FILES TO BACKUP
+#=================================================
+ynh_print_info --message="Declaring files to be backed up..."
 
 #=================================================
 # STANDARD BACKUP STEPS
@@ -43,3 +43,9 @@ ynh_backup "$final_path"
 #=================================================
 
 ynh_backup "/etc/systemd/system/$app.service"
+
+#=================================================
+# END OF SCRIPT
+#=================================================
+
+ynh_print_info --message="Backup script completed for $app. (YunoHost will then actually copy those files to the archive)."
