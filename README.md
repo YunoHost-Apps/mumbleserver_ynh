@@ -12,7 +12,6 @@ Password and other usefull information will be sent to you after installation.
 - [Add the admin](http://wiki.mumble.info/wiki/Murmurguide#Connecting_to_Murmur_Server)
 
 #### Maintainers & history
-----------------
 
 * 2014: Package creation was maid by [matlink]](https://github.com/Matlink)
 * 2016: improved and maintained by [Moul](https://github.com/M5oul)

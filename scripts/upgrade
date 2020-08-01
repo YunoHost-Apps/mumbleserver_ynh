@@ -211,3 +211,9 @@ Are you facing an issue, want to improve this app or say thank you?
 Please open a new issue in this project: https://github.com/YunoHost-Apps/mumbleserver_ynh
 "
 ynh_send_readme_to_admin "$message"
+
+#=================================================
+# END OF SCRIPT
+#=================================================
+
+ynh_script_progression --message="Upgrade of $app completed" --last

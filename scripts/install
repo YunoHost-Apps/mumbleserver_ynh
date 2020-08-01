@@ -59,7 +59,7 @@ ynh_app_setting_set "$app" instance_id     "$instance_id"
 #=================================================
 
 port=$(ynh_find_port 64738)
-ynh_app_setting_set "$app" port "$port"
+ynh_app_setting_set --app=$app --key=port --value=$port
 
 # Open port in firewall
 yunohost firewall allow Both "$port"
@@ -69,7 +69,8 @@ yunohost firewall allow Both "$port"
 #=================================================
 
 # Install Mumble Debian package via apt
-ynh_install_app_dependencies mumble-server mailutils
+
+ynh_install_app_dependencies $pkg_dependencies
 
 #=================================================
 # SPECIFIC SETUP
@@ -109,13 +110,13 @@ ynh_add_systemd_config
 #=================================================
 
 chmod -R 770 "$final_path"
-chown -R :mumble-server "$final_path"
+chown -R :$app "$final_path"
 
 #=================================================
 # Add user to ssl-cert so it can read certificates
 #=================================================
 
-usermod --append --groups ssl-cert mumble-server
+usermod --append --groups ssl-cert $app
 
 #=================================================
 # Set SuperUser password
@@ -129,8 +130,8 @@ murmurd -ini "$mumble_conf" -supw "$su_passwd" "$instance_id" || true
 # Disable default server installed by Debian's package
 #=================================================
 
-systemctl stop mumble-server
-systemctl disable mumble-server
+systemctl stop $app
+systemctl disable $app
 
 #=================================================
 # ADVERTISE SERVICE IN ADMIN PANEL
