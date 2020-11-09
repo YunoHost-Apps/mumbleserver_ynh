@@ -21,10 +21,6 @@ Password and other usefull information will be sent to you after installation.
 
 # State of this package
 
-* works fine:
-
-  * [x] install/remove/backup/remove/upgrade/multi-instance with x86_64
-
 * to be confirmed
   * [x] ARM support
   * [x] Improve systemd protection
