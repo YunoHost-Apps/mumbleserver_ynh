@@ -17,7 +17,7 @@ Password and other usefull information will be sent to you after installation.
 * 2016: improved and maintained by [Moul](https://github.com/M5oul)
 * 2018: full rewrite and now maintained by [Jibec](https://github.com/Jibec)
 
-**Shipped version:** 1.2.8 (source package provided by Debian) 
+**Shipped version:** 1.3.0
 
 # State of this package
 
