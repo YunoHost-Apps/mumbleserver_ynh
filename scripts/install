@@ -35,6 +35,7 @@ su_passwd=$(ynh_string_random)
 #=================================================
 # CHECK IF THE APP CAN BE INSTALLED WITH THESE ARGS
 #=================================================
+ynh_script_progression --message="Validating installation parameters..." --weight=1
 
 final_path=/var/www/$app
 test ! -e "$final_path" || ynh_die "This path already contains a folder"
@@ -42,6 +43,7 @@ test ! -e "$final_path" || ynh_die "This path already contains a folder"
 #=================================================
 # STORE SETTINGS FROM MANIFEST
 #=================================================
+ynh_script_progression --message="Storing installation settings..." --weight=2
 
 # Save app settings
 ynh_app_setting_set --app=$app --key=domain          --value="$domain"
@@ -57,6 +59,7 @@ ynh_app_setting_set --app=$app --key=instance_id     --value="$instance_id"
 #=================================================
 # FIND AND OPEN A PORT
 #=================================================
+ynh_script_progression --message="Configuring firewall..." --weight=1
 
 port=$(ynh_find_port 64738)
 ynh_app_setting_set --app=$app --key=port --value=$port
@@ -67,9 +70,9 @@ yunohost firewall allow Both "$port"
 #=================================================
 # INSTALL DEPENDENCIES
 #=================================================
+ynh_script_progression --message="Installing dependencies..." --weight=4
 
 # Install Mumble Debian package via apt
-
 ynh_install_app_dependencies $pkg_dependencies
 
 #=================================================
@@ -86,13 +89,13 @@ mumble_conf="$final_path/mumble-server.ini"
 
 cp ../conf/mumble-server.ini "$mumble_conf"
 
-ynh_replace_string "__FINALPATH__" "$final_path"     "$mumble_conf"
-ynh_replace_string "__APP__"      "$app"             "$mumble_conf"
-ynh_replace_string "__WELCOME__"  "$welcometext"     "$mumble_conf"
-ynh_replace_string "__PORT__"     "$port"            "$mumble_conf"
-ynh_replace_string "__SRV_PWD__"  "$server_password" "$mumble_conf"
-ynh_replace_string "__REGISTER__" "$registerName"    "$mumble_conf"
-ynh_replace_string "__DOMAIN__"   "$domain"          "$mumble_conf"
+ynh_replace_string --match_string="__FINALPATH__" --replace_string="$final_path"      --target_file="$mumble_conf"
+ynh_replace_string --match_string="__APP__"       --replace_string="$app"             --target_file="$mumble_conf"
+ynh_replace_string --match_string="__WELCOME__"   --replace_string="$welcometext"     --target_file="$mumble_conf"
+ynh_replace_string --match_string="__PORT__"      --replace_string="$port"            --target_file="$mumble_conf"
+ynh_replace_string --match_string="__SRV_PWD__"   --replace_string="$server_password" --target_file="$mumble_conf"
+ynh_replace_string --match_string="__REGISTER__"  --replace_string="$registerName"    --target_file="$mumble_conf"
+ynh_replace_string --match_string="__DOMAIN__"    --replace_string="$domain"          --target_file="$mumble_conf"
 
 ynh_store_file_checksum "$mumble_conf"
 
