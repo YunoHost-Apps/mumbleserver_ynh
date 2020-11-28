@@ -5,13 +5,14 @@
 #=================================================
 # IMPORT GENERIC HELPERS
 #=================================================
+
 source _common.sh
 source /usr/share/yunohost/helpers
 
 #=================================================
 # LOAD SETTINGS
 #=================================================
-
+ynh_script_progression --message="Loading installation settings..." --weight=1
 app=$YNH_APP_INSTANCE_NAME
 
 domain=$(ynh_app_setting_get "$app" domain)
@@ -23,6 +24,12 @@ registerName=$(ynh_app_setting_get "$app" registerName)
 port=$(ynh_app_setting_get "$app" port)
 final_path=$(ynh_app_setting_get "$app" final_path)
 instance_id=$(ynh_app_setting_get "$app" instance_id)
+
+#=================================================
+# CHECK VERSION
+#=================================================
+
+upgrade_type=$(ynh_check_app_version_changed)
 
 #=================================================
 # ENSURE DOWNWARD COMPATIBILITY
@@ -90,10 +97,10 @@ if [ -z "$instance_id" ]; then
 	ynh_app_setting_set "$app" instance_id "$instance_id"
 fi
 
-
 #=================================================
 # BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
 #=================================================
+ynh_script_progression --message="Backing up the app before upgrading (may take a while)..." --weight=5
 
 # Backup the current version of the app
 ynh_backup_before_upgrade
@@ -114,9 +121,10 @@ ynh_abort_if_errors
 #=================================================
 # INSTALL DEPENDENCIES
 #=================================================
+ynh_script_progression --message="Upgrading dependencies..." --weight=6
 
 # Install Mumble Debian package via apt
-ynh_install_app_dependencies mumble-server mailutils
+ynh_install_app_dependencies $pkg_dependencies
 
 #=================================================
 # SPECIFIC UPGRADE
@@ -133,13 +141,13 @@ ynh_backup_if_checksum_is_different "$mumble_conf"
 
 cp ../conf/mumble-server.ini "$mumble_conf"
 
-ynh_replace_string "__FINALPATH__" "$final_path"     "$mumble_conf"
-ynh_replace_string "__APP__"      "$app"             "$mumble_conf"
-ynh_replace_string "__WELCOME__"  "$welcometext"     "$mumble_conf"
-ynh_replace_string "__PORT__"     "$port"            "$mumble_conf"
-ynh_replace_string "__SRV_PWD__"  "$server_password" "$mumble_conf"
-ynh_replace_string "__REGISTER__" "$registerName"    "$mumble_conf"
-ynh_replace_string "__DOMAIN__"   "$domain"          "$mumble_conf"
+ynh_replace_string --match_string="__FINALPATH__" --replace_string="$final_path"      --target_file="$mumble_conf"
+ynh_replace_string --match_string="__APP__"       --replace_string="$app"             --target_file="$mumble_conf"
+ynh_replace_string --match_string="__WELCOME__"   --replace_string="$welcometext"     --target_file="$mumble_conf"
+ynh_replace_string --match_string="__PORT__"      --replace_string="$port"            --target_file="$mumble_conf"
+ynh_replace_string --match_string="__SRV_PWD__"   --replace_string="$server_password" --target_file="$mumble_conf"
+ynh_replace_string --match_string="__REGISTER__"  --replace_string="$registerName"    --target_file="$mumble_conf"
+ynh_replace_string --match_string="__DOMAIN__"    --replace_string="$domain"          --target_file="$mumble_conf"
 
 ynh_store_file_checksum "$mumble_conf"
 
@@ -211,3 +219,9 @@ Are you facing an issue, want to improve this app or say thank you?
 Please open a new issue in this project: https://github.com/YunoHost-Apps/mumbleserver_ynh
 "
 ynh_send_readme_to_admin "$message"
+
+#=================================================
+# END OF SCRIPT
+#=================================================
+
+ynh_script_progression --message="Upgrade of $app completed" --last
