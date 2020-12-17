@@ -3,8 +3,8 @@
     "id": "mumbleserver",
     "packaging_format": 1,
     "description": {
-        "en": "Mumble is a libre, low-latency, high quality voice chat software primarily intended for use while gaming.",
-        "fr": "Mumble est un logiciel libre de voix sur IP (VoIP), son principal usage étant la communication pendant les parties de jeux en réseau."
+        "en": "Low-latency, high quality voice chat software (VoIP).",
+        "fr": "Logiciel libre de voix sur IP (VoIP)."
     },
     "url": "https://mumble.info",
     "license": "BSD-3-Clause",
