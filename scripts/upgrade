@@ -168,7 +168,7 @@ chown -R :mumble-server "$final_path"
 # Add user to ssl-cert so it can read certificates
 #=================================================
 
-ynh_exec_warn_less usermod --append --groups ssl-cert mumble-server
+usermod --append --groups ssl-cert mumble-server
 
 #=================================================
 # Set SuperUser password
