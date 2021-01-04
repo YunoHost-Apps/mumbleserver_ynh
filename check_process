@@ -17,10 +17,7 @@
 		multi_instance=1
 		wrong_user=0
 		wrong_path=0
-		incorrect_path=0
 		port_already_use=0
-;;; Levels
-	Level 5=auto
 ;;; Options
 Email=jean-baptiste@holcroft.fr
 Notification=all
