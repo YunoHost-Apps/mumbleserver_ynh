@@ -66,14 +66,14 @@ usermod --append --groups ssl-cert mumble-server
 #=================================================
 
 systemctl stop mumble-server
-systemctl disable mumble-server
+systemctl disable mumble-server --quiet
 
 #=================================================
 # ADVERTISE SERVICE IN ADMIN PANEL
 #=================================================
 
 # Add Mumble as a YunoHost service
-yunohost service add "$app" -l "/var/log/mumble-server/$app.log"
+yunohost service add $app --description="Mumble server" --log="/var/log/$app/$app.log"
 
 #=================================================
 # RESTORE SYSTEMD

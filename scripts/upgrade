@@ -74,7 +74,7 @@ if [ -z "$server_password" ]; then
 	systemctl stop mumble-server
 	dpkg-reconfigure mumble-server --frontend=Noninteractive
 	systemctl stop mumble-server
-	systemctl disable mumble-server
+	systemctl disable mumble-server --quiet
 fi
 
 # Fix SSO issue
@@ -193,7 +193,7 @@ systemctl disable mumble-server --quiet
 #=================================================
 
 # Add Mumble as a YunoHost service
-yunohost service add "$app" -l "/var/log/mumble-server/$app.log"
+yunohost service add $app --description="Mumble server" --log="/var/log/$app/$app.log"
 
 systemctl restart "$app"
 
