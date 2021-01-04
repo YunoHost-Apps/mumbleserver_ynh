@@ -99,6 +99,8 @@ ynh_replace_string --match_string="__DOMAIN__"    --replace_string="$domain"    
 
 ynh_store_file_checksum "$mumble_conf"
 
+cp ../conf/mumble-server.conf /etc/tmpfiles.d/mumble-server.conf
+
 #=================================================
 # SETUP SYSTEMD
 #=================================================
@@ -114,6 +116,14 @@ ynh_add_systemd_config
 
 chmod -R 770 "$final_path"
 chown -R :mumble-server "$final_path"
+
+#=================================================
+# SETUP LOGROTATE
+#=================================================
+ynh_script_progression --message="Configuring log rotation..." --weight=1
+
+# Use logrotate to manage application logfile(s)
+ynh_use_logrotate
 
 #=================================================
 # Add user to ssl-cert so it can read certificates

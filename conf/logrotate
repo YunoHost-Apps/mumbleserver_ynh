@@ -1,0 +1,12 @@
+/var/log/mumble-server/*log {
+    su mumble-server mumble-server
+    dateext
+    rotate 4
+    missingok
+    notifempty
+    sharedscripts
+    delaycompress
+    postrotate
+        /bin/systemctl reload mumble-server.service > /dev/null 2>/dev/null || true
+    endscript
+}
