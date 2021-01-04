@@ -1,5 +1,5 @@
 [Unit]
-Description=Mumble Server (Murmur, app __APP__)
+Description=Mumble Server: voice chat application
 Requires=network-online.target
 After=network.target
 
