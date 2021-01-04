@@ -73,7 +73,7 @@ yunohost firewall allow Both "$port"
 ynh_script_progression --message="Installing dependencies..." --weight=4
 
 # Install Mumble Debian package via apt
-ynh_install_app_dependencies $pkg_dependencies
+ynh_exec_warn_less ynh_install_app_dependencies $pkg_dependencies
 
 #=================================================
 # SPECIFIC SETUP
@@ -142,7 +142,7 @@ systemctl disable mumble-server --quiet
 ynh_script_progression --message="Integrating service in YunoHost..."
 
 # Add Mumble as a YunoHost service
-yunohost service add $app --description="Mumble server" --log="/var/log/$app/$app.log"
+yunohost service add $app --description="Mumble server" --log="/var/log/$app/$app.log" --needs_exposed_ports $port
 
 systemctl restart "$app"
 

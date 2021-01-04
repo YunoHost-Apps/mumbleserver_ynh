@@ -13,6 +13,7 @@ source /usr/share/yunohost/helpers
 # LOAD SETTINGS
 #=================================================
 ynh_script_progression --message="Loading installation settings..." --weight=1
+
 app=$YNH_APP_INSTANCE_NAME
 
 domain=$(ynh_app_setting_get --app=$app --key=domain)
@@ -34,6 +35,7 @@ upgrade_type=$(ynh_check_app_version_changed)
 #=================================================
 # ENSURE DOWNWARD COMPATIBILITY
 #=================================================
+ynh_script_progression --message="Ensuring downward compatibility..." --weight=1
 
 # If final_path doesn't exist, create it
 if [ -z "$final_path" ]; then
@@ -124,7 +126,7 @@ ynh_abort_if_errors
 ynh_script_progression --message="Upgrading dependencies..." --weight=6
 
 # Install Mumble Debian package via apt
-ynh_install_app_dependencies $pkg_dependencies
+ynh_exec_warn_less ynh_install_app_dependencies $pkg_dependencies
 
 #=================================================
 # SPECIFIC UPGRADE
@@ -154,6 +156,7 @@ ynh_store_file_checksum "$mumble_conf"
 #=================================================
 # SETUP SYSTEMD
 #=================================================
+ynh_script_progression --message="Upgrading systemd configuration..." --weight=2
 
 # Create a dedicated systemd config
 ynh_add_systemd_config
@@ -193,9 +196,14 @@ systemctl disable mumble-server --quiet
 #=================================================
 
 # Add Mumble as a YunoHost service
-yunohost service add $app --description="Mumble server" --log="/var/log/$app/$app.log"
+yunohost service add $app --description="Mumble server" --log="/var/log/$app/$app.log" --needs_exposed_ports $port
 
-systemctl restart "$app"
+#=================================================
+# START SYSTEMD SERVICE
+#=================================================
+ynh_script_progression --message="Starting a systemd service..." --weight=3
+
+ynh_systemd_action --service_name=$app --action=restart #--log_path="/var/log/$app/$app.log"
 
 #=================================================
 # SEND README TO ADMIN
