@@ -115,18 +115,12 @@ ynh_clean_setup () {
 ynh_abort_if_errors
 
 #=================================================
-# STANDARD UPGRADE STEPS
-#=================================================
-
-# source and user are provided by debian's package, no web interface
-
-#=================================================
 # INSTALL DEPENDENCIES
 #=================================================
 ynh_script_progression --message="Upgrading dependencies..." --weight=6
 
 # Install Mumble Debian package via apt
-ynh_exec_warn_less ynh_install_app_dependencies $pkg_dependencies
+ynh_install_app_dependencies $pkg_dependencies
 
 #=================================================
 # SPECIFIC UPGRADE
@@ -174,7 +168,7 @@ chown -R :mumble-server "$final_path"
 # Add user to ssl-cert so it can read certificates
 #=================================================
 
-usermod --append --groups ssl-cert mumble-server
+ynh_exec_warn_less usermod --append --groups ssl-cert mumble-server
 
 #=================================================
 # Set SuperUser password

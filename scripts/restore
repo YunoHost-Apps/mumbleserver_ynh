@@ -64,7 +64,7 @@ chown -R :mumble-server "$final_path"
 # Add user to ssl-cert so it can read certificates
 #=================================================
 
-usermod --append --groups ssl-cert mumble-server
+ynh_exec_warn_less usermod --append --groups ssl-cert mumble-server
 
 #=================================================
 # Disable default server installed by Debian's package
