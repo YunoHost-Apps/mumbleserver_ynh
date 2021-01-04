@@ -4,8 +4,8 @@ Requires=network-online.target
 After=network.target
 
 [Service]
-User=__APP__
-Group=__APP__
+User=mumble-server
+Group=mumble-server
 Type=forking
 # https://www.freedesktop.org/software/systemd/man/systemd.exec.html#RuntimeDirectory=
 RuntimeDirectory=mumble-server

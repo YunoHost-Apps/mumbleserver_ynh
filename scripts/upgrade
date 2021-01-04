@@ -15,15 +15,15 @@ source /usr/share/yunohost/helpers
 ynh_script_progression --message="Loading installation settings..." --weight=1
 app=$YNH_APP_INSTANCE_NAME
 
-domain=$(ynh_app_setting_get "$app" domain)
-no_sso=$(ynh_app_setting_get "$app" no_sso)
-server_password=$(ynh_app_setting_get "$app" server_password)
-su_passwd=$(ynh_app_setting_get "$app" su_passwd)
-welcometext=$(ynh_app_setting_get "$app" welcometext)
-registerName=$(ynh_app_setting_get "$app" registerName)
-port=$(ynh_app_setting_get "$app" port)
-final_path=$(ynh_app_setting_get "$app" final_path)
-instance_id=$(ynh_app_setting_get "$app" instance_id)
+domain=$(ynh_app_setting_get --app=$app --key=domain)
+no_sso=$(ynh_app_setting_get --app=$app --key=no_sso)
+server_password=$(ynh_app_setting_get --app=$app --key=server_password)
+su_passwd=$(ynh_app_setting_get --app=$app --key=su_passwd)
+welcometext=$(ynh_app_setting_get --app=$app --key=welcometext)
+registerName=$(ynh_app_setting_get --app=$app --key=registerName)
+port=$(ynh_app_setting_get --app=$app --key=port)
+final_path=$(ynh_app_setting_get --app=$app --key=final_path)
+instance_id=$(ynh_app_setting_get --app=$app --key=instance_id)
 
 #=================================================
 # CHECK VERSION
@@ -65,11 +65,11 @@ if [ -z "$server_password" ]; then
 		| head -1 \
 		| sed -r "s/.* (([a-z])*\.([a-z])*).*/\1/g")
 
-	ynh_app_setting_set "$app" server_password "$server_password"
-	ynh_app_setting_set "$app" welcometext     "$welcometext"
-	ynh_app_setting_set "$app" registerName    "$registerName"
-	ynh_app_setting_set "$app" su_passwd       "$su_passwd"
-	ynh_app_setting_set "$app" domain          "$domain"
+	ynh_app_setting_set --app=$app --key=server_password --value=$server_password
+	ynh_app_setting_set --app=$app --key=welcometext     --value=$welcometext
+	ynh_app_setting_set --app=$app --key=registerName    --value=$registerName
+	ynh_app_setting_set --app=$app --key=su_passwd       --value=$su_passwd
+	ynh_app_setting_set --app=$app --key=domain          --value=$domain
 
 	systemctl stop mumble-server
 	dpkg-reconfigure mumble-server --frontend=Noninteractive
@@ -186,7 +186,7 @@ murmurd -ini "$mumble_conf" -supw "$su_passwd" "$instance_id" || true
 #=================================================
 
 systemctl stop mumble-server
-systemctl disable mumble-server
+systemctl disable mumble-server --quiet
 
 #=================================================
 # ADVERTISE SERVICE IN ADMIN PANEL

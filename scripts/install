@@ -113,7 +113,7 @@ ynh_add_systemd_config
 #=================================================
 
 chmod -R 770 "$final_path"
-chown -R :$app "$final_path"
+chown -R :mumble-server "$final_path"
 
 #=================================================
 # Add user to ssl-cert so it can read certificates
@@ -134,7 +134,7 @@ murmurd -ini "$mumble_conf" -supw "$su_passwd" "$instance_id" || true
 #=================================================
 
 systemctl stop $app
-systemctl disable $app
+systemctl disable $app --quiet
 
 #=================================================
 # INTEGRATE SERVICE IN YUNOHOST

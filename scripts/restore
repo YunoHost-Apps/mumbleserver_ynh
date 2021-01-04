@@ -80,7 +80,7 @@ yunohost service add "$app" -l "/var/log/mumble-server/$app.log"
 #=================================================
 
 ynh_restore_file "/etc/systemd/system/$app.service"
-systemctl enable "$app.service"
+systemctl enable "$app.service" --quiet
 
 systemctl restart "$app"
 
