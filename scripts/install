@@ -119,7 +119,7 @@ chown -R :mumble-server "$final_path"
 # Add user to ssl-cert so it can read certificates
 #=================================================
 
-usermod --append --groups ssl-cert $app
+usermod --append --groups ssl-cert mumble-server
 
 #=================================================
 # Set SuperUser password
@@ -133,8 +133,8 @@ murmurd -ini "$mumble_conf" -supw "$su_passwd" "$instance_id" || true
 # Disable default server installed by Debian's package
 #=================================================
 
-systemctl stop $app
-systemctl disable $app --quiet
+systemctl stop mumble-server
+systemctl disable mumble-server --quiet
 
 #=================================================
 # INTEGRATE SERVICE IN YUNOHOST
@@ -142,7 +142,7 @@ systemctl disable $app --quiet
 ynh_script_progression --message="Integrating service in YunoHost..."
 
 # Add Mumble as a YunoHost service
-yunohost service add $app --description "Mumble server" --log="/var/log/$app/$app.log"
+yunohost service add $app --description="Mumble server" --log="/var/log/$app/$app.log"
 
 systemctl restart "$app"
 
