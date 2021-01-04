@@ -76,6 +76,14 @@ fi
 ynh_secure_remove "/var/log/mumble-server/$app.log"
 
 #=================================================
+# REMOVE LOGROTATE CONFIGURATION
+#=================================================
+ynh_script_progression --message="Removing logrotate configuration..." --weight=1
+
+# Remove the app-specific logrotate config
+ynh_remove_logrotate
+
+#=================================================
 # END OF SCRIPT
 #=================================================
 

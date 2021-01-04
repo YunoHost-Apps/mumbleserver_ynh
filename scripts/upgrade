@@ -165,6 +165,14 @@ chmod -R 770 "$final_path"
 chown -R :mumble-server "$final_path"
 
 #=================================================
+# SETUP LOGROTATE
+#=================================================
+ynh_script_progression --message="Upgrading logrotate configuration..." --weight=1
+
+# Use logrotate to manage app-specific logfile(s)
+ynh_use_logrotate --non-append
+
+#=================================================
 # Add user to ssl-cert so it can read certificates
 #=================================================
 

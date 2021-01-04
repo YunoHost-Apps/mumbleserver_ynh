@@ -97,6 +97,12 @@ ynh_script_progression --message="Starting a systemd service..." --weight=3
 ynh_systemd_action --service_name=$app --action=restart #--log_path="/var/log/$app/$app.log"
 
 #=================================================
+# RESTORE THE LOGROTATE CONFIGURATION
+#=================================================
+
+ynh_restore_file --origin_path="/etc/logrotate.d/$app"
+
+#=================================================
 # END OF SCRIPT
 #=================================================
 

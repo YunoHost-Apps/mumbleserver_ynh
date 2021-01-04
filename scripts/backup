@@ -38,6 +38,12 @@ ynh_print_info --message="Declaring files to be backed up..."
 ynh_backup "$final_path"
 
 #=================================================
+# BACKUP LOGROTATE
+#=================================================
+
+ynh_backup --src_path="/etc/logrotate.d/$app"
+
+#=================================================
 # BACKUP SYSTEMD
 #=================================================
 
