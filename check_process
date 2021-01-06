@@ -2,7 +2,7 @@
 	auto_remove=1
 	; Manifest
 		domain="domain.tld"	(DOMAIN)
-		welcometext="Welcome to my mumble server"
+		welcometext="Welcome to my Mumble server"
 		registername="Root"
 	; Checks
 		pkg_linter=1
@@ -12,25 +12,14 @@
 		setup_private=0
 		setup_public=0
 		upgrade=1
-		# latest published in community.json
 		backup_restore=1
 		multi_instance=1
 		wrong_user=0
 		wrong_path=0
-		incorrect_path=0
 		port_already_use=0
-;;; Levels
-	Level 1=auto
-	Level 2=auto
-	Level 3=auto
-	# https://github.com/YunoHost-Apps/mumbleserver_ynh/issues/11
-	Level 4=1
-	Level 5=auto
-	Level 6=auto
-	Level 7=auto
-	Level 8=0
-	Level 9=0
-	Level 10=0
 ;;; Options
-Email=jean-baptiste@holcroft.fr
-Notification=all
+Email=
+Notification=none
+;;; Upgrade options
+	; commit=CommitHash
+		name=Name and date of the commit.
