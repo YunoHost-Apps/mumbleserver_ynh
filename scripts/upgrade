@@ -198,7 +198,7 @@ Port                   : $port
 Password to join server: $server_password
 SuperUser Password     : $su_passwd
 Welcome text           : $welcometext
-Root channel (your mumble server name): $registerName
+Root channel (your mumble server name): $registername
 Final path (where to find your files) : $final_path
 Mumble configuration file             : $mumble_conf
 
