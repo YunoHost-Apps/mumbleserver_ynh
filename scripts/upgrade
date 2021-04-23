@@ -133,19 +133,7 @@ mkdir -p $final_path
 # Configuring with given settings
 mumble_conf="$final_path/mumble-server.ini"
 
-ynh_backup_if_checksum_is_different "$mumble_conf"
-
-cp ../conf/mumble-server.ini "$mumble_conf"
-
-ynh_replace_string --match_string="__FINALPATH__" --replace_string="$final_path"      --target_file="$mumble_conf"
-ynh_replace_string --match_string="__APP__"       --replace_string="$app"             --target_file="$mumble_conf"
-ynh_replace_string --match_string="__WELCOME__"   --replace_string="$welcometext"     --target_file="$mumble_conf"
-ynh_replace_string --match_string="__PORT__"      --replace_string="$port"            --target_file="$mumble_conf"
-ynh_replace_string --match_string="__SRV_PWD__"   --replace_string="$server_password" --target_file="$mumble_conf"
-ynh_replace_string --match_string="__REGISTER__"  --replace_string="$registerName"    --target_file="$mumble_conf"
-ynh_replace_string --match_string="__DOMAIN__"    --replace_string="$domain"          --target_file="$mumble_conf"
-
-ynh_store_file_checksum "$mumble_conf"
+ynh_add_config --template="../conf/mumble-server.ini" --destination="$mumble_conf"
 
 #=================================================
 # SETUP SYSTEMD

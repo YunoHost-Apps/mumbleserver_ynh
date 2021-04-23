@@ -37,8 +37,8 @@ This package installs the Debian package and configures it with given settings. 
 
 #### Supported architectures
 
-* x86-64 - [![Build Status](https://ci-apps.yunohost.org/ci/logs/mumbleserver%20%28Apps%29.svg)](https://ci-apps.yunohost.org/ci/apps/mumbleserver/)
-* ARMv8-A - [![Build Status](https://ci-apps-arm.yunohost.org/ci/logs/mumbleserver%20%28Apps%29.svg)](https://ci-apps-arm.yunohost.org/ci/apps/mumbleserver/)
+* x86-64 - [![Build Status](https://ci-apps.yunohost.org/ci/logs/mumbleserver.svg)](https://ci-apps.yunohost.org/ci/apps/mumbleserver/)
+* ARMv8-A - [![Build Status](https://ci-apps-arm.yunohost.org/ci/logs/mumbleserver.svg)](https://ci-apps-arm.yunohost.org/ci/apps/mumbleserver/)
 
 ## Limitations
 

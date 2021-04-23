@@ -59,13 +59,14 @@ ynh_app_setting_set --app=$app --key=instance_id     --value="$instance_id"
 #=================================================
 # FIND AND OPEN A PORT
 #=================================================
-ynh_script_progression --message="Configuring firewall..." --weight=1
+ynh_script_progression --message="Finding an available port..." --weight=1
 
-port=$(ynh_find_port 64738)
+port=$(ynh_find_port --port=64738)
 ynh_app_setting_set --app=$app --key=port --value=$port
 
-# Open port in firewall
-yunohost firewall allow Both "$port"
+# Open the port
+ynh_script_progression --message="Configuring firewall..." --weight=1
+ynh_exec_warn_less yunohost firewall allow Both TCP $port
 
 #=================================================
 # INSTALL DEPENDENCIES
@@ -87,17 +88,7 @@ ynh_app_setting_set --app=$app --key=final_path --value=$final_path
 # Configuring with given settings
 mumble_conf="$final_path/mumble-server.ini"
 
-cp ../conf/mumble-server.ini "$mumble_conf"
-
-ynh_replace_string --match_string="__FINALPATH__" --replace_string="$final_path"      --target_file="$mumble_conf"
-ynh_replace_string --match_string="__APP__"       --replace_string="$app"             --target_file="$mumble_conf"
-ynh_replace_string --match_string="__WELCOME__"   --replace_string="$welcometext"     --target_file="$mumble_conf"
-ynh_replace_string --match_string="__PORT__"      --replace_string="$port"            --target_file="$mumble_conf"
-ynh_replace_string --match_string="__SRV_PWD__"   --replace_string="$server_password" --target_file="$mumble_conf"
-ynh_replace_string --match_string="__REGISTER__"  --replace_string="$registerName"    --target_file="$mumble_conf"
-ynh_replace_string --match_string="__DOMAIN__"    --replace_string="$domain"          --target_file="$mumble_conf"
-
-ynh_store_file_checksum "$mumble_conf"
+ynh_add_config --template="../conf/mumble-server.ini" --destination="$mumble_conf"
 
 #=================================================
 # SETUP SYSTEMD
