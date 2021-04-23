@@ -120,7 +120,7 @@ ynh_abort_if_errors
 ynh_script_progression --message="Upgrading dependencies..." --weight=6
 
 # Install Mumble Debian package via apt
-ynh_install_app_dependencies $pkg_dependencies
+ynh_exec_warn_less ynh_install_app_dependencies $pkg_dependencies
 
 #=================================================
 # SPECIFIC UPGRADE
