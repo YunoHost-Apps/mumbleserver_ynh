@@ -21,7 +21,7 @@ no_sso=$(ynh_app_setting_get --app=$app --key=no_sso)
 server_password=$(ynh_app_setting_get --app=$app --key=server_password)
 su_passwd=$(ynh_app_setting_get --app=$app --key=su_passwd)
 welcometext=$(ynh_app_setting_get --app=$app --key=welcometext)
-registerName=$(ynh_app_setting_get --app=$app --key=registerName)
+registername=$(ynh_app_setting_get --app=$app --key=registername)
 port=$(ynh_app_setting_get --app=$app --key=port)
 final_path=$(ynh_app_setting_get --app=$app --key=final_path)
 instance_id=$(ynh_app_setting_get --app=$app --key=instance_id)
@@ -55,9 +55,9 @@ if [ -z "$server_password" ]; then
 		| grep "welcometext=" \
 		| sed "s/welcometext=//")
 
-	registerName=$(cat "$old_mumble_conf" \
+	registername=$(cat "$old_mumble_conf" \
 		| grep "registerName=" \
-		| sed "s/registerName=//")
+		| sed "s/registername=//")
 
 	# we don't know what the previous password was, let's regenerate it
 	su_passwd=$(ynh_string_random)
@@ -69,7 +69,7 @@ if [ -z "$server_password" ]; then
 
 	ynh_app_setting_set --app=$app --key=server_password --value=$server_password
 	ynh_app_setting_set --app=$app --key=welcometext     --value=$welcometext
-	ynh_app_setting_set --app=$app --key=registerName    --value=$registerName
+	ynh_app_setting_set --app=$app --key=registerName    --value=$registername
 	ynh_app_setting_set --app=$app --key=su_passwd       --value=$su_passwd
 	ynh_app_setting_set --app=$app --key=domain          --value=$domain
 
@@ -120,7 +120,7 @@ ynh_abort_if_errors
 ynh_script_progression --message="Upgrading dependencies..." --weight=6
 
 # Install Mumble Debian package via apt
-ynh_install_app_dependencies $pkg_dependencies
+ynh_exec_warn_less ynh_install_app_dependencies $pkg_dependencies
 
 #=================================================
 # SPECIFIC UPGRADE
@@ -133,19 +133,7 @@ mkdir -p $final_path
 # Configuring with given settings
 mumble_conf="$final_path/mumble-server.ini"
 
-ynh_backup_if_checksum_is_different "$mumble_conf"
-
-cp ../conf/mumble-server.ini "$mumble_conf"
-
-ynh_replace_string --match_string="__FINALPATH__" --replace_string="$final_path"      --target_file="$mumble_conf"
-ynh_replace_string --match_string="__APP__"       --replace_string="$app"             --target_file="$mumble_conf"
-ynh_replace_string --match_string="__WELCOME__"   --replace_string="$welcometext"     --target_file="$mumble_conf"
-ynh_replace_string --match_string="__PORT__"      --replace_string="$port"            --target_file="$mumble_conf"
-ynh_replace_string --match_string="__SRV_PWD__"   --replace_string="$server_password" --target_file="$mumble_conf"
-ynh_replace_string --match_string="__REGISTER__"  --replace_string="$registerName"    --target_file="$mumble_conf"
-ynh_replace_string --match_string="__DOMAIN__"    --replace_string="$domain"          --target_file="$mumble_conf"
-
-ynh_store_file_checksum "$mumble_conf"
+ynh_add_config --template="../conf/mumble-server.ini" --destination="$mumble_conf"
 
 #=================================================
 # SETUP SYSTEMD
@@ -210,7 +198,7 @@ Port                   : $port
 Password to join server: $server_password
 SuperUser Password     : $su_passwd
 Welcome text           : $welcometext
-Root channel (your mumble server name): $registerName
+Root channel (your mumble server name): $registername
 Final path (where to find your files) : $final_path
 Mumble configuration file             : $mumble_conf
 

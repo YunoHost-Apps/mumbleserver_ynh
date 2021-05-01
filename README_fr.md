@@ -6,7 +6,7 @@
 *[Read this readme in english.](./README.md)* 
 
 > *Ce package vous permet d'installer Mumble server rapidement et simplement sur un serveur YunoHost.  
-Si vous n'avez pas YunoHost, consultez [le guide](https://yunohost.org/#/install) pour apprendre comment l'installer.*
+Si vous n'avez pas YunoHost, consultez [le guide](https://yunohost.org/install) pour apprendre comment l'installer.*
 
 ## Vue d'ensemble
 Mumble est une application de chat vocal gratuite, open source, à faible latence et de haute qualité. Mumble a été la première application VoIP à établir une véritable communication vocale à faible latence il y a plus de dix ans. Mais la faible latence et le jeu ne sont pas les seuls cas d'utilisation dans lesquels il brille.
@@ -37,8 +37,8 @@ mumbleserver_ynh installe le paquet Debian et le configure avec les paramètres 
 
 #### Architectures supportées
 
-* x86-64 - [![Build Status](https://ci-apps.yunohost.org/ci/logs/mumbleserver%20%28Apps%29.svg)](https://ci-apps.yunohost.org/ci/apps/mumbleserver/)
-* ARMv8-A - [![Build Status](https://ci-apps-arm.yunohost.org/ci/logs/mumbleserver%20%28Apps%29.svg)](https://ci-apps-arm.yunohost.org/ci/apps/mumbleserver/)
+* x86-64 - [![Build Status](https://ci-apps.yunohost.org/ci/logs/mumbleserver.svg)](https://ci-apps.yunohost.org/ci/apps/mumbleserver/)
+* ARMv8-A - [![Build Status](https://ci-apps-arm.yunohost.org/ci/logs/mumbleserver.svg)](https://ci-apps-arm.yunohost.org/ci/apps/mumbleserver/)
 
 ## Limitations
 

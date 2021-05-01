@@ -12,6 +12,7 @@
 		setup_private=0
 		setup_public=0
 		upgrade=1
+		upgrade=1	from_commit=d9ece341d532bd5eac9af9ce191da7b62d1e8bb1
 		backup_restore=1
 		multi_instance=1
 		wrong_user=0
@@ -21,5 +22,5 @@
 Email=
 Notification=none
 ;;; Upgrade options
-	; commit=CommitHash
-		name=Name and date of the commit.
+	; commit=d9ece341d532bd5eac9af9ce191da7b62d1e8bb1
+		name=Merge pull request #40 from YunoHost-Apps/testing
