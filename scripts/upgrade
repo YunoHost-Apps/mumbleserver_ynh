@@ -184,6 +184,7 @@ ynh_replace_string --match_string="__ENV_PATH__" --replace_string="$PATH" --targ
 ynh_add_systemd_config
 
 if [ "$mumbleweb" -eq 1 ] ; then
+	ynh_replace_string --match_string="__ENV_PATH__" --replace_string="$PATH" --target_file="../conf/systemd.service"
 	ynh_add_systemd_config "$app-web" mumble-web.service
 fi
 
