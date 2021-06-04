@@ -16,19 +16,19 @@ ynh_script_progression --message="Loading installation settings..." --weight=1
 
 app=$YNH_APP_INSTANCE_NAME
 
-domain=$(ynh_app_setting_get "$app" domain)
-path_url=$(ynh_app_setting_get --app="$app" --key=path)
-is_public=$(ynh_app_setting_get --app="$app" --key=is_public)
-no_sso=$(ynh_app_setting_get "$app" no_sso)
-server_password=$(ynh_app_setting_get "$app" server_password)
-su_passwd=$(ynh_app_setting_get "$app" su_passwd)
-welcometext=$(ynh_app_setting_get "$app" welcometext)
-registerName=$(ynh_app_setting_get "$app" registerName)
-port=$(ynh_app_setting_get "$app" port)
-port_web=$(ynh_app_setting_get "$app" port_web)
-final_path=$(ynh_app_setting_get "$app" final_path)
-instance_id=$(ynh_app_setting_get "$app" instance_id)
-mumbleweb=$(ynh_app_setting_get "$app" mumbleweb)
+domain=$(ynh_app_setting_get --app=$app --key=domain)
+path_url=$(ynh_app_setting_get --app=$app --key=path)
+is_public=$(ynh_app_setting_get --app=$app --key=is_public)
+no_sso=$(ynh_app_setting_get --app=$app --key=no_sso)
+server_password=$(ynh_app_setting_get --app=$app --key=server_password)
+su_passwd=$(ynh_app_setting_get --app=$app --key=su_passwd)
+welcometext=$(ynh_app_setting_get --app=$app --key=welcometext)
+registerName=$(ynh_app_setting_get --app=$app r--key=egisterName)
+port=$(ynh_app_setting_get --app=$app --key=port)
+port_web=$(ynh_app_setting_get --app=$app --key=port_web)
+final_path=$(ynh_app_setting_get --app=$app --key=final_path)
+instance_id=$(ynh_app_setting_get --app=$app --key=instance_id)
+mumbleweb=$(ynh_app_setting_get --app=$app --key=mumbleweb)
 
 #=================================================
 # CHECK VERSION
@@ -123,7 +123,7 @@ ynh_abort_if_errors
 #=================================================
 # STOP SYSTEMD SERVICE
 #=================================================
-ynh_script_progression --message="Stopping a systemd service..." --time --weight=1
+ynh_script_progression --message="Stopping a systemd service..." --weight=1
 
 ynh_systemd_action --service_name="$app" --action="stop"
 ynh_systemd_action --service_name="$app-web" --action="stop"
@@ -134,7 +134,7 @@ ynh_systemd_action --service_name="$app-web" --action="stop"
 
 if [ "$mumbleweb" -eq 1 ] ; then
 then
-	ynh_script_progression --message="Upgrading source files..." --time --weight=1
+	ynh_script_progression --message="Upgrading source files..." --weight=1
 
 	# Download, check integrity, uncompress and patch the source from app.src
 	ynh_setup_source --dest_dir="$final_path"
@@ -146,15 +146,15 @@ fi
 ynh_script_progression --message="Upgrading nginx web server configuration..." --time --weight=1
 
 # Create a dedicated nginx config
-ynh_add_nginx_config "port_web"
+ynh_add_nginx_config
 
 #=================================================
 # INSTALL DEPENDENCIES
 #=================================================
-ynh_script_progression --message="Upgrading dependencies..." --time --weight=1
+ynh_script_progression --message="Upgrading dependencies..." --weight=1
 
 # Install Mumble Debian package via apt
-ynh_install_app_dependencies $pkg_dependencies
+ynh_exec_warn_less ynh_install_app_dependencies $pkg_dependencies
 
 #=================================================
 # CREATE DEDICATED USER
@@ -164,14 +164,6 @@ ynh_script_progression --message="Making sure dedicated system user exists..." -
 # Create a dedicated user (if not existing)
 ynh_system_user_create --username="$app"
 
-
-# INSTALL DEPENDENCIES
-#=================================================
-ynh_script_progression --message="Upgrading dependencies..." --weight=6
-
-# Install Mumble Debian package via apt
-ynh_exec_warn_less ynh_install_app_dependencies $pkg_dependencies
-
 #=================================================
 # SPECIFIC UPGRADE
 #=================================================
@@ -179,23 +171,7 @@ ynh_exec_warn_less ynh_install_app_dependencies $pkg_dependencies
 #=================================================
 
 mkdir -p $final_path
-
-# Configuring with given settings
-mumble_conf="$final_path/mumble-server.ini"
-
-ynh_add_config --template="../conf/mumble-server.ini" --destination="$mumble_conf"
-
-#=================================================
-# SETUP SSOWAT
-#=================================================
-ynh_script_progression --message="Upgrading SSOwat configuration..." --time --weight=1
-
-# Make app public if necessary
-if [ "$is_public" -eq 1 ]
-then
-	# unprotected_uris allows SSO credentials to be passed anyway
-	ynh_app_setting_set --app="$app" --key=unprotected_uris --value="/"
-fi
+ynh_add_config --template="../conf/mumble-server.ini" --destination="$final_path/mumble-server.ini"
 
 #=================================================
 # SETUP SYSTEMD
@@ -206,8 +182,6 @@ ynh_script_progression --message="Upgrading systemd configuration..." --weight=2
 ynh_add_systemd_config
 
 if [ "$mumbleweb" -eq 1 ] ; then
-    ynh_replace_string "__PORT__"   "$port"    "../conf/mumble-web.service"
-    ynh_replace_string "__PORT_WEB__"   "$port_web"    "../conf/mumble-web.service"
 	ynh_add_systemd_config "$app-web" mumble-web.service
 fi
 

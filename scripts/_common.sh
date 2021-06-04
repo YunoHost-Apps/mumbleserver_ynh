@@ -1,14 +1,14 @@
 #!/bin/bash
 
-
-pkg_dependencies="mumble-server mailutils websockify"
-
 #=================================================
 # COMMON VARIABLES
 #=================================================
 
 # dependencies used by the app
-pkg_dependencies="mumble-server mailutils"
+pkg_dependencies="mumble-server mailutils websockify"
+
+# NodeJS version
+nodejs_version=12
 
 #=================================================
 # PERSONAL HELPERS

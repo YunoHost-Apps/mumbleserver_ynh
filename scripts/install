@@ -49,15 +49,15 @@ test ! -e "$final_path" || ynh_die "This path already contains a folder"
 ynh_script_progression --message="Storing installation settings..." --weight=2
 
 # Save app settings
-ynh_app_setting_set --app=$app --key=domain          --value="$domain"
-ynh_app_setting_set --app=$app --key=no_sso          --value="true"
+ynh_app_setting_set --app=$app --key=domain --value="$domain"
+ynh_app_setting_set --app=$app --key=no_sso --value="true"
 ynh_app_setting_set --app=$app --key=server_password --value="$server_password"
-ynh_app_setting_set --app=$app --key=su_passwd       --value="$su_passwd"
-ynh_app_setting_set --app=$app --key=welcometext     --value="$welcometext"
-ynh_app_setting_set --app=$app --key=registerName    --value="$registername"
-ynh_app_setting_set --app=$app --key=instance_id     --value="$instance_id"
-ynh_app_setting_set "$app" mumbleweb       "$mumbleweb"
-ynh_app_setting_set "$app" is_public       "$is_public"
+ynh_app_setting_set --app=$app --key=su_passwd --value="$su_passwd"
+ynh_app_setting_set --app=$app --key=welcometext --value="$welcometext"
+ynh_app_setting_set --app=$app --key=registerName --value="$registername"
+ynh_app_setting_set --app=$app --key=instance_id --value="$instance_id"
+ynh_app_setting_set --app=$app --key=mumbleweb --value="$mumbleweb"
+ynh_app_setting_set --app=$app --key=i_public --value="$is_public"
 
 #=================================================
 # STANDARD MODIFICATIONS
@@ -74,10 +74,10 @@ ynh_script_progression --message="Configuring firewall..." --weight=1
 ynh_exec_warn_less yunohost firewall allow Both $port
 
 if [ "$mumbleweb" -eq 1 ] ; then
-    port_web=$(ynh_find_port 64800)
-    ynh_app_setting_set "$app" port_web "$port_web"
+    port_web=$(ynh_find_port 64737)
+    ynh_app_setting_set --app=$app --key=port_web --value=$port_web
     # Open port in firewall
-    yunohost firewall allow Both "$port_web"
+    ynh_exec_warn_less yunohost firewall allow Both "$port_web"
 fi
 
 #=================================================
@@ -86,47 +86,30 @@ fi
 ynh_script_progression --message="Installing dependencies..." --weight=4
 
 # Install Mumble Debian package via apt
-ynh_install_app_dependencies $pkg_dependencies
+ynh_exec_warn_less ynh_install_app_dependencies $pkg_dependencies
 
 if [ "$mumbleweb" -eq 1 ] ; then
-    ynh_install_nodejs --nodejs_version="12"
+    ynh_install_nodejs --nodejs_version=$nodejs_version
 fi
 
 #=================================================
 # INSTALL Mumble-web
 #=================================================
+ynh_script_progression --message="Installing Mumble Web..." --weight=4
 
-
-ynh_app_setting_set "$app" final_path "$final_path"
-mkdir -p "$final_path"
-
+ynh_app_setting_set --app=$app --key=final_path --value=$final_path
 
 if [ "$mumbleweb" -eq 1 ] ; then
     ynh_setup_source --dest_dir="$final_path"
 fi
 
-
 #=================================================
 # NGINX CONFIGURATION
 #=================================================
-ynh_script_progression --message="Configuring nginx web server..." --time --weight=1
-
-### `ynh_add_nginx_config` will use the file conf/nginx.conf
+ynh_script_progression --message="Configuring NGINX web server..." --weight=1
 
 # Create a dedicated nginx config
-
-ynh_add_nginx_config "port_web"
-
-#=================================================
-# CREATE DEDICATED USER
-#=================================================
-ynh_script_progression --message="Configuring system user..." --weight=3
-
-# Create a dedicated system user
-ynh_system_user_create --username="$app" --home_dir="$final_path"
-
-ynh_exec_warn_less ynh_install_app_dependencies $pkg_dependencies
-
+ynh_add_nginx_config
 
 #=================================================
 # SPECIFIC SETUP
@@ -134,14 +117,7 @@ ynh_exec_warn_less ynh_install_app_dependencies $pkg_dependencies
 # mumble server conf.ini
 #=================================================
 
-
-mkdir -p "$final_path"
-ynh_app_setting_set --app=$app --key=final_path --value=$final_path
-
-# Configuring with given settings
-mumble_conf="$final_path/mumble-server.ini"
-
-ynh_add_config --template="../conf/mumble-server.ini" --destination="$mumble_conf"
+ynh_add_config --template="../conf/mumble-server.ini" --destination="$final_path/mumble-server.ini"
 
 if [ "$mumbleweb" -eq 1 ] ; then
 	ynh_use_nodejs
@@ -157,13 +133,12 @@ fi
 #=================================================
 # SETUP SYSTEMD
 #=================================================
+ynh_script_progression --message="Configuring a systemd service..." --weight=1
 
 # Create a dedicated systemd config
 ynh_add_systemd_config
 
 if [ "$mumbleweb" -eq 1 ] ; then
-    ynh_replace_string "__PORT__"   "$port"    "../conf/mumble-web.service"
-    ynh_replace_string "__PORT_WEB__"   "$port_web"    "../conf/mumble-web.service"
 	ynh_add_systemd_config "$app-web" mumble-web.service
 fi
 
@@ -203,31 +178,30 @@ systemctl disable mumble-server --quiet
 ynh_script_progression --message="Integrating service in YunoHost..."
 
 # Add Mumble as a YunoHost service
-yunohost service add $app --description="Mumble server" --log="/var/log/$app/$app.log" --needs_exposed_ports $port
+yunohost service add $app --description="Mumble server" --log="/var/log/$app/$app.log" --needs_exposed_ports=$port
 
 #=================================================
 # START SYSTEMD SERVICE
 #=================================================
 ynh_script_progression --message="Starting a systemd service..." --weight=3
 
-ynh_systemd_action --service_name=$app --action=restart #--log_path="/var/log/$app/$app.log"
+ynh_systemd_action --service_name=$app --action=restart --log_path="/var/log/$app/$app.log"
 
 #=================================================
 # SETUP SSOWAT
 #=================================================
-ynh_script_progression --message="Configuring SSOwat..." --time --weight=1
+ynh_script_progression --message="Configuring permissions..." --weight=1
 
 # Make app public if necessary
-if [ "$is_public" -eq 1 ]
+if [ $is_public -eq 1 ]
 then
-	# unprotected_uris allows SSO credentials to be passed anyway.
-	ynh_app_setting_set --app="$app" --key=unprotected_uris --value="/"
+	ynh_permission_update --permission="main" --add="visitors"
 fi
 
 #=================================================
 # RELOAD NGINX
 #=================================================
-ynh_script_progression --message="Reloading nginx web server..." --time --weight=1
+ynh_script_progression --message="Reloading nginx web server..." --weight=1
 
 ynh_systemd_action --service_name=nginx --action=reload
 
