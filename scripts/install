@@ -224,7 +224,7 @@ SuperUser Password     : $su_passwd
 Welcome text           : $welcometext
 Root channel (your mumble server name): $registername
 Final path (where to find your files) : $final_path
-Mumble configuration file             : $mumble_conf
+Mumble configuration file             : $final_path/mumble-server.ini
 
 Note about config file: this package will regenerate the config file on upgrade.
 If you changed it manually and upgrade mumble, you'll find a backup in $final_path.
