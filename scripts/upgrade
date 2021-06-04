@@ -222,7 +222,7 @@ systemctl disable mumble-server --quiet
 #=================================================
 
 # Add Mumble as a YunoHost service
-yunohost service add $app --description="Mumble server" --log="/var/log/$app/$app.log" --needs_exposed_ports $port
+yunohost service add $app --description="Mumble server" --log="/var/log/$app/$app.log" --needs_exposed_ports=$port
 
 #=================================================
 # START SYSTEMD SERVICE
