@@ -1,6 +1,6 @@
 {
     "name": "Mumble Server",
-    "id": "mumbleserver",
+    "id": "mumble-server",
     "packaging_format": 1,
     "description": {
         "en": "Low-latency, high quality voice chat software (VoIP).",
