@@ -70,7 +70,7 @@ ynh_secure_remove --file="$final_path"
 #=================================================
 # REMOVE NGINX CONFIGURATION
 #=================================================
-ynh_script_progression --message="Removing NGINX web server configuration..." --time --weight=1
+ynh_script_progression --message="Removing NGINX web server configuration..." --weight=1
 
 # Remove the dedicated nginx config
 ynh_remove_nginx_config
@@ -99,14 +99,14 @@ fi
 # REMOVE OTHER FILES
 #=================================================
 
-ynh_secure_remove "/var/log/mumble-server/$app.log"
+ynh_secure_remove "/var/log/$app/$app.log"
 
 #=================================================
 # GENERIC FINALIZATION
 #=================================================
 # REMOVE DEDICATED USER
 #=================================================
-ynh_script_progression --message="Removing the dedicated system user..." --time --weight=1
+ynh_script_progression --message="Removing the dedicated system user..." --weight=1
 
 # Delete a system user
 ynh_system_user_delete --username="$app"
