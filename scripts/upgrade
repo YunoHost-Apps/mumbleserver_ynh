@@ -18,7 +18,6 @@ app=$YNH_APP_INSTANCE_NAME
 
 domain=$(ynh_app_setting_get --app=$app --key=domain)
 path_url=$(ynh_app_setting_get --app=$app --key=path)
-is_public=$(ynh_app_setting_get --app=$app --key=is_public)
 no_sso=$(ynh_app_setting_get --app=$app --key=no_sso)
 server_password=$(ynh_app_setting_get --app=$app --key=server_password)
 su_passwd=$(ynh_app_setting_get --app=$app --key=su_passwd)

@@ -57,7 +57,6 @@ ynh_app_setting_set --app=$app --key=welcometext --value="$welcometext"
 ynh_app_setting_set --app=$app --key=registerName --value="$registername"
 ynh_app_setting_set --app=$app --key=instance_id --value="$instance_id"
 ynh_app_setting_set --app=$app --key=mumbleweb --value="$mumbleweb"
-ynh_app_setting_set --app=$app --key=i_public --value="$is_public"
 
 #=================================================
 # STANDARD MODIFICATIONS
