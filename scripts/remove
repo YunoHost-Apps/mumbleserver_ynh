@@ -12,6 +12,7 @@ source /usr/share/yunohost/helpers
 #=================================================
 # LOAD SETTINGS
 #=================================================
+ynh_script_progression --message="Loading installation settings..." --weight=1
 
 app=$YNH_APP_INSTANCE_NAME
 
@@ -21,21 +22,24 @@ port=$(ynh_app_setting_get "$app" port)
 port_web=$(ynh_app_setting_get "$app" port_web)
 mumbleweb=$(ynh_app_setting_get "$app" mumbleweb)
 final_path=$(ynh_app_setting_get "$app" final_path)
+
 #=================================================
 # STANDARD REMOVE
 #=================================================
 # REMOVE SERVICE FROM ADMIN PANEL
 #=================================================
 
-if yunohost service status | grep -q "$app"
+# Remove the service from the list of services known by YunoHost (added from `yunohost service add`)
+if ynh_exec_warn_less yunohost service status $app >/dev/null
 then
-	echo "Remove $app service"
-	yunohost service remove "$app"
+	ynh_script_progression --message="Removing $app service integration..." --weight=1
+	yunohost service remove $app
 fi
 
 #=================================================
 # STOP AND REMOVE SERVICE
 #=================================================
+ynh_script_progression --message="Stopping and removing the systemd service..." --weight=2
 
 # Remove the dedicated systemd config
 ynh_remove_systemd_config
@@ -44,6 +48,7 @@ ynh_remove_systemd_config mumble-web
 #=================================================
 # REMOVE DEPENDENCIES
 #=================================================
+ynh_script_progression --message="Removing dependencies..." --weight=1
 
 # Remove metapackage and its dependencies
 ynh_remove_app_dependencies
@@ -57,9 +62,10 @@ ynh_remove_nodejs
 #=================================================
 # REMOVE APP MAIN DIR
 #=================================================
+ynh_script_progression --message="Removing app main directory..." --weight=2
 
 # Remove the app directory securely
-ynh_secure_remove "$final_path"
+ynh_secure_remove --file="$final_path"
 
 #=================================================
 # REMOVE NGINX CONFIGURATION
@@ -75,8 +81,8 @@ ynh_remove_nginx_config
 
 if yunohost firewall list | grep -q "\- $port$"
 then
-	echo "Close port $port"
-	yunohost firewall disallow Both "$port" > /dev/null 2>&1
+	ynh_script_progression --message="Close port $port" --weight=1
+	ynh_exec_warn_less yunohost firewall disallow Both $port
 fi
 
 if [ "$mumbleweb" -eq 1 ] ; then
@@ -104,3 +110,8 @@ ynh_script_progression --message="Removing the dedicated system user..." --time 
 
 # Delete a system user
 ynh_system_user_delete --username="$app"
+
+# END OF SCRIPT
+#=================================================
+
+ynh_script_progression --message="Removal of $app completed" --last

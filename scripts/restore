@@ -13,12 +13,12 @@ source /usr/share/yunohost/helpers
 # MANAGE SCRIPT FAILURE
 #=================================================
 
-# Exit if an error occurs during the execution of the script
 ynh_abort_if_errors
 
 #=================================================
 # LOAD SETTINGS
 #=================================================
+ynh_script_progression --message="Loading installation settings..." --weight=1
 
 app=$YNH_APP_INSTANCE_NAME
 
@@ -26,9 +26,11 @@ domain=$(ynh_app_setting_get --app="$app" --key=domain)
 path_url=$(ynh_app_setting_get --app="$app" --key=path)
 final_path=$(ynh_app_setting_get --app"$app" --key=final_path)
 
+
 #=================================================
 # CHECK IF THE APP CAN BE RESTORED
 #=================================================
+ynh_script_progression --message="Validating restoration parameters..." --weight=1
 
 ynh_script_progression --message="Validating restoration parameters..." --time --weight=1
 
@@ -48,17 +50,24 @@ ynh_restore_file --origin_path="/etc/nginx/conf.d/$domain.d/$app.conf"
 #=================================================
 # RESTORE THE APP MAIN DIR
 #=================================================
-ynh_script_progression --message="Restoring the app main directory..." --time --weight=1
+ynh_script_progression --message="Restoring the app main directory..." --weight=2
 
-ynh_restore_file "$final_path"
+ynh_restore_file --origin_path="$final_path"
 
 #=================================================
 # RECREATE THE DEDICATED USER
 #=================================================
+
 ynh_script_progression --message="Recreating the dedicated system user..." --time --weight=1
 
 # Create the dedicated user (if not existing)
 ynh_system_user_create --username="$app"
+
+ynh_script_progression --message="Reinstalling dependencies..." --weight=4
+
+# Define and install dependencies
+ynh_install_app_dependencies $pkg_dependencies
+
 
 #=================================================
 # RESTORE USER RIGHTS
@@ -89,14 +98,15 @@ usermod --append --groups ssl-cert mumble-server
 #=================================================
 
 systemctl stop mumble-server
-systemctl disable mumble-server
+systemctl disable mumble-server --quiet
 
 #=================================================
 # ADVERTISE SERVICE IN ADMIN PANEL
 #=================================================
+ynh_script_progression --message="Integrating service in YunoHost..." --weight=1
 
 # Add Mumble as a YunoHost service
-yunohost service add "$app" -l "/var/log/mumble-server/$app.log"
+yunohost service add $app --description="Mumble server" --log="/var/log/$app/$app.log" --needs_exposed_ports $port
 
 #=================================================
 # RESTORE SYSTEMD
@@ -126,8 +136,21 @@ ynh_script_progression --message="Reloading nginx web server..." --time --weight
 
 ynh_systemd_action --service_name=nginx --action=reload
 
+ynh_script_progression --message="Restoring the systemd configuration..." --weight=1
+
+ynh_restore_file --origin_path="/etc/systemd/system/$app.service"
+systemctl enable $app.service --quiet
+
+#=================================================
+# START SYSTEMD SERVICE
+#=================================================
+ynh_script_progression --message="Starting a systemd service..." --weight=3
+
+ynh_systemd_action --service_name=$app --action=restart #--log_path="/var/log/$app/$app.log"
+
+
 #=================================================
 # END OF SCRIPT
 #=================================================
 
-ynh_script_progression --message="Restoration completed for $app" --time --last
+ynh_script_progression --message="Restoration completed for $app" --last

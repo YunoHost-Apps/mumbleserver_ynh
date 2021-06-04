@@ -1,10 +1,8 @@
 ;; Test complet
 	auto_remove=1
 	; Manifest
-		domain="domain.tld"	(DOMAIN)
-		path="/path"		(PATH)
-		is_public=1		(PUBLIC|public=1|private=0)
-		welcometext="Welcome to my mumble server"
+		domain="domain.tld"
+		welcometext="Welcome to my Mumble server"
 		registername="Root"
 		mumbleweb=1
 	; Checks
@@ -15,21 +13,12 @@
 		setup_private=1
 		setup_public=1
 		upgrade=1
+		upgrade=1	from_commit=d9ece341d532bd5eac9af9ce191da7b62d1e8bb1
 		backup_restore=1
 		multi_instance=1
-		port_already_use=0
-;;; Levels
-	Level 1=auto
-	Level 2=auto
-	Level 3=auto
-	# https://github.com/YunoHost-Apps/mumbleserver_ynh/issues/11
-	Level 4=1
-	Level 5=auto
-	Level 6=auto
-	Level 7=auto
-	Level 8=0
-	Level 9=0
-	Level 10=0
 ;;; Options
-Email=jean-baptiste@holcroft.fr
-Notification=all
+Email=
+Notification=none
+;;; Upgrade options
+	; commit=d9ece341d532bd5eac9af9ce191da7b62d1e8bb1
+		name=Merge pull request #40 from YunoHost-Apps/testing
