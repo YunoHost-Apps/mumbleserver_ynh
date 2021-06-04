@@ -93,6 +93,14 @@ if [ "$mumbleweb" -eq 1 ] ; then
 fi
 
 #=================================================
+# CREATE DEDICATED USER
+#=================================================
+ynh_script_progression --message="Configuring system user..." --weight=1
+
+# Create a system user
+ynh_system_user_create --username=$app --home_dir="$final_path"
+
+#=================================================
 # INSTALL Mumble-web
 #=================================================
 ynh_script_progression --message="Installing Mumble Web..." --weight=4

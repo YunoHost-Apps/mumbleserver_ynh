@@ -74,7 +74,8 @@
                 "name": "mumbleweb",
                 "type": "boolean",
                 "ask": {
-                    "en": "Install the web application? (mumble-web)"
+                    "en": "Do you want to install Mumble web?",
+                    "fr": "Voulez-vous installer Mumble Web? "
                 },
                 "default": false
             }

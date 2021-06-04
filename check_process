@@ -13,7 +13,7 @@
 		setup_private=1
 		setup_public=1
 		upgrade=1
-		upgrade=1	from_commit=d9ece341d532bd5eac9af9ce191da7b62d1e8bb1
+		#upgrade=1	from_commit=d9ece341d532bd5eac9af9ce191da7b62d1e8bb1
 		backup_restore=1
 		multi_instance=1
 ;;; Options
