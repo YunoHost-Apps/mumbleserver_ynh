@@ -5,8 +5,8 @@ It shall NOT be edited by hand.
 
 # Mumble Server for YunoHost
 
-[![Integration level](https://dash.yunohost.org/integration/mumbleserver.svg)](https://dash.yunohost.org/appci/app/mumbleserver) ![](https://ci-apps.yunohost.org/ci/badges/mumbleserver.status.svg) ![](https://ci-apps.yunohost.org/ci/badges/mumbleserver.maintain.svg)  
-[![Install Mumble Server with YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=mumbleserver)
+[![Integration level](https://dash.yunohost.org/integration/mumble-server.svg)](https://dash.yunohost.org/appci/app/mumble-server) ![](https://ci-apps.yunohost.org/ci/badges/mumble-server.status.svg) ![](https://ci-apps.yunohost.org/ci/badges/mumble-server.maintain.svg)  
+[![Install Mumble Server with YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=mumble-server)
 
 *[Lire ce readme en français.](./README_fr.md)*
 
@@ -38,18 +38,18 @@ This package installs the Debian package and configures it with given settings. 
 * Official app website: https://mumble.info
 * Official admin documentation: https://wiki.mumble.info/wiki/Main_Page
 * Upstream app code repository: https://github.com/mumble-voip/mumble
-* YunoHost documentation for this app: https://yunohost.org/app_mumbleserver
-* Report a bug: https://github.com/YunoHost-Apps/mumbleserver_ynh/issues
+* YunoHost documentation for this app: https://yunohost.org/app_mumble-server
+* Report a bug: https://github.com/YunoHost-Apps/mumble-server_ynh/issues
 
 ## Developer info
 
-Please send your pull request to the [testing branch](https://github.com/YunoHost-Apps/mumbleserver_ynh/tree/testing).
+Please send your pull request to the [testing branch](https://github.com/YunoHost-Apps/mumble-server_ynh/tree/testing).
 
 To try the testing branch, please proceed like that.
 ```
-sudo yunohost app install https://github.com/YunoHost-Apps/mumbleserver_ynh/tree/testing --debug
+sudo yunohost app install https://github.com/YunoHost-Apps/mumble-server_ynh/tree/testing --debug
 or
-sudo yunohost app upgrade mumbleserver -u https://github.com/YunoHost-Apps/mumbleserver_ynh/tree/testing --debug
+sudo yunohost app upgrade mumble-server -u https://github.com/YunoHost-Apps/mumble-server_ynh/tree/testing --debug
 ```
 
 **More info regarding app packaging:** https://yunohost.org/packaging_apps
