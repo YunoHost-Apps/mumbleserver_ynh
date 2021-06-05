@@ -22,7 +22,7 @@ no_sso=$(ynh_app_setting_get --app=$app --key=no_sso)
 server_password=$(ynh_app_setting_get --app=$app --key=server_password)
 su_passwd=$(ynh_app_setting_get --app=$app --key=su_passwd)
 welcometext=$(ynh_app_setting_get --app=$app --key=welcometext)
-registerName=$(ynh_app_setting_get --app=$app --key=registerName)
+registername=$(ynh_app_setting_get --app=$app --key=registerName)
 port=$(ynh_app_setting_get --app=$app --key=port)
 port_web=$(ynh_app_setting_get --app=$app --key=port_web)
 final_path=$(ynh_app_setting_get --app=$app --key=final_path)
@@ -194,9 +194,10 @@ chmod -R 770 "$final_path"
 chown -R :mumble-server "$final_path"
 
 #=================================================
-# Add user to ssl-cert so it can read certificates
+#ADD USER TO SSL-CERT
 #=================================================
 
+# Add user to ssl-cert so it can read certificates
 usermod --append --groups ssl-cert mumble-server
 
 #=================================================
