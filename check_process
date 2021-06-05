@@ -1,9 +1,10 @@
 ;; Test complet
-	auto_remove=1
 	; Manifest
 		domain="domain.tld"
+		path="/path"
 		welcometext="Welcome to my Mumble server"
 		registername="Root"
+		is_public=1
 		mumbleweb=1
 	; Checks
 		pkg_linter=1
@@ -16,6 +17,7 @@
 		#upgrade=1	from_commit=d9ece341d532bd5eac9af9ce191da7b62d1e8bb1
 		backup_restore=1
 		multi_instance=1
+		change_url=1
 ;;; Options
 Email=
 Notification=none
