@@ -101,8 +101,10 @@ fi
 #=================================================
 ynh_script_progression --message="Configuring system user..." --weight=1
 
-# Create a system user
-ynh_system_user_create --username=$app --home_dir="$final_path"
+if [ "$mumbleweb" -eq 1 ] ; then
+	# Create a system user
+	ynh_system_user_create --username=$app --home_dir="$final_path"
+fi
 
 #=================================================
 # INSTALL Mumble-web
