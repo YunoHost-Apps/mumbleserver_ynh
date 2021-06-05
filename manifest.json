@@ -59,8 +59,8 @@
                 "name": "registername",
                 "type": "string",
                 "ask": {
-                    "en": "Choose a name for the root channel (your mumble server name)",
-                    "fr": "Entrez un nom pour le channel racine (le nom de votre serveur mumble)"
+                    "en": "Choose a name for the root channel (your Mumble server name)",
+                    "fr": "Entrez un nom pour le channel racine (le nom de votre serveur Mumble)"
                 },
                 "example": "Root",
                 "default": "Root"
@@ -69,7 +69,7 @@
                 "name": "mumbleweb",
                 "type": "boolean",
                 "ask": {
-                    "en": "Do you want to install Mumble web?",
+                    "en": "Do you want to install Mumble Web?",
                     "fr": "Voulez-vous installer Mumble Web? "
                 },
                 "default": false
