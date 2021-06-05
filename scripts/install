@@ -107,9 +107,10 @@ chmod -R 770 "$final_path"
 chown -R :mumble-server "$final_path"
 
 #=================================================
-# Add user to ssl-cert so it can read certificates
+# ADD USER TO SSL-CERT
 #=================================================
 
+# Add user to ssl-cert so it can read certificates
 usermod --append --groups ssl-cert mumble-server
 
 #=================================================
