@@ -19,7 +19,7 @@ Logiciel libre de voix sur IP (VoIP)
 
 ## Captures d'écran
 
-![](./doc/screenshots/connected.png)
+![](./doc/screenshots/Mumble.png)
 
 ## Avertissements / informations importantes
 

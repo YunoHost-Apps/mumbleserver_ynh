@@ -23,7 +23,7 @@ Low-latency, high quality voice chat software (VoIP)
 
 ## Screenshots
 
-![](./doc/screenshots/connected.png)
+![](./doc/screenshots/Mumble.png)
 
 ## Disclaimers / important information
 
