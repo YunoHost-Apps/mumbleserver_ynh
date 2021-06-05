@@ -15,7 +15,7 @@ If you don't have YunoHost, please consult [the guide](https://yunohost.org/#/in
 
 ## Overview
 
-Low-latency, high quality voice chat software (VoIP).
+Low-latency, high quality voice chat software (VoIP)
 
 **Shipped version:** 1.3.0~ynh2
 
