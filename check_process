@@ -1,4 +1,4 @@
-;; Test complet
+;; Test complet avec Mumble web interface
 	; Manifest
 		domain="domain.tld"
 		path="/path"
@@ -17,6 +17,22 @@
 		#upgrade=1	from_commit=d9ece341d532bd5eac9af9ce191da7b62d1e8bb1
 		backup_restore=1
 		multi_instance=0
+		change_url=1
+;; Test complet sans Mumble web interface
+	; Manifest
+		domain="domain.tld"
+		path="/path"
+		welcometext="Welcome to my Mumble server"
+		registername="Root"
+		is_public=1
+		mumbleweb=0
+	; Checks
+		pkg_linter=1
+		setup_root=1
+		setup_private=1
+		setup_public=1
+		upgrade=1
+		backup_restore=1
 		change_url=1
 ;;; Options
 Email=
