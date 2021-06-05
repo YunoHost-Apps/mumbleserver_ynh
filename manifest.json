@@ -31,18 +31,14 @@
     ],
     "arguments": {
         "install" : [
-	   {
-            "name": "domain",
-            "type": "domain",
-	        "example": "domain.org"
-	    },
-
+    	   {
+                "name": "domain",
+                "type": "domain",
+    	        "example": "domain.org"
+    	    },
             {
                 "name": "is_public",
                 "type": "boolean",
-                "help": {
-                    "en": "Set to no to limit access to logged YunoHost users."
-                },
                 "default": true
             },
             {
@@ -52,7 +48,7 @@
                     "en": "Choose a welcome text for your server",
                     "fr": "Choisissez un message de bienvenue pour le serveur"
                 },
-                "example": "Welcome to my mumble server",
+                "example": "Welcome to my Mumble server",
                 "default": "Welcome"
             },
             {
