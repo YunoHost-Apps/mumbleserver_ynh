@@ -16,12 +16,12 @@ ynh_script_progression --message="Loading installation settings..." --weight=1
 
 app=$YNH_APP_INSTANCE_NAME
 
-domain=$(ynh_app_setting_get "$app" domain)
-path=$(ynh_app_setting_get "$app" path)
-port=$(ynh_app_setting_get "$app" port)
-port_web=$(ynh_app_setting_get "$app" port_web)
-mumbleweb=$(ynh_app_setting_get "$app" mumbleweb)
-final_path=$(ynh_app_setting_get "$app" final_path)
+domain=$(ynh_app_setting_get --app=$app --key=domain)
+path=$(ynh_app_setting_get --app=$app --key=path)
+port=$(ynh_app_setting_get --app=$app --key=port)
+port_web=$(ynh_app_setting_get --app=$app --key=port_web)
+mumbleweb=$(ynh_app_setting_get --app=$app --key=mumbleweb)
+final_path=$(ynh_app_setting_get --app=$app --key=final_path)
 
 #=================================================
 # STANDARD REMOVE

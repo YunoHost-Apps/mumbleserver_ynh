@@ -130,7 +130,7 @@ ynh_systemd_action --service_name="mumble-web" --action="stop"
 #=================================================
 # CREATE DEDICATED USER
 #=================================================
-ynh_script_progression --message="Making sure dedicated system user exists..." --time --weight=1
+ynh_script_progression --message="Making sure dedicated system user exists..." --weight=1
 
 # Create a dedicated user (if not existing)
 ynh_system_user_create --username="$app" --home_dir="$final_path"
@@ -150,7 +150,7 @@ fi
 #=================================================
 # NGINX CONFIGURATION
 #=================================================
-ynh_script_progression --message="Upgrading NGINX web server configuration..." --time --weight=1
+ynh_script_progression --message="Upgrading NGINX web server configuration..."  --weight=5
 
 # Create a dedicated nginx config
 ynh_add_nginx_config
