@@ -95,7 +95,7 @@ fi
 # REMOVE OTHER FILES
 #=================================================
 
-ynh_secure_remove "/var/log/$app/$app.log"
+ynh_secure_remove "/var/log/$app"
 
 #=================================================
 # GENERIC FINALIZATION

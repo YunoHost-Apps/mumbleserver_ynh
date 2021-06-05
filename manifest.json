@@ -65,8 +65,8 @@
                 "name": "mumbleweb",
                 "type": "boolean",
                 "ask": {
-                    "en": "Do you want to install Mumble Web?",
-                    "fr": "Voulez-vous installer Mumble Web? "
+                    "en": "Do you want to install Mumble web interface?",
+                    "fr": "Voulez-vous installer l'interface web Mumble ?"
                 },
                 "default": false
             }
