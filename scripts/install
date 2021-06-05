@@ -83,7 +83,7 @@ if [ "$mumbleweb" -eq 1 ] ; then
     port_web=$(ynh_find_port --port=64737)
     ynh_app_setting_set --app=$app --key=port_web --value=$port_web
     # Open port in firewall
-    ynh_exec_warn_less yunohost firewall allow Both $port_web
+    #ynh_exec_warn_less yunohost firewall allow Both $port_web
 fi
 
 #=================================================
@@ -197,7 +197,7 @@ ynh_script_progression --message="Integrating service in YunoHost..."
 # Add Mumble as a YunoHost service
 yunohost service add $app --description="Mumble server" --log="/var/log/$app/$app.log" --needs_exposed_ports=$port
 # Add Mumble as a YunoHost service
-yunohost service add mumble-web --description="Mumble web" --log="/var/log/$app/mumble-web.log" --needs_exposed_ports=$port_web
+yunohost service add mumble-web --description="Mumble web" --log="/var/log/$app/mumble-web.log"
 
 #=================================================
 # START SYSTEMD SERVICE

@@ -140,11 +140,10 @@ ynh_system_user_create --username="$app" --home_dir="$final_path"
 #=================================================
 
 if [ "$mumbleweb" -eq 1 ] ; then
-then
 	ynh_script_progression --message="Upgrading source files..." --weight=1
 
 	# Download, check integrity, uncompress and patch the source from app.src
-	ynh_setup_source --dest_dir="$final_path"
+	ynh_setup_source --dest_dir="$final_path" #--keep="$final_path/mumble-server.ini"
 fi
 
 #=================================================
@@ -169,7 +168,7 @@ ynh_exec_warn_less ynh_install_app_dependencies $pkg_dependencies
 # mumble server conf.ini
 #=================================================
 
-mkdir -p $final_path
+#mkdir -p $final_path
 ynh_add_config --template="../conf/mumble-server.ini" --destination="$final_path/mumble-server.ini"
 
 #=================================================
@@ -222,7 +221,7 @@ systemctl disable mumble-server --quiet
 # Add Mumble as a YunoHost service
 yunohost service add $app --description="Mumble server" --log="/var/log/$app/$app.log" --needs_exposed_ports=$port
 # Add Mumble as a YunoHost service
-yunohost service add mumble-web --description="Mumble web" --log="/var/log/$app/mumble-web.log" --needs_exposed_ports=$port_web
+yunohost service add mumble-web --description="Mumble web" --log="/var/log/$app/mumble-web.log"
 
 #=================================================
 # START SYSTEMD SERVICE
@@ -244,7 +243,7 @@ ynh_systemd_action --service_name=nginx --action=reload
 #=================================================
 
 message="
-Mumbleserver was updated!
+Mumble-server was updated!
 
 Port                   : $port
 Password to join server: $server_password

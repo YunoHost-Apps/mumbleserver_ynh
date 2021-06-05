@@ -102,7 +102,7 @@ ynh_script_progression --message="Integrating service in YunoHost..." --weight=1
 # Add Mumble as a YunoHost service
 yunohost service add $app --description="Mumble server" --log="/var/log/$app/$app.log" --needs_exposed_ports=$port
 # Add Mumble as a YunoHost service
-yunohost service add mumble-web --description="Mumble web" --log="/var/log/$app/mumble-web.log" --needs_exposed_ports=$port_web
+yunohost service add mumble-web --description="Mumble web" --log="/var/log/$app/mumble-web.log"
 
 #=================================================
 # RESTORE SYSTEMD
