@@ -71,10 +71,10 @@ if [ -z "$server_password" ]; then
 		| sed -r "s/.* (([a-z])*\.([a-z])*).*/\1/g")
 
 	ynh_app_setting_set --app=$app --key=server_password --value=$server_password
-	ynh_app_setting_set --app=$app --key=welcometext     --value=$welcometext
-	ynh_app_setting_set --app=$app --key=registerName    --value=$registername
-	ynh_app_setting_set --app=$app --key=su_passwd       --value=$su_passwd
-	ynh_app_setting_set --app=$app --key=domain          --value=$domain
+	ynh_app_setting_set --app=$app --key=welcometext --value=$welcometext
+	ynh_app_setting_set --app=$app --key=registerName --value=$registername
+	ynh_app_setting_set --app=$app --key=su_passwd --value=$su_passwd
+	ynh_app_setting_set --app=$app --key=domain --value=$domain
 
 	systemctl stop mumble-server
 	dpkg-reconfigure mumble-server --frontend=Noninteractive
@@ -125,7 +125,15 @@ ynh_abort_if_errors
 ynh_script_progression --message="Stopping a systemd service..." --weight=1
 
 ynh_systemd_action --service_name="$app" --action="stop"
-ynh_systemd_action --service_name="$app-web" --action="stop"
+ynh_systemd_action --service_name="mumble-web" --action="stop"
+
+#=================================================
+# CREATE DEDICATED USER
+#=================================================
+ynh_script_progression --message="Making sure dedicated system user exists..." --time --weight=1
+
+# Create a dedicated user (if not existing)
+ynh_system_user_create --username="$app" --home_dir="$final_path"
 
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
@@ -142,7 +150,7 @@ fi
 #=================================================
 # NGINX CONFIGURATION
 #=================================================
-ynh_script_progression --message="Upgrading nginx web server configuration..." --time --weight=1
+ynh_script_progression --message="Upgrading NGINX web server configuration..." --time --weight=1
 
 # Create a dedicated nginx config
 ynh_add_nginx_config
@@ -154,14 +162,6 @@ ynh_script_progression --message="Upgrading dependencies..." --weight=1
 
 # Install Mumble Debian package via apt
 ynh_exec_warn_less ynh_install_app_dependencies $pkg_dependencies
-
-#=================================================
-# CREATE DEDICATED USER
-#=================================================
-ynh_script_progression --message="Making sure dedicated system user exists..." --time --weight=1
-
-# Create a dedicated user (if not existing)
-ynh_system_user_create --username="$app"
 
 #=================================================
 # SPECIFIC UPGRADE
@@ -182,7 +182,7 @@ ynh_add_systemd_config
 
 if [ "$mumbleweb" -eq 1 ] ; then
 	ynh_replace_string --match_string="__ENV_PATH__" --replace_string="$PATH" --target_file="../conf/mumble-web.service"
-	ynh_add_systemd_config --service=$app-web --template=mumble-web.service
+	ynh_add_systemd_config --service=mumble-web --template=mumble-web.service
 fi
 
 #=================================================
@@ -206,7 +206,7 @@ usermod --append --groups ssl-cert mumble-server
 
 # || true temporarily to ignore a bug in murmurd 1.3.0
 # https://github.com/mumble-voip/mumble/issues/3911
-murmurd -ini "$mumble_conf" -supw "$su_passwd" "$instance_id" || true
+murmurd -ini "../conf/mumble-server.ini" -supw "$su_passwd" "$instance_id" || true
 
 #=================================================
 # Disable default server installed by Debian's package
@@ -230,15 +230,15 @@ ynh_script_progression --message="Starting a systemd service..." --weight=3
 #=================================================
 # START SYSTEMD SERVICE
 #=================================================
-ynh_script_progression --message="Starting a systemd service..." --time --weight=1
+ynh_script_progression --message="Starting a systemd service..." --weight=1
 
 ynh_systemd_action --service_name="$app" --action="start"
-ynh_systemd_action --service_name="$app-web" --action="start"
+ynh_systemd_action --service_name="mumble-web" --action="start"
 
 #=================================================
 # RELOAD NGINX
 #=================================================
-ynh_script_progression --message="Reloading nginx web server..." --time --weight=1
+ynh_script_progression --message="Reloading NGINX web server..." --weight=2
 
 ynh_systemd_action --service_name=nginx --action=reload
 
@@ -255,7 +255,7 @@ SuperUser Password     : $su_passwd
 Welcome text           : $welcometext
 Root channel (your mumble server name): $registername
 Final path (where to find your files) : $final_path
-Mumble configuration file             : $mumble_conf
+Mumble configuration file             : ../conf/mumble-server.ini
 
 Note about config file: this package will regenerate the config file on upgrade.
 If you changed it manually and upgrade mumble, you'll find a backup in $final_path.
