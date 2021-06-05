@@ -25,12 +25,13 @@ ynh_abort_if_errors
 # Retrieve arguments
 domain=$YNH_APP_ARG_DOMAIN
 path_url=$YNH_APP_ARG_PATH
-app=$YNH_APP_INSTANCE_NAME
 welcometext=$YNH_APP_ARG_WELCOMETEXT
 registername=$YNH_APP_ARG_REGISTERNAME
 instance_id=$YNH_APP_INSTANCE_NUMBER
 mumbleweb=$YNH_APP_ARG_MUMBLEWEB
 is_public=$YNH_APP_ARG_IS_PUBLIC
+
+app=$YNH_APP_INSTANCE_NAME
 
 server_password=$(ynh_string_random)
 su_passwd=$(ynh_string_random)
@@ -38,10 +39,16 @@ su_passwd=$(ynh_string_random)
 #=================================================
 # CHECK IF THE APP CAN BE INSTALLED WITH THESE ARGS
 #=================================================
-ynh_script_progression --message="Validating installation parameters..." --weight=1
 
-final_path=/var/www/$app
-test ! -e "$final_path" || ynh_die "This path already contains a folder"
+if [ "$mumbleweb" -eq 1 ] ; then
+	ynh_script_progression --message="Validating installation parameters..." --weight=1
+
+	final_path=/var/www/$app
+	test ! -e "$final_path" || ynh_die "This path already contains a folder"
+
+	# Register (book) web path
+	ynh_webpath_register --app=$app --domain=$domain --path_url=$path_url
+fi
 
 #=================================================
 # STORE SETTINGS FROM MANIFEST
