@@ -36,12 +36,7 @@
             "type": "domain",
 	        "example": "domain.org"
 	    },
-            {
-                "name": "path",
-                "type": "path",
-                "example": "/web",
-                "default": "/web"
-            },
+
             {
                 "name": "is_public",
                 "type": "boolean",
