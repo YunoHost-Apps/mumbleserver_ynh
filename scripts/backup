@@ -49,7 +49,7 @@ ynh_backup --src_path="/etc/nginx/conf.d/$domain.d/$app.conf"
 #=================================================
 
 ynh_backup "/etc/systemd/system/$app-server.service"
-ynh_backup "/etc/systemd/system/$app-web.service"
+ynh_backup "/etc/systemd/system/mumble-web.service"
 
 #=================================================
 # END OF SCRIPT
