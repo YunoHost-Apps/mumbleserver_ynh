@@ -125,7 +125,9 @@ ynh_abort_if_errors
 ynh_script_progression --message="Stopping a systemd service..." --weight=1
 
 ynh_systemd_action --service_name="$app" --action="stop"
-ynh_systemd_action --service_name="mumble-web" --action="stop"
+if [ "$mumbleweb" -eq 1 ] ; then
+	ynh_systemd_action --service_name="mumble-web" --action="stop"
+fi
 
 #=================================================
 # CREATE DEDICATED USER
@@ -152,7 +154,9 @@ fi
 ynh_script_progression --message="Upgrading NGINX web server configuration..."  --weight=5
 
 # Create a dedicated nginx config
-ynh_add_nginx_config
+if [ "$mumbleweb" -eq 1 ] ; then
+	ynh_add_nginx_config
+fi
 
 #=================================================
 # INSTALL DEPENDENCIES
@@ -161,6 +165,10 @@ ynh_script_progression --message="Upgrading dependencies..." --weight=1
 
 # Install Mumble Debian package via apt
 ynh_exec_warn_less ynh_install_app_dependencies $pkg_dependencies
+
+if [ "$mumbleweb" -eq 1 ] ; then
+    ynh_install_nodejs --nodejs_version=$nodejs_version
+fi
 
 #=================================================
 # SPECIFIC UPGRADE
@@ -194,7 +202,7 @@ chmod -R 770 "$final_path"
 chown -R :mumble-server "$final_path"
 
 #=================================================
-#ADD USER TO SSL-CERT
+# ADD USER TO SSL-CERT
 #=================================================
 
 # Add user to ssl-cert so it can read certificates
@@ -222,7 +230,9 @@ systemctl disable mumble-server --quiet
 # Add Mumble as a YunoHost service
 yunohost service add $app --description="Mumble server" --log="/var/log/$app/$app.log" --needs_exposed_ports=$port
 # Add Mumble as a YunoHost service
-yunohost service add mumble-web --description="Mumble web interface" --log="/var/log/$app/mumble-web.log"
+if [ "$mumbleweb" -eq 1 ] ; then
+	yunohost service add mumble-web --description="Mumble web interface" --log="/var/log/$app/mumble-web.log"
+fi
 
 #=================================================
 # START SYSTEMD SERVICE
@@ -230,21 +240,25 @@ yunohost service add mumble-web --description="Mumble web interface" --log="/var
 ynh_script_progression --message="Starting a systemd service..." --weight=1
 
 ynh_systemd_action --service_name="$app" --action="start" --log_path="/var/log/$app/$app.log"
-ynh_systemd_action --service_name="mumble-web" --action="start" --log_path="/var/log/$app/mumble-web.log"
+if [ "$mumbleweb" -eq 1 ] ; then
+	ynh_systemd_action --service_name="mumble-web" --action="start" --log_path="/var/log/$app/mumble-web.log"
+fi
 
 #=================================================
 # RELOAD NGINX
 #=================================================
-ynh_script_progression --message="Reloading NGINX web server..." --weight=2
+if [ "$mumbleweb" -eq 1 ] ; then
+	ynh_script_progression --message="Reloading NGINX web server..." --weight=2
 
-ynh_systemd_action --service_name=nginx --action=reload
+	ynh_systemd_action --service_name=nginx --action=reload
+fi
 
 #=================================================
 # SEND README TO ADMIN
 #=================================================
 
 message="
-Mumble-server was updated!
+Mumble server was updated!
 
 Port                   : $port
 Password to join server: $server_password
@@ -252,7 +266,7 @@ SuperUser Password     : $su_passwd
 Welcome text           : $welcometext
 Root channel (your mumble server name): $registername
 Final path (where to find your files) : $final_path
-Mumble configuration file             : ../conf/mumble-server.ini
+Mumble configuration file             : $final_path/mumble-server.ini
 
 Note about config file: this package will regenerate the config file on upgrade.
 If you changed it manually and upgrade mumble, you'll find a backup in $final_path.

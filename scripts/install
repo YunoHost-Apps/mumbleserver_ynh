@@ -82,8 +82,6 @@ ynh_exec_warn_less yunohost firewall allow Both $port
 if [ "$mumbleweb" -eq 1 ] ; then
     port_web=$(ynh_find_port --port=64737)
     ynh_app_setting_set --app=$app --key=port_web --value=$port_web
-    # Open port in firewall
-    #ynh_exec_warn_less yunohost firewall allow Both $port_web
 fi
 
 #=================================================
@@ -111,9 +109,8 @@ ynh_system_user_create --username=$app --home_dir="$final_path"
 #=================================================
 ynh_script_progression --message="Installing Mumble Web..." --weight=4
 
-ynh_app_setting_set --app=$app --key=final_path --value=$final_path
-
 if [ "$mumbleweb" -eq 1 ] ; then
+	ynh_app_setting_set --app=$app --key=final_path --value=$final_path
     ynh_setup_source --dest_dir="$final_path"
 fi
 
@@ -123,7 +120,9 @@ fi
 ynh_script_progression --message="Configuring NGINX web server..." --weight=1
 
 # Create a dedicated nginx config
-ynh_add_nginx_config
+if [ "$mumbleweb" -eq 1 ] ; then
+    ynh_add_nginx_config
+fi
 
 #=================================================
 # SPECIFIC SETUP
@@ -198,7 +197,9 @@ ynh_script_progression --message="Integrating service in YunoHost..."
 # Add Mumble as a YunoHost service
 yunohost service add $app --description="Mumble server" --log="/var/log/$app/$app.log" --needs_exposed_ports=$port
 # Add Mumble as a YunoHost service
-yunohost service add mumble-web --description="Mumble web interface" --log="/var/log/$app/mumble-web.log"
+if [ "$mumbleweb" -eq 1 ] ; then
+    yunohost service add mumble-web --description="Mumble web interface" --log="/var/log/$app/mumble-web.log"
+fi
 
 #=================================================
 # START SYSTEMD SERVICE
@@ -206,26 +207,33 @@ yunohost service add mumble-web --description="Mumble web interface" --log="/var
 ynh_script_progression --message="Starting a systemd service..." --weight=3
 
 ynh_systemd_action --service_name=$app --action=restart --log_path="/var/log/$app/$app.log"
-
-ynh_systemd_action --service_name=mumble-web --action=restart --log_path="/var/log/$app/mumble-web.log"
+if [ "$mumbleweb" -eq 1 ] ; then
+	ynh_systemd_action --service_name=mumble-web --action=restart --log_path="/var/log/$app/mumble-web.log"
+fi
 
 #=================================================
 # SETUP SSOWAT
 #=================================================
-ynh_script_progression --message="Configuring permissions..." --weight=1
 
-# Make app public if necessary
-if [ $is_public -eq 1 ]
-then
-	ynh_permission_update --permission="main" --add="visitors"
+if [ "$mumbleweb" -eq 1 ] ; then
+	ynh_script_progression --message="Configuring permissions..." --weight=1
+
+	# Make app public if necessary
+	if [ $is_public -eq 1 ]
+	then
+		ynh_permission_update --permission="main" --add="visitors"
+	fi
 fi
 
 #=================================================
 # RELOAD NGINX
 #=================================================
-ynh_script_progression --message="Reloading NGINX web server..." --weight=1
 
-ynh_systemd_action --service_name=nginx --action=reload
+if [ "$mumbleweb" -eq 1 ] ; then
+	ynh_script_progression --message="Reloading NGINX web server..." --weight=1
+
+	ynh_systemd_action --service_name=nginx --action=reload
+fi
 
 #=================================================
 # SEND README TO ADMIN
