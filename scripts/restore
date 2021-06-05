@@ -80,15 +80,17 @@ chmod -R 770 "$final_path"
 chown -R :mumble-server "$final_path"
 
 #=================================================
-# Add user to ssl-cert so it can read certificates
+# ADD USER TO SSL-CERT
 #=================================================
 
+# Add user to ssl-cert so it can read certificates
 usermod --append --groups ssl-cert mumble-server
 
 #=================================================
-# Disable default server installed by Debian's package
+# DISABLE DEFAULT SERVER
 #=================================================
 
+# Disable default server installed by Debian's package
 systemctl stop mumble-server
 systemctl disable mumble-server --quiet
 
@@ -99,6 +101,8 @@ ynh_script_progression --message="Integrating service in YunoHost..." --weight=1
 
 # Add Mumble as a YunoHost service
 yunohost service add $app --description="Mumble server" --log="/var/log/$app/$app.log" --needs_exposed_ports=$port
+# Add Mumble as a YunoHost service
+yunohost service add mumble-web --description="Mumble web" --log="/var/log/$app/mumble-web.log" --needs_exposed_ports=$port_web
 
 #=================================================
 # RESTORE SYSTEMD
@@ -116,8 +120,8 @@ systemctl enable "mumble-web.service" --quiet
 #=================================================
 ynh_script_progression --message="Starting a systemd service..." --weight=1
 
-ynh_systemd_action --service_name="$app" --action="start"
-ynh_systemd_action --service_name="mumble-web" --action="start"
+ynh_systemd_action --service_name="$app" --action="start" --log_path="/var/log/$app/$app.log"
+ynh_systemd_action --service_name="mumble-web" --action="start" --log_path="/var/log/$app/mumble-web.log"
 
 #=================================================
 # GENERIC FINALIZATION
@@ -127,13 +131,6 @@ ynh_systemd_action --service_name="mumble-web" --action="start"
 ynh_script_progression --message="Reloading NGINX web server..." --weight=1
 
 ynh_systemd_action --service_name=nginx --action=reload
-
-#=================================================
-# START SYSTEMD SERVICE
-#=================================================
-ynh_script_progression --message="Starting a systemd service..." --weight=3
-
-ynh_systemd_action --service_name=$app --action=restart #--log_path="/var/log/$app/$app.log"
 
 #=================================================
 # END OF SCRIPT

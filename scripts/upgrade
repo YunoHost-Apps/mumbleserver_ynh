@@ -221,19 +221,16 @@ systemctl disable mumble-server --quiet
 
 # Add Mumble as a YunoHost service
 yunohost service add $app --description="Mumble server" --log="/var/log/$app/$app.log" --needs_exposed_ports=$port
-
-#=================================================
-# START SYSTEMD SERVICE
-#=================================================
-ynh_script_progression --message="Starting a systemd service..." --weight=3
+# Add Mumble as a YunoHost service
+yunohost service add mumble-web --description="Mumble web" --log="/var/log/$app/mumble-web.log" --needs_exposed_ports=$port_web
 
 #=================================================
 # START SYSTEMD SERVICE
 #=================================================
 ynh_script_progression --message="Starting a systemd service..." --weight=1
 
-ynh_systemd_action --service_name="$app" --action="start"
-ynh_systemd_action --service_name="mumble-web" --action="start"
+ynh_systemd_action --service_name="$app" --action="start" --log_path="/var/log/$app/$app.log"
+ynh_systemd_action --service_name="mumble-web" --action="start" --log_path="/var/log/$app/mumble-web.log"
 
 #=================================================
 # RELOAD NGINX
