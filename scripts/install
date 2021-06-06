@@ -119,7 +119,7 @@ usermod --append --groups ssl-cert mumble-server
 
 # || true temporarily to ignore a bug in murmurd 1.3.0
 # https://github.com/mumble-voip/mumble/issues/3911
-murmurd -ini "$mumble_conf" -supw "$su_passwd" "$instance_id" || true 2>&1
+ynh_exec_warn_less murmurd -ini "$mumble_conf" -supw "$su_passwd" "$instance_id" || true
 
 #=================================================
 # Disable default server installed by Debian's package
