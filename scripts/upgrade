@@ -99,11 +99,10 @@ if [ -z "$instance_id" ]; then
 	ynh_app_setting_set "$app" instance_id "$instance_id"
 fi
 
-if [ -z "$registername" ];
-then
-      	registername=$(ynh_app_setting_get "$app" registerName)
-      	ynh_app_setting_set "$app" registername "$registername"
-      	ynh_app_setting_delete "$app" registerName
+if [ -z "$registername" ]; then
+    registername=$(ynh_app_setting_get "$app" registerName)
+    ynh_app_setting_set "$app" registername "$registername"
+    ynh_app_setting_delete "$app" registerName
 fi
 
 #=================================================
