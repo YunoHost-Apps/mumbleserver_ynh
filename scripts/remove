@@ -73,7 +73,7 @@ fi
 # REMOVE OTHER FILES
 #=================================================
 
-ynh_secure_remove "/var/log/mumble-server/$app.log"
+ynh_secure_remove --file="/var/log/mumble-server/$app.log"
 
 #=================================================
 # END OF SCRIPT
