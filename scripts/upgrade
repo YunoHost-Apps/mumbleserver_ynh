@@ -133,6 +133,7 @@ ynh_exec_warn_less ynh_install_app_dependencies $pkg_dependencies
 #=================================================
 # mumble server conf.ini
 #=================================================
+ynh_script_progression --message="Updating a configuration file..." --weight=1
 
 mkdir -p $final_path
 
@@ -182,6 +183,7 @@ systemctl disable mumble-server --quiet
 #=================================================
 # ADVERTISE SERVICE IN ADMIN PANEL
 #=================================================
+ynh_script_progression --message="Integrating service in YunoHost..." --weight=1
 
 # Add Mumble as a YunoHost service
 yunohost service add $app --description="Mumble server" --log="/var/log/mumble-server/$app.log" --needs_exposed_ports="$port"
