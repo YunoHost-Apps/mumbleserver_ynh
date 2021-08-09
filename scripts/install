@@ -26,7 +26,7 @@ ynh_abort_if_errors
 domain=$YNH_APP_ARG_DOMAIN
 app=$YNH_APP_INSTANCE_NAME
 welcometext=$YNH_APP_ARG_WELCOMETEXT
-registerName=$YNH_APP_ARG_REGISTERNAME
+registername=$YNH_APP_ARG_REGISTERNAME
 instance_id=$YNH_APP_INSTANCE_NUMBER
 
 server_password=$(ynh_string_random)
@@ -51,7 +51,7 @@ ynh_app_setting_set --app=$app --key=no_sso          --value="true"
 ynh_app_setting_set --app=$app --key=server_password --value="$server_password"
 ynh_app_setting_set --app=$app --key=su_passwd       --value="$su_passwd"
 ynh_app_setting_set --app=$app --key=welcometext     --value="$welcometext"
-ynh_app_setting_set --app=$app --key=registerName    --value="$registerName"
+ynh_app_setting_set --app=$app --key=registername    --value="$registername"
 ynh_app_setting_set --app=$app --key=instance_id     --value="$instance_id"
 
 #=================================================
@@ -59,13 +59,14 @@ ynh_app_setting_set --app=$app --key=instance_id     --value="$instance_id"
 #=================================================
 # FIND AND OPEN A PORT
 #=================================================
-ynh_script_progression --message="Configuring firewall..." --weight=1
+ynh_script_progression --message="Finding an available port..." --weight=1
 
-port=$(ynh_find_port 64738)
+port=$(ynh_find_port --port=64738)
 ynh_app_setting_set --app=$app --key=port --value=$port
 
-# Open port in firewall
-yunohost firewall allow Both "$port"
+# Open the port
+ynh_script_progression --message="Configuring firewall..." --weight=1
+ynh_exec_warn_less yunohost firewall allow Both $port
 
 #=================================================
 # INSTALL DEPENDENCIES
@@ -73,7 +74,7 @@ yunohost firewall allow Both "$port"
 ynh_script_progression --message="Installing dependencies..." --weight=4
 
 # Install Mumble Debian package via apt
-ynh_install_app_dependencies $pkg_dependencies
+ynh_exec_warn_less ynh_install_app_dependencies $pkg_dependencies
 
 #=================================================
 # SPECIFIC SETUP
@@ -87,17 +88,7 @@ ynh_app_setting_set --app=$app --key=final_path --value=$final_path
 # Configuring with given settings
 mumble_conf="$final_path/mumble-server.ini"
 
-cp ../conf/mumble-server.ini "$mumble_conf"
-
-ynh_replace_string --match_string="__FINALPATH__" --replace_string="$final_path"      --target_file="$mumble_conf"
-ynh_replace_string --match_string="__APP__"       --replace_string="$app"             --target_file="$mumble_conf"
-ynh_replace_string --match_string="__WELCOME__"   --replace_string="$welcometext"     --target_file="$mumble_conf"
-ynh_replace_string --match_string="__PORT__"      --replace_string="$port"            --target_file="$mumble_conf"
-ynh_replace_string --match_string="__SRV_PWD__"   --replace_string="$server_password" --target_file="$mumble_conf"
-ynh_replace_string --match_string="__REGISTER__"  --replace_string="$registerName"    --target_file="$mumble_conf"
-ynh_replace_string --match_string="__DOMAIN__"    --replace_string="$domain"          --target_file="$mumble_conf"
-
-ynh_store_file_checksum "$mumble_conf"
+ynh_add_config --template="../conf/mumble-server.ini" --destination="$mumble_conf"
 
 #=================================================
 # SETUP SYSTEMD
@@ -116,9 +107,10 @@ chmod -R 770 "$final_path"
 chown -R :mumble-server "$final_path"
 
 #=================================================
-# Add user to ssl-cert so it can read certificates
+# ADD USER TO SSL-CERT
 #=================================================
 
+# Add user to ssl-cert so it can read certificates
 usermod --append --groups ssl-cert mumble-server
 
 #=================================================
@@ -127,7 +119,7 @@ usermod --append --groups ssl-cert mumble-server
 
 # || true temporarily to ignore a bug in murmurd 1.3.0
 # https://github.com/mumble-voip/mumble/issues/3911
-murmurd -ini "$mumble_conf" -supw "$su_passwd" "$instance_id" || true
+ynh_exec_warn_less murmurd -ini "$mumble_conf" -supw "$su_passwd" "$instance_id" || true
 
 #=================================================
 # Disable default server installed by Debian's package
@@ -142,14 +134,14 @@ systemctl disable mumble-server --quiet
 ynh_script_progression --message="Integrating service in YunoHost..."
 
 # Add Mumble as a YunoHost service
-yunohost service add $app --description="Mumble server" --log="/var/log/$app/$app.log" --needs_exposed_ports $port
+yunohost service add $app --description="Mumble server" --log="/var/log/mumble-server/$app.log" --needs_exposed_ports="$port"
 
 #=================================================
 # START SYSTEMD SERVICE
 #=================================================
 ynh_script_progression --message="Starting a systemd service..." --weight=3
 
-ynh_systemd_action --service_name=$app --action=restart #--log_path="/var/log/$app/$app.log"
+ynh_systemd_action --service_name=$app --action=restart --log_path="/var/log/mumble-server/$app.log"
 
 #=================================================
 # SEND README TO ADMIN
@@ -160,7 +152,7 @@ Port                   : $port
 Password to join server: $server_password
 SuperUser Password     : $su_passwd
 Welcome text           : $welcometext
-Root channel (your mumble server name): $registerName
+Root channel (your Mumble server name): $registername
 Final path (where to find your files) : $final_path
 Mumble configuration file             : $mumble_conf
 

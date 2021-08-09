@@ -1,7 +1,7 @@
 ;; Test complet
 	auto_remove=1
 	; Manifest
-		domain="domain.tld"	(DOMAIN)
+		domain="domain.tld"
 		welcometext="Welcome to my Mumble server"
 		registername="Root"
 	; Checks
@@ -12,14 +12,12 @@
 		setup_private=0
 		setup_public=0
 		upgrade=1
+		upgrade=1	from_commit=d9ece341d532bd5eac9af9ce191da7b62d1e8bb1
 		backup_restore=1
 		multi_instance=1
-		wrong_user=0
-		wrong_path=0
-		port_already_use=0
 ;;; Options
 Email=
 Notification=none
 ;;; Upgrade options
-	; commit=CommitHash
-		name=Name and date of the commit.
+	; commit=d9ece341d532bd5eac9af9ce191da7b62d1e8bb1
+		name=Merge pull request #40 from YunoHost-Apps/testing

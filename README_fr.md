@@ -1,21 +1,27 @@
-# Mumble server pour YunoHost
+# Mumble Server pour YunoHost
 
 [![Niveau d'intégration](https://dash.yunohost.org/integration/mumbleserver.svg)](https://dash.yunohost.org/appci/app/mumbleserver) ![](https://ci-apps.yunohost.org/ci/badges/mumbleserver.status.svg) ![](https://ci-apps.yunohost.org/ci/badges/mumbleserver.maintain.svg)  
-[![Installer avec YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=mumbleserver)
+[![Installer Mumble Server avec YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=mumbleserver)
 
-*[Read this readme in english.](./README.md)* 
+*[Read this readme in english.](./README.md)*
+*[Lire ce readme en français.](./README_fr.md)*
 
-> *Ce package vous permet d'installer Mumble server rapidement et simplement sur un serveur YunoHost.  
-Si vous n'avez pas YunoHost, consultez [le guide](https://yunohost.org/#/install) pour apprendre comment l'installer.*
+> *Ce package vous permet d'installer Mumble Server rapidement et simplement sur un serveur YunoHost.
+Si vous n'avez pas YunoHost, regardez [ici](https://yunohost.org/#/install) pour savoir comment l'installer et en profiter.*
 
 ## Vue d'ensemble
-Mumble est une application de chat vocal gratuite, open source, à faible latence et de haute qualité. Mumble a été la première application VoIP à établir une véritable communication vocale à faible latence il y a plus de dix ans. Mais la faible latence et le jeu ne sont pas les seuls cas d'utilisation dans lesquels il brille.
 
-**Version incluse :** 1.3.0 (paquet source fourni par Debian)
+Logiciel libre de voix sur IP (VoIP)
+
+**Version incluse :** 1.3.0~ynh2
+
+
 
 ## Captures d'écran
 
-![](https://www.mumble.info/client-screenshots/connected.png)
+![](./doc/screenshots/Mumble.png)
+
+## Avertissements / informations importantes
 
 ## Configuration
 
@@ -23,39 +29,13 @@ mumbleserver_ynh installe le paquet Debian et le configure avec les paramètres 
 
 - [Ajouter l'administrateur](http://wiki.mumble.info/wiki/Murmurguide#Connecting_to_Murmur_Server)
 
-## Documentation
+## Documentations et ressources
 
- * Documentation officielle : https://wiki.mumble.info/wiki/Main_Page
- * Documentation YunoHost : Si une documentation spécifique est nécessaire, n'hésitez pas à contribuer.
-
-## Caractéristiques spécifiques YunoHost
-
-#### Support multi-utilisateur
-
-* L'authentification LDAP et HTTP est-elle prise en charge ? **Non**
-* L'application peut-elle être utilisée par plusieurs utilisateurs ? 
-
-#### Architectures supportées
-
-* x86-64 - [![Build Status](https://ci-apps.yunohost.org/ci/logs/mumbleserver%20%28Apps%29.svg)](https://ci-apps.yunohost.org/ci/apps/mumbleserver/)
-* ARMv8-A - [![Build Status](https://ci-apps-arm.yunohost.org/ci/logs/mumbleserver%20%28Apps%29.svg)](https://ci-apps-arm.yunohost.org/ci/apps/mumbleserver/)
-
-## Limitations
-
-* Limitations connues.
-
-## Informations additionnelles
-
-* Autres informations que vous souhaitez ajouter sur cette application.
-
-## Liens
-
- * Signaler un bug : https://github.com/YunoHost-Apps/mumbleserver_ynh
- * Site de l'application : https://mumble.info
- * Dépôt de l'application principale : https://github.com/mumble-voip/mumble
- * Site web YunoHost : https://yunohost.org
- 
- ---
+* Site officiel de l'app : https://mumble.info
+* Documentation officielle de l'admin : https://wiki.mumble.info/wiki/Main_Page
+* Dépôt de code officiel de l'app : https://github.com/mumble-voip/mumble
+* Documentation YunoHost pour cette app : https://yunohost.org/app_mumbleserver
+* Signaler un bug : https://github.com/YunoHost-Apps/mumbleserver_ynh/issues
 
 ## Informations pour les développeurs
 
@@ -67,3 +47,5 @@ sudo yunohost app install https://github.com/YunoHost-Apps/mumbleserver_ynh/tree
 ou
 sudo yunohost app upgrade mumbleserver -u https://github.com/YunoHost-Apps/mumbleserver_ynh/tree/testing --debug
 ```
+
+**Plus d'infos sur le packaging d'applications :** https://yunohost.org/packaging_apps

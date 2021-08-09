@@ -7,7 +7,6 @@ After=network.target
 User=mumble-server
 Group=mumble-server
 Type=forking
-# https://www.freedesktop.org/software/systemd/man/systemd.exec.html#RuntimeDirectory=
 RuntimeDirectory=mumble-server
 ExecStart=/usr/sbin/murmurd -ini __FINALPATH__/mumble-server.ini
 PIDFile=/var/run/mumble-server/__APP__.pid
