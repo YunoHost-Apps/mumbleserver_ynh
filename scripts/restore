@@ -30,8 +30,7 @@ port=$(ynh_app_setting_get --app=$app --key=port)
 #=================================================
 ynh_script_progression --message="Validating restoration parameters..." --weight=1
 
-test ! -d "$final_path" \
-	|| ynh_die "There is already a directory: $final_path "
+test ! -d "$final_path" || ynh_die "There is already a directory: $final_path "
 
 #=================================================
 # STANDARD RESTORATION STEPS
