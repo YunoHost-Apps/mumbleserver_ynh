@@ -216,7 +216,7 @@ Final path (where to find your files) : $final_path
 Mumble configuration file             : $mumble_conf
 
 Note about config file: this package will regenerate the config file on upgrade.
-If you changed it manually and upgrade mumble, you'll find a backup in $final_path.
+If you changed it manually and upgrade mumble, you'll find a backup in /home/yunohost.conf/backup/var/www/mumbleserver/.
 
 Are you facing an issue, want to improve this app or say thank you?
 Please open a new issue in this project: https://github.com/YunoHost-Apps/mumbleserver_ynh
