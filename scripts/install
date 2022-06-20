@@ -15,6 +15,9 @@ source /usr/share/yunohost/helpers
 # MANAGE SCRIPT FAILURE
 #=================================================
 
+ynh_clean_setup () {
+	ynh_clean_check_starting
+}
 # Exit if an error occurs during the execution of the script
 ynh_abort_if_errors
 
@@ -22,12 +25,12 @@ ynh_abort_if_errors
 # RETRIEVE ARGUMENTS FROM THE MANIFEST
 #=================================================
 
-# Retrieve arguments
 domain=$YNH_APP_ARG_DOMAIN
-app=$YNH_APP_INSTANCE_NAME
 welcometext=$YNH_APP_ARG_WELCOMETEXT
 registername=$YNH_APP_ARG_REGISTERNAME
 instance_id=$YNH_APP_INSTANCE_NUMBER
+
+app=$YNH_APP_INSTANCE_NAME
 
 server_password=$(ynh_string_random)
 su_passwd=$(ynh_string_random)
@@ -38,7 +41,7 @@ su_passwd=$(ynh_string_random)
 ynh_script_progression --message="Validating installation parameters..." --weight=1
 
 final_path=/var/www/$app
-test ! -e "$final_path" || ynh_die "This path already contains a folder"
+test ! -e "$final_path" || ynh_die --message="This path already contains a folder"
 
 #=================================================
 # STORE SETTINGS FROM MANIFEST
@@ -46,13 +49,13 @@ test ! -e "$final_path" || ynh_die "This path already contains a folder"
 ynh_script_progression --message="Storing installation settings..." --weight=2
 
 # Save app settings
-ynh_app_setting_set --app=$app --key=domain          --value="$domain"
-ynh_app_setting_set --app=$app --key=no_sso          --value="true"
+ynh_app_setting_set --app=$app --key=domain --value="$domain"
+ynh_app_setting_set --app=$app --key=no_sso --value="true"
 ynh_app_setting_set --app=$app --key=server_password --value="$server_password"
-ynh_app_setting_set --app=$app --key=su_passwd       --value="$su_passwd"
-ynh_app_setting_set --app=$app --key=welcometext     --value="$welcometext"
-ynh_app_setting_set --app=$app --key=registername    --value="$registername"
-ynh_app_setting_set --app=$app --key=instance_id     --value="$instance_id"
+ynh_app_setting_set --app=$app --key=su_passwd --value="$su_passwd"
+ynh_app_setting_set --app=$app --key=welcometext --value="$welcometext"
+ynh_app_setting_set --app=$app --key=registername --value="$registername"
+ynh_app_setting_set --app=$app --key=instance_id --value="$instance_id"
 
 #=================================================
 # STANDARD MODIFICATIONS
@@ -61,6 +64,7 @@ ynh_app_setting_set --app=$app --key=instance_id     --value="$instance_id"
 #=================================================
 ynh_script_progression --message="Finding an available port..." --weight=1
 
+# Find an available port
 port=$(ynh_find_port --port=64738)
 ynh_app_setting_set --app=$app --key=port --value=$port
 
@@ -73,14 +77,14 @@ ynh_exec_warn_less yunohost firewall allow Both $port
 #=================================================
 ynh_script_progression --message="Installing dependencies..." --weight=4
 
-# Install Mumble Debian package via apt
 ynh_exec_warn_less ynh_install_app_dependencies $pkg_dependencies
 
 #=================================================
 # SPECIFIC SETUP
 #=================================================
-# mumble server conf.ini
+# ADD A CONFIGURATION
 #=================================================
+ynh_script_progression --message="Adding a configuration file..."
 
 mkdir -p "$final_path"
 ynh_app_setting_set --app=$app --key=final_path --value=$final_path
@@ -89,19 +93,6 @@ ynh_app_setting_set --app=$app --key=final_path --value=$final_path
 mumble_conf="$final_path/mumble-server.ini"
 
 ynh_add_config --template="../conf/mumble-server.ini" --destination="$mumble_conf"
-
-#=================================================
-# SETUP SYSTEMD
-#=================================================
-
-# Create a dedicated systemd config
-ynh_add_systemd_config
-
-#=================================================
-# GENERIC FINALIZATION
-#=================================================
-# SECURE FILES AND DIRECTORIES
-#=================================================
 
 chmod -R 770 "$final_path"
 chown -R :mumble-server "$final_path"
@@ -129,11 +120,20 @@ systemctl stop mumble-server
 systemctl disable mumble-server --quiet
 
 #=================================================
+# SETUP SYSTEMD
+#=================================================
+ynh_script_progression --message="Configuring a systemd service..."
+
+# Create a dedicated systemd config
+ynh_add_systemd_config
+
+#=================================================
+# GENERIC FINALIZATION
+#=================================================
 # INTEGRATE SERVICE IN YUNOHOST
 #=================================================
 ynh_script_progression --message="Integrating service in YunoHost..."
 
-# Add Mumble as a YunoHost service
 yunohost service add $app --description="Mumble server" --log="/var/log/mumble-server/$app.log" --needs_exposed_ports="$port"
 
 #=================================================
