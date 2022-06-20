@@ -15,7 +15,7 @@ Si vous n'avez pas YunoHost, regardez [ici](https://yunohost.org/#/install) pour
 
 ## Vue d'ensemble
 
-Logiciel libre de voix sur IP (VoIP)
+Mumble est une application de chat vocal gratuite, open source, à faible latence et de haute qualité. Mumble a été la première application VoIP à établir une véritable communication vocale à faible latence il y a plus de dix ans. Mais la faible latence et le jeu ne sont pas les seuls cas d'utilisation dans lesquels il brille.
 
 **Version incluse :** 1.3.0~ynh3
 
@@ -30,6 +30,12 @@ Logiciel libre de voix sur IP (VoIP)
 mumbleserver_ynh installe le paquet Debian et le configure avec les paramètres donnés. Le mot de passe et d'autres informations utiles sont envoyés par email après l'installation.
 
 - [Ajouter l'administrateur](http://wiki.mumble.info/wiki/Murmurguide#Connecting_to_Murmur_Server)
+
+## Configuration
+Si vous devez changer le mot de passe du serveur/superutilisateur
+1- éditez `/var/www/mumbleserver/mumble-server.ini`
+2- supprimer (ou changer) le mot de passe pour serverpassword=
+3- redémarrer mumbleserver
 
 ## Documentations et ressources
 
