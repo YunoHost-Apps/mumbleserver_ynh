@@ -23,7 +23,7 @@ final_path=$(ynh_app_setting_get --app=$app --key=final_path)
 #=================================================
 # STANDARD REMOVE
 #=================================================
-# REMOVE SERVICE FROM ADMIN PANEL
+# REMOVE SERVICE INTEGRATION IN YUNOHOST
 #=================================================
 
 # Remove the service from the list of services known by YunoHost (added from `yunohost service add`)
@@ -42,14 +42,6 @@ ynh_script_progression --message="Stopping and removing the systemd service..." 
 ynh_remove_systemd_config
 
 #=================================================
-# REMOVE DEPENDENCIES
-#=================================================
-ynh_script_progression --message="Removing dependencies..." --weight=1
-
-# Remove metapackage and its dependencies
-ynh_remove_app_dependencies
-
-#=================================================
 # REMOVE APP MAIN DIR
 #=================================================
 ynh_script_progression --message="Removing app main directory..." --weight=2
@@ -58,20 +50,29 @@ ynh_script_progression --message="Removing app main directory..." --weight=2
 ynh_secure_remove --file="$final_path"
 
 #=================================================
+# REMOVE DEPENDENCIES
+#=================================================
+ynh_script_progression --message="Removing dependencies..." --weight=1
+
+# Remove metapackage and its dependencies
+ynh_remove_app_dependencies
+
+#=================================================
 # CLOSE A PORT
 #=================================================
 
 if yunohost firewall list | grep -q "\- $port$"
 then
-	ynh_script_progression --message="Close port $port" --weight=1
+	ynh_script_progression --message="Closing port $port..." --weight=1
 	ynh_exec_warn_less yunohost firewall disallow Both $port
 fi
 
 #=================================================
 # SPECIFIC REMOVE
 #=================================================
-# REMOVE OTHER FILES
+# REMOVE VARIOUS FILES
 #=================================================
+ynh_script_progression --message="Removing various files..."
 
 ynh_secure_remove --file="/var/log/mumble-server/$app.log"
 

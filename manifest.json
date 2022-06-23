@@ -6,7 +6,7 @@
         "en": "Low-latency, high quality voice chat software (VoIP)",
         "fr": "Logiciel libre de voix sur IP (VoIP)"
     },
-    "version": "1.3.0~ynh2",
+    "version": "1.3.0~ynh3",
     "url": "https://mumble.info",
     "upstream": {
         "license": "BSD-3-Clause",
@@ -24,37 +24,36 @@
         "email": "jean-baptiste@holcroft.fr"
     }],
     "requirements": {
-        "yunohost": ">= 4.2.4"
+        "yunohost": ">= 4.3.0"
     },
     "multi_instance": true,
     "services": [
     ],
     "arguments": {
-        "install" : [
-	   {
-            "name": "domain",
-            "type": "domain",
-	        "example": "domain.org"
-	    },
+        "install": [
             {
-            "name": "welcometext",
-            "type": "string",
-            "ask": {
-                "en": "Choose a welcome text for your server",
-                "fr": "Choisissez un message de bienvenue pour le serveur"
-            },
-            "example": "Welcome to my Mumble server",
-            "default": "Welcome"
+                "name": "domain",
+                "type": "domain"
             },
             {
-            "name": "registername",
-            "type": "string",
-            "ask": {
-                "en": "Choose a name for the root channel (your Mumble server name)",
-                "fr": "Entrez un nom pour le channel racine (le nom de votre serveur Mumble)"
+                "name": "welcometext",
+                "type": "string",
+                "ask": {
+                    "en": "Choose a welcome text for your server",
+                    "fr": "Choisissez un message de bienvenue pour le serveur"
+                },
+                "example": "Welcome to my Mumble server",
+                "default": "Welcome"
             },
-            "example": "Root",
-            "default": "Root"
+            {
+                "name": "registername",
+                "type": "string",
+                "ask": {
+                    "en": "Choose a name for the root channel (your Mumble server name)",
+                    "fr": "Entrez un nom pour le channel racine (le nom de votre serveur Mumble)"
+                },
+                "example": "Root",
+                "default": "Root"
             }
         ]
     }
