@@ -21,7 +21,6 @@ Mumble is a free, open source, low latency, high quality voice chat application.
 **Shipped version:** 1.3.4~ynh1
 
 
-
 ## Screenshots
 
 ![Screenshot of Mumble Server](./doc/screenshots/Mumble.png)
