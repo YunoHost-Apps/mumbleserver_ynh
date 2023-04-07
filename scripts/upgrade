@@ -12,19 +12,19 @@ source /usr/share/yunohost/helpers
 #=================================================
 # LOAD SETTINGS
 #=================================================
-ynh_script_progression --message="Loading installation settings..." --weight=1
+#REMOVEME? ynh_script_progression --message="Loading installation settings..." --weight=1
 
-app=$YNH_APP_INSTANCE_NAME
+#REMOVEME? app=$YNH_APP_INSTANCE_NAME
 
-domain=$(ynh_app_setting_get --app=$app --key=domain)
-no_sso=$(ynh_app_setting_get --app=$app --key=no_sso)
-server_password=$(ynh_app_setting_get --app=$app --key=server_password)
-su_passwd=$(ynh_app_setting_get --app=$app --key=su_passwd)
-welcometext=$(ynh_app_setting_get --app=$app --key=welcometext)
-registername=$(ynh_app_setting_get --app=$app --key=registername)
-port=$(ynh_app_setting_get --app=$app --key=port)
-final_path=$(ynh_app_setting_get --app=$app --key=final_path)
-instance_id=$(ynh_app_setting_get --app=$app --key=instance_id)
+#REMOVEME? domain=$(ynh_app_setting_get --app=$app --key=domain)
+#REMOVEME? no_sso=$(ynh_app_setting_get --app=$app --key=no_sso)
+#REMOVEME? server_password=$(ynh_app_setting_get --app=$app --key=server_password)
+#REMOVEME? su_passwd=$(ynh_app_setting_get --app=$app --key=su_passwd)
+#REMOVEME? welcometext=$(ynh_app_setting_get --app=$app --key=welcometext)
+#REMOVEME? registername=$(ynh_app_setting_get --app=$app --key=registername)
+#REMOVEME? port=$(ynh_app_setting_get --app=$app --key=port)
+#REMOVEME? #REMOVEME? install_dir=$(ynh_app_setting_get --app=$app --key=install_dir)
+#REMOVEME? instance_id=$(ynh_app_setting_get --app=$app --key=instance_id)
 
 #=================================================
 # CHECK VERSION
@@ -36,17 +36,17 @@ upgrade_type=$(ynh_check_app_version_changed)
 #=================================================
 # BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
 #=================================================
-ynh_script_progression --message="Backing up the app before upgrading (may take a while)..." --weight=5
+#REMOVEME? ynh_script_progression --message="Backing up the app before upgrading (may take a while)..." --weight=5
 
 # Backup the current version of the app
-ynh_backup_before_upgrade
-ynh_clean_setup () {
+#REMOVEME? ynh_backup_before_upgrade
+#REMOVEME? ynh_clean_setup () {
 	ynh_clean_check_starting
 	# Restore it if the upgrade fails
-	ynh_restore_upgradebackup
+#REMOVEME? 	ynh_restore_upgradebackup
 }
 # Exit if an error occurs during the execution of the script
-ynh_abort_if_errors
+#REMOVEME? ynh_abort_if_errors
 
 #=================================================
 # STANDARD UPGRADE STEPS
@@ -62,10 +62,10 @@ ynh_systemd_action --service_name=$app --action="stop"
 #=================================================
 ynh_script_progression --message="Ensuring downward compatibility..." --weight=1
 
-# If final_path doesn't exist, create it
-if [ -z "$final_path" ]; then
-	final_path=/var/www/$app
-	ynh_app_setting_set "$app" final_path "$final_path"
+# If install_dir doesn't exist, create it
+if [ -z "$install_dir" ]; then
+#REMOVEME? 	install_dir=/var/www/$app
+#REMOVEME? 	ynh_app_setting_set "$app" install_dir "$install_dir"
 fi
 
 # test old time
@@ -92,11 +92,11 @@ if [ -z "$server_password" ]; then
 		| head -1 \
 		| sed -r "s/.* (([a-z])*\.([a-z])*).*/\1/g")
 
-	ynh_app_setting_set --app=$app --key=server_password --value=$server_password
+#REMOVEME? 	ynh_app_setting_set --app=$app --key=server_password --value=$server_password
 	ynh_app_setting_set --app=$app --key=welcometext     --value=$welcometext
 	ynh_app_setting_set --app=$app --key=registername    --value=$registername
 	ynh_app_setting_set --app=$app --key=su_passwd       --value=$su_passwd
-	ynh_app_setting_set --app=$app --key=domain          --value=$domain
+#REMOVEME? 	ynh_app_setting_set --app=$app --key=domain          --value=$domain
 
 	systemctl stop mumble-server
 	dpkg-reconfigure mumble-server --frontend=Noninteractive
@@ -107,8 +107,8 @@ fi
 # Fix SSO issue
 # https://github.com/YunoHost-Apps/mumbleserver_ynh/issues/19
 if [ -z "$domain" ]; then
-	domain=$(ynh_app_setting_get "$app" domain_mumble)
-	ynh_app_setting_set "$app" domain "$domain"
+#REMOVEME? 	domain=$(ynh_app_setting_get "$app" domain_mumble)
+#REMOVEME? 	ynh_app_setting_set "$app" domain "$domain"
 	ynh_app_setting_delete "$app" domain_mumble
 fi
 
@@ -125,7 +125,7 @@ if [ -z "$instance_id" ]; then
 fi
 
 if [ -z "$registername" ]; then
-    registername=$(ynh_app_setting_get "$app" registerName)
+#REMOVEME?     registername=$(ynh_app_setting_get "$app" registerName)
     ynh_app_setting_set "$app" registername "$registername"
     ynh_app_setting_delete "$app" registerName
 fi
@@ -133,9 +133,9 @@ fi
 #=================================================
 # UPGRADE DEPENDENCIES
 #=================================================
-ynh_script_progression --message="Upgrading dependencies..." --weight=6
+#REMOVEME? ynh_script_progression --message="Upgrading dependencies..." --weight=6
 
-ynh_exec_warn_less ynh_install_app_dependencies $pkg_dependencies
+#REMOVEME? ynh_exec_warn_less ynh_install_app_dependencies $pkg_dependencies
 
 #=================================================
 # SPECIFIC UPGRADE
@@ -144,15 +144,15 @@ ynh_exec_warn_less ynh_install_app_dependencies $pkg_dependencies
 #=================================================
 ynh_script_progression --message="Updating a configuration file..." --weight=1
 
-mkdir -p $final_path
+mkdir -p $install_dir
 
 # Configuring with given settings
-mumble_conf="$final_path/mumble-server.ini"
+mumble_conf="$install_dir/mumble-server.ini"
 
 ynh_add_config --template="../conf/mumble-server.ini" --destination="$mumble_conf"
 
-chmod -R 770 "$final_path"
-chown -R :mumble-server "$final_path"
+chmod -R 770 "$install_dir"
+chown -R :mumble-server "$install_dir"
 
 #=================================================
 # Add user to ssl-cert so it can read certificates
@@ -212,7 +212,7 @@ Password to join server: $server_password
 SuperUser Password     : $su_passwd
 Welcome text           : $welcometext
 Root channel (your Mumble server name): $registername
-Final path (where to find your files) : $final_path
+Final path (where to find your files) : $install_dir
 Mumble configuration file             : $mumble_conf
 
 Note about config file: this package will regenerate the config file on upgrade.

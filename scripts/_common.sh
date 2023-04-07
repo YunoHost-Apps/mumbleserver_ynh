@@ -5,7 +5,7 @@
 #=================================================
 
 # dependencies used by the app
-pkg_dependencies="mumble-server mailutils"
+#REMOVEME? pkg_dependencies="mumble-server mailutils"
 
 #=================================================
 # PERSONAL HELPERS
