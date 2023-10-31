@@ -5,24 +5,24 @@ It shall NOT be edited by hand.
 
 # Mumble Server pour YunoHost
 
-[![Niveau d'intégration](https://dash.yunohost.org/integration/mumbleserver.svg)](https://dash.yunohost.org/appci/app/mumbleserver) ![Statut du fonctionnement](https://ci-apps.yunohost.org/ci/badges/mumbleserver.status.svg) ![Statut de maintenance](https://ci-apps.yunohost.org/ci/badges/mumbleserver.maintain.svg)  
+[![Niveau d’intégration](https://dash.yunohost.org/integration/mumbleserver.svg)](https://dash.yunohost.org/appci/app/mumbleserver) ![Statut du fonctionnement](https://ci-apps.yunohost.org/ci/badges/mumbleserver.status.svg) ![Statut de maintenance](https://ci-apps.yunohost.org/ci/badges/mumbleserver.maintain.svg)
+
 [![Installer Mumble Server avec YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=mumbleserver)
 
 *[Read this readme in english.](./README.md)*
 
-> *Ce package vous permet d'installer Mumble Server rapidement et simplement sur un serveur YunoHost.
-Si vous n'avez pas YunoHost, regardez [ici](https://yunohost.org/#/install) pour savoir comment l'installer et en profiter.*
+> *Ce package vous permet d’installer Mumble Server rapidement et simplement sur un serveur YunoHost.
+Si vous n’avez pas YunoHost, regardez [ici](https://yunohost.org/#/install) pour savoir comment l’installer et en profiter.*
 
-## Vue d'ensemble
+## Vue d’ensemble
 
 Mumble est une application de chat vocal gratuite, open source, à faible latence et de haute qualité. Mumble a été la première application VoIP à établir une véritable communication vocale à faible latence il y a plus de dix ans. Mais la faible latence et le jeu ne sont pas les seuls cas d'utilisation dans lesquels il brille.
 
-**Version incluse :** 1.3.4~ynh1
+**Version incluse :** 1.3.4~ynh1
 
+## Captures d’écran
 
-## Captures d'écran
-
-![Capture d'écran de Mumble Server](./doc/screenshots/Mumble.png)
+![Capture d’écran de Mumble Server](./doc/screenshots/Mumble.png)
 
 ## Avertissements / informations importantes
 
@@ -40,10 +40,10 @@ Si vous devez changer le mot de passe du serveur/superutilisateur
 
 ## Documentations et ressources
 
-* Site officiel de l'app : <https://mumble.info>
-* Documentation officielle de l'admin : <https://wiki.mumble.info/wiki/Main_Page>
-* Dépôt de code officiel de l'app : <https://github.com/mumble-voip/mumble>
-* Documentation YunoHost pour cette app : <https://yunohost.org/app_mumbleserver>
+* Site officiel de l’app : <https://mumble.info>
+* Documentation officielle de l’admin : <https://wiki.mumble.info/wiki/Main_Page>
+* Dépôt de code officiel de l’app : <https://github.com/mumble-voip/mumble>
+* YunoHost Store: <https://apps.yunohost.org/app/mumbleserver>
 * Signaler un bug : <https://github.com/YunoHost-Apps/mumbleserver_ynh/issues>
 
 ## Informations pour les développeurs
@@ -58,4 +58,4 @@ ou
 sudo yunohost app upgrade mumbleserver -u https://github.com/YunoHost-Apps/mumbleserver_ynh/tree/testing --debug
 ```
 
-**Plus d'infos sur le packaging d'applications :** <https://yunohost.org/packaging_apps>
+**Plus d’infos sur le packaging d’applications :** <https://yunohost.org/packaging_apps>

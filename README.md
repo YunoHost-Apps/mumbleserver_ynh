@@ -5,7 +5,8 @@ It shall NOT be edited by hand.
 
 # Mumble Server for YunoHost
 
-[![Integration level](https://dash.yunohost.org/integration/mumbleserver.svg)](https://dash.yunohost.org/appci/app/mumbleserver) ![Working status](https://ci-apps.yunohost.org/ci/badges/mumbleserver.status.svg) ![Maintenance status](https://ci-apps.yunohost.org/ci/badges/mumbleserver.maintain.svg)  
+[![Integration level](https://dash.yunohost.org/integration/mumbleserver.svg)](https://dash.yunohost.org/appci/app/mumbleserver) ![Working status](https://ci-apps.yunohost.org/ci/badges/mumbleserver.status.svg) ![Maintenance status](https://ci-apps.yunohost.org/ci/badges/mumbleserver.maintain.svg)
+
 [![Install Mumble Server with YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=mumbleserver)
 
 *[Lire ce readme en français.](./README_fr.md)*
@@ -19,7 +20,6 @@ Mumble is a free, open source, low latency, high quality voice chat application.
 
 
 **Shipped version:** 1.3.4~ynh1
-
 
 ## Screenshots
 
@@ -44,7 +44,7 @@ If you need to change password of the server/superuser
 * Official app website: <https://mumble.info>
 * Official admin documentation: <https://wiki.mumble.info/wiki/Main_Page>
 * Upstream app code repository: <https://github.com/mumble-voip/mumble>
-* YunoHost documentation for this app: <https://yunohost.org/app_mumbleserver>
+* YunoHost Store: <https://apps.yunohost.org/app/mumbleserver>
 * Report a bug: <https://github.com/YunoHost-Apps/mumbleserver_ynh/issues>
 
 ## Developer info
