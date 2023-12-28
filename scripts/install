@@ -17,6 +17,7 @@ source /usr/share/yunohost/helpers
 
 server_password=$(ynh_string_random)
 su_passwd=$(ynh_string_random)
+instance_id=$YNH_APP_INSTANCE_NUMBER
 
 #=================================================
 # STORE SETTINGS FROM MANIFEST
