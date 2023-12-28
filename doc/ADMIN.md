@@ -6,6 +6,6 @@ This package installs the Debian package and configures it with given settings. 
 
 ## Config
 If you need to change password of the server/superuser
-1- edit `/var/www/mumbleserver/mumble-server.ini`
+1- edit `__INSTALL_DIR__/mumble-server.ini`
 2- remove (or change) the password for serverpassword=
 3- restart mumbleserver

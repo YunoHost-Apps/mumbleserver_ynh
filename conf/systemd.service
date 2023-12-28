@@ -8,7 +8,7 @@ User=mumble-server
 Group=mumble-server
 Type=forking
 RuntimeDirectory=mumble-server
-ExecStart=/usr/sbin/murmurd -ini __FINALPATH__/mumble-server.ini
+ExecStart=/usr/sbin/murmurd -ini __INSTALL_DIR__/mumble-server.ini
 PIDFile=/var/run/mumble-server/__APP__.pid
 ExecReload=/bin/kill -s HUP $MAINPID
 PrivateDevices=true
@@ -17,7 +17,7 @@ ProtectHome=true
 ProtectSystem=strict
 ProtectControlGroups=yes
 ProtectKernelModules=yes
-ReadWritePaths=__FINALPATH__ /var/log/mumble-server /var/run/mumble-server
+ReadWritePaths=__INSTALL_DIR__ /var/log/mumble-server /var/run/mumble-server
 
 [Install]
 WantedBy=multi-user.target

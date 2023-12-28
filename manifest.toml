@@ -1,0 +1,62 @@
+packaging_format = 2
+
+id = "mumbleserver"
+name = "Mumble Server"
+description.en = "Low-latency, high quality voice chat software (VoIP)"
+description.fr = "Logiciel libre de voix sur IP (VoIP)"
+
+version = "1.3.4~ynh2"
+
+maintainers = []
+
+[upstream]
+license = "BSD-3-Clause"
+website = "https://mumble.info"
+admindoc = "https://wiki.mumble.info/wiki/Main_Page"
+code = "https://github.com/mumble-voip/mumble"
+
+[integration]
+yunohost = ">= 11.2"
+architectures = "all"
+multi_instance = true
+
+ldap = "not_relevant"
+
+sso = "not_relevant"
+
+disk = "50M"
+ram.build = "50M"
+ram.runtime = "50M"
+
+[install]
+    [install.domain]
+    type = "domain"
+
+    [install.welcometext]
+    ask.en = "Choose a welcome text for your server"
+    ask.fr = "Choisissez un message de bienvenue pour le serveur"
+    type = "string"
+    example = "Welcome to my Mumble server"
+    default = "Welcome"
+
+    [install.registername]
+    ask.en = "Choose a name for the root channel (your Mumble server name)"
+    ask.fr = "Entrez un nom pour le channel racine (le nom de votre serveur Mumble)"
+    type = "string"
+    example = "Root"
+    default = "Root"
+
+[resources]
+
+    [resources.ports]
+    main.default = 64738
+    main.exposed = "Both"
+
+    [resources.system_user]
+
+    [resources.install_dir]
+
+    [resources.permissions]
+
+    [resources.apt]
+    packages = "mumble-server, mailutils"
