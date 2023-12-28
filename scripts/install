@@ -24,10 +24,8 @@ su_passwd=$(ynh_string_random)
 ynh_script_progression --message="Storing installation settings..." --weight=2
 
 ynh_app_setting_set --app=$app --key=no_sso --value="true"
-REMOVEME? ynh_app_setting_set --app=$app --key=server_password --value="$server_password"
+ynh_app_setting_set --app=$app --key=server_password --value="$server_password"
 ynh_app_setting_set --app=$app --key=su_passwd --value="$su_passwd"
-ynh_app_setting_set --app=$app --key=welcometext --value="$welcometext"
-ynh_app_setting_set --app=$app --key=registername --value="$registername"
 ynh_app_setting_set --app=$app --key=instance_id --value="$instance_id"
 
 #=================================================
