@@ -24,26 +24,12 @@ Mumble est une application de chat vocal gratuite, open source, à faible latenc
 
 ![Capture d’écran de Mumble Server](./doc/screenshots/Mumble.png)
 
-## Avertissements / informations importantes
-
-## Configuration
-
-mumbleserver_ynh installe le paquet Debian et le configure avec les paramètres donnés. Le mot de passe et d'autres informations utiles sont envoyés par email après l'installation.
-
-- [Ajouter l'administrateur](http://wiki.mumble.info/wiki/Murmurguide#Connecting_to_Murmur_Server)
-
-## Configuration
-Si vous devez changer le mot de passe du serveur/superutilisateur
-1- éditez `/var/www/mumbleserver/mumble-server.ini`
-2- supprimer (ou changer) le mot de passe pour serverpassword=
-3- redémarrer mumbleserver
-
 ## Documentations et ressources
 
 * Site officiel de l’app : <https://mumble.info>
 * Documentation officielle de l’admin : <https://wiki.mumble.info/wiki/Main_Page>
 * Dépôt de code officiel de l’app : <https://github.com/mumble-voip/mumble>
-* Documentation YunoHost pour cette app : <https://yunohost.org/app_mumbleserver>
+* YunoHost Store: <https://apps.yunohost.org/app/mumbleserver>
 * Signaler un bug : <https://github.com/YunoHost-Apps/mumbleserver_ynh/issues>
 
 ## Informations pour les développeurs
