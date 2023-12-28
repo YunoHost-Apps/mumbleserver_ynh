@@ -44,7 +44,7 @@ If you need to change password of the server/superuser
 * Official app website: <https://mumble.info>
 * Official admin documentation: <https://wiki.mumble.info/wiki/Main_Page>
 * Upstream app code repository: <https://github.com/mumble-voip/mumble>
-* YunoHost documentation for this app: <https://yunohost.org/app_mumbleserver>
+* YunoHost Store: <https://apps.yunohost.org/app/mumbleserver>
 * Report a bug: <https://github.com/YunoHost-Apps/mumbleserver_ynh/issues>
 
 ## Developer info
