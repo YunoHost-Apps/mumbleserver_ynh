@@ -38,12 +38,11 @@ ynh_app_setting_set --app=$app --key=instance_id --value="$instance_id"
 ynh_script_progression --message="Adding a configuration file..."
 
 mkdir -p "$install_dir"
-#REMOVEME? ynh_app_setting_set --app=$app --key=install_dir --value=$install_dir
 
 # Configuring with given settings
 mumble_conf="$install_dir/mumble-server.ini"
 
-ynh_add_config --template="../conf/mumble-server.ini" --destination="$mumble_conf"
+ynh_add_config --template="mumble-server.ini" --destination="$mumble_conf"
 
 chmod -R 770 "$install_dir"
 chown -R :mumble-server "$install_dir"
@@ -78,13 +77,6 @@ ynh_script_progression --message="Configuring a systemd service..."
 # Create a dedicated systemd config
 ynh_add_systemd_config
 
-#=================================================
-# GENERIC FINALIZATION
-#=================================================
-# INTEGRATE SERVICE IN YUNOHOST
-#=================================================
-ynh_script_progression --message="Integrating service in YunoHost..."
-
 yunohost service add $app --description="Mumble server" --log="/var/log/mumble-server/$app.log" --needs_exposed_ports="$port"
 
 #=================================================
@@ -93,27 +85,6 @@ yunohost service add $app --description="Mumble server" --log="/var/log/mumble-s
 ynh_script_progression --message="Starting a systemd service..." --weight=3
 
 ynh_systemd_action --service_name=$app --action=restart --log_path="/var/log/mumble-server/$app.log"
-
-#=================================================
-# SEND README TO ADMIN
-#=================================================
-
-message="
-Port                   : $port
-Password to join server: $server_password
-SuperUser Password     : $su_passwd
-Welcome text           : $welcometext
-Root channel (your Mumble server name): $registername
-Final path (where to find your files) : $install_dir
-Mumble configuration file             : $mumble_conf
-
-Note about config file: this package will regenerate the config file on upgrade.
-If you changed it manually and upgrade mumble, you'll find a backup in $install_dir.
-
-Are you facing an issue, want to improve this app or say thank you?
-Please open a new issue in this project: https://github.com/YunoHost-Apps/mumbleserver_ynh
-"
-ynh_send_readme_to_admin "$message"
 
 #=================================================
 # END OF SCRIPT
