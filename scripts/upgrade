@@ -22,7 +22,7 @@ upgrade_type=$(ynh_check_app_version_changed)
 #=================================================
 ynh_script_progression --message="Stopping a systemd service..."
 
-ynh_systemd_action --service_name=$app --action="stop"
+ynh_systemd_action --service_name=$app --action="stop" --log_path="/var/log/mumble-server/$app.log"
 
 #=================================================
 # ENSURE DOWNWARD COMPATIBILITY
@@ -30,7 +30,7 @@ ynh_systemd_action --service_name=$app --action="stop"
 ynh_script_progression --message="Ensuring downward compatibility..." --weight=1
 
 # test old time
-if [ -z "$server_password" ]; then
+if [ -z "${server_password:-}" ]; then
 	old_mumble_conf="/etc/mumble-server.ini"
 
 	server_password=$(cat "$old_mumble_conf" \
@@ -66,19 +66,19 @@ fi
 
 # Fix SSO issue
 # https://github.com/YunoHost-Apps/mumbleserver_ynh/issues/19
-if [ -z "$no_sso" ]; then
-	ynh_app_setting_set "$app" no_sso "true"
+if [ -z "${no_sso:-}" ]; then
+	ynh_app_setting_set --app="$app" --key=no_sso --value="true"
 fi
 
 # Fix multi installation
-if [ -z "$instance_id" ]; then
+if [ -z "${instance_id:-}" ]; then
 	instance_id=$YNH_APP_INSTANCE_NUMBER
-	ynh_app_setting_set "$app" instance_id "$instance_id"
+	ynh_app_setting_set --app="$app" instance_id --value="$instance_id"
 fi
 
-if [ -z "$registername" ]; then
-#REMOVEME?     registername=$(ynh_app_setting_get "$app" registerName)
-    ynh_app_setting_set "$app" registername "$registername"
+if [ -z "${registername:-}" ]; then
+	registername=$(ynh_app_setting_get "$app" registerName)
+    ynh_app_setting_set  --app="$app" --key=registername --value="$registername"
     ynh_app_setting_delete "$app" registerName
 fi
 
@@ -91,10 +91,7 @@ ynh_script_progression --message="Updating a configuration file..." --weight=1
 
 mkdir -p $install_dir
 
-# Configuring with given settings
-mumble_conf="$install_dir/mumble-server.ini"
-
-ynh_add_config --template="../conf/mumble-server.ini" --destination="$mumble_conf"
+ynh_add_config --template="mumble-server.ini" --destination="$install_dir/mumble-server.ini"
 
 chmod -R 770 "$install_dir"
 chown -R :mumble-server "$install_dir"
@@ -111,7 +108,7 @@ usermod --append --groups ssl-cert mumble-server
 
 # || true temporarily to ignore a bug in murmurd 1.3.0
 # https://github.com/mumble-voip/mumble/issues/3911
-murmurd -ini "$mumble_conf" -supw "$su_passwd" "$instance_id" || true
+murmurd -ini "$install_dir/mumble-server.ini" -supw "$su_passwd" "$instance_id" || true
 
 #=================================================
 # Disable default server installed by Debian's package
@@ -127,13 +124,6 @@ ynh_script_progression --message="Upgrading systemd configuration..." --weight=2
 
 # Create a dedicated systemd config
 ynh_add_systemd_config
-
-#=================================================
-# GENERIC FINALIZATION
-#=================================================
-# INTEGRATE SERVICE IN YUNOHOST
-#=================================================
-ynh_script_progression --message="Integrating service in YunoHost..." --weight=1
 
 # Add Mumble as a YunoHost service
 yunohost service add $app --description="Mumble server" --log="/var/log/mumble-server/$app.log" --needs_exposed_ports="$port"

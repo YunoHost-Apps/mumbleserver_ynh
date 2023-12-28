@@ -34,14 +34,11 @@ ynh_app_setting_set --app=$app --key=instance_id --value="$instance_id"
 #=================================================
 # ADD A CONFIGURATION
 #=================================================
-ynh_script_progression --message="Adding a configuration file..."
+ynh_script_progression --message="Adding a configuration file..." --weight=2
 
 mkdir -p "$install_dir"
 
-# Configuring with given settings
-mumble_conf="$install_dir/mumble-server.ini"
-
-ynh_add_config --template="mumble-server.ini" --destination="$mumble_conf"
+ynh_add_config --template="mumble-server.ini" --destination="$install_dir/mumble-server.ini"
 
 chmod -R 770 "$install_dir"
 chown -R :mumble-server "$install_dir"
@@ -59,7 +56,7 @@ usermod --append --groups ssl-cert mumble-server
 
 # || true temporarily to ignore a bug in murmurd 1.3.0
 # https://github.com/mumble-voip/mumble/issues/3911
-ynh_exec_warn_less murmurd -ini "$mumble_conf" -supw "$su_passwd" "$instance_id" || true
+#ynh_exec_warn_less murmurd -ini "$install_dir/mumble-server.ini" -supw "$su_passwd" "$instance_id" || true
 
 #=================================================
 # Disable default server installed by Debian's package
@@ -67,11 +64,6 @@ ynh_exec_warn_less murmurd -ini "$mumble_conf" -supw "$su_passwd" "$instance_id"
 
 systemctl stop mumble-server
 systemctl disable mumble-server --quiet
-
-#=================================================
-# SETUP SYSTEMD
-#=================================================
-ynh_script_progression --message="Configuring a systemd service..."
 
 # Create a dedicated systemd config
 ynh_add_systemd_config
