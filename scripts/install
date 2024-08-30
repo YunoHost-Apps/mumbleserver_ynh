@@ -2,12 +2,6 @@
 
 # doc: https://wiki.mumble.info/wiki/Running_Murmur
 
-#=================================================
-# GENERIC START
-#=================================================
-# IMPORT GENERIC HELPERS
-#=================================================
-
 source _common.sh
 source /usr/share/yunohost/helpers
 
@@ -22,27 +16,26 @@ instance_id=$YNH_APP_INSTANCE_NUMBER
 #=================================================
 # STORE SETTINGS FROM MANIFEST
 #=================================================
-ynh_script_progression --message="Storing installation settings..." --weight=2
+ynh_script_progression "Storing installation settings..."
 
-ynh_app_setting_set --app=$app --key=no_sso --value="true"
-ynh_app_setting_set --app=$app --key=server_password --value="$server_password"
-ynh_app_setting_set --app=$app --key=su_passwd --value="$su_passwd"
-ynh_app_setting_set --app=$app --key=instance_id --value="$instance_id"
+ynh_app_setting_set --key=no_sso --value="true"
+ynh_app_setting_set --key=server_password --value="$server_password"
+ynh_app_setting_set --key=su_passwd --value="$su_passwd"
+ynh_app_setting_set --key=instance_id --value="$instance_id"
 
 #=================================================
 # SPECIFIC SETUP
 #=================================================
 # ADD A CONFIGURATION
 #=================================================
-ynh_script_progression --message="Adding a configuration file..." --weight=2
+ynh_script_progression "Adding $app's configuration..."
 
 mkdir -p "$install_dir"
 
-ynh_add_config --template="mumble-server.ini" --destination="$install_dir/mumble-server.ini"
+ynh_config_add --template="mumble-server.ini" --destination="$install_dir/mumble-server.ini"
 
-chmod -R 770 "$install_dir"
-chown -R :mumble-server "$install_dir"
-
+#REMOVEME? Assuming the install dir is setup using ynh_setup_source, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chmod -R 770 "$install_dir"
+#REMOVEME? Assuming the install dir is setup using ynh_setup_source, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chown -R :mumble-server "$install_dir"
 #=================================================
 # ADD USER TO SSL-CERT
 #=================================================
@@ -56,7 +49,7 @@ usermod --append --groups ssl-cert mumble-server
 
 # || true temporarily to ignore a bug in murmurd 1.3.0
 # https://github.com/mumble-voip/mumble/issues/3911
-#ynh_exec_warn_less murmurd -ini "$install_dir/mumble-server.ini" -supw "$su_passwd" "$instance_id" || true
+#ynh_hide_warnings murmurd -ini "$install_dir/mumble-server.ini" -supw "$su_passwd" "$instance_id" || true
 
 #=================================================
 # Disable default server installed by Debian's package
@@ -66,19 +59,19 @@ systemctl stop mumble-server
 systemctl disable mumble-server --quiet
 
 # Create a dedicated systemd config
-ynh_add_systemd_config
+ynh_config_add_systemd
 
 yunohost service add $app --description="Mumble server" --log="/var/log/mumble-server/$app.log" --needs_exposed_ports="$port"
 
 #=================================================
 # START SYSTEMD SERVICE
 #=================================================
-ynh_script_progression --message="Starting a systemd service..." --weight=3
+ynh_script_progression "Starting $app's systemd service..."
 
-ynh_systemd_action --service_name=$app --action=restart --log_path="/var/log/mumble-server/$app.log"
+ynh_systemctl --service=$app --action=restart --log_path="/var/log/mumble-server/$app.log"
 
 #=================================================
 # END OF SCRIPT
 #=================================================
 
-ynh_script_progression --message="Installation of $app completed" --last
+ynh_script_progression "Installation of $app completed"

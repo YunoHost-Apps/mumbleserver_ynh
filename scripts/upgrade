@@ -1,33 +1,19 @@
 #!/bin/bash
 
-#=================================================
-# GENERIC START
-#=================================================
-# IMPORT GENERIC HELPERS
-#=================================================
-
 source _common.sh
 source /usr/share/yunohost/helpers
 
 #=================================================
-# CHECK VERSION
-#=================================================
-
-upgrade_type=$(ynh_check_app_version_changed)
-
-#=================================================
-# STANDARD UPGRADE STEPS
-#=================================================
 # STOP SYSTEMD SERVICE
 #=================================================
-ynh_script_progression --message="Stopping a systemd service..."
+ynh_script_progression "Stopping $app's systemd service..."
 
-ynh_systemd_action --service_name=$app --action="stop" --log_path="/var/log/mumble-server/$app.log"
+ynh_systemctl --service=$app --action="stop" --log_path="/var/log/mumble-server/$app.log"
 
 #=================================================
 # ENSURE DOWNWARD COMPATIBILITY
 #=================================================
-ynh_script_progression --message="Ensuring downward compatibility..." --weight=1
+ynh_script_progression "Ensuring downward compatibility..."
 
 # test old time
 if [ -z "${server_password:-}" ]; then
@@ -53,10 +39,10 @@ if [ -z "${server_password:-}" ]; then
 		| head -1 \
 		| sed -r "s/.* (([a-z])*\.([a-z])*).*/\1/g")
 
-	ynh_app_setting_set --app=$app --key=server_password --value=$server_password
-	ynh_app_setting_set --app=$app --key=welcometext     --value=$welcometext
-	ynh_app_setting_set --app=$app --key=registername    --value=$registername
-	ynh_app_setting_set --app=$app --key=su_passwd       --value=$su_passwd
+	ynh_app_setting_set --key=server_password --value=$server_password
+	ynh_app_setting_set --key=welcometext     --value=$welcometext
+	ynh_app_setting_set --key=registername    --value=$registername
+	ynh_app_setting_set --key=su_passwd       --value=$su_passwd
 
 	systemctl stop mumble-server
 	dpkg-reconfigure mumble-server --frontend=Noninteractive
@@ -67,35 +53,33 @@ fi
 # Fix SSO issue
 # https://github.com/YunoHost-Apps/mumbleserver_ynh/issues/19
 if [ -z "${no_sso:-}" ]; then
-	ynh_app_setting_set --app="$app" --key=no_sso --value="true"
+	ynh_app_setting_set --key=no_sso --value="true"
 fi
 
 # Fix multi installation
+# FIXMEhelpers2.1: maybe replace with: ynh_app_setting_set_default --key=instance_id --value=$YNH_APP_INSTANCE_NUMBER
 if [ -z "${instance_id:-}" ]; then
 	instance_id=$YNH_APP_INSTANCE_NUMBER
-	ynh_app_setting_set --app="$app" instance_id --value="$instance_id"
+	ynh_app_setting_set instance_id --value="$instance_id"
 fi
 
 if [ -z "${registername:-}" ]; then
 	registername=$(ynh_app_setting_get "$app" registerName)
-    ynh_app_setting_set  --app="$app" --key=registername --value="$registername"
+    ynh_app_setting_set  --key=registername --value="$registername"
     ynh_app_setting_delete "$app" registerName
 fi
 
 #=================================================
-# SPECIFIC UPGRADE
-#=================================================
 # UPDATE A CONFIG FILE
 #=================================================
-ynh_script_progression --message="Updating a configuration file..." --weight=1
+ynh_script_progression "Updating configuration..."
 
 mkdir -p $install_dir
 
-ynh_add_config --template="mumble-server.ini" --destination="$install_dir/mumble-server.ini"
+ynh_config_add --template="mumble-server.ini" --destination="$install_dir/mumble-server.ini"
 
-chmod -R 770 "$install_dir"
-chown -R :mumble-server "$install_dir"
-
+#REMOVEME? Assuming the install dir is setup using ynh_setup_source, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chmod -R 770 "$install_dir"
+#REMOVEME? Assuming the install dir is setup using ynh_setup_source, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chown -R :mumble-server "$install_dir"
 #=================================================
 # Add user to ssl-cert so it can read certificates
 #=================================================
@@ -120,10 +104,10 @@ systemctl disable mumble-server --quiet
 #=================================================
 # SETUP SYSTEMD
 #=================================================
-ynh_script_progression --message="Upgrading systemd configuration..." --weight=2
+ynh_script_progression "Upgrading systemd configuration..."
 
 # Create a dedicated systemd config
-ynh_add_systemd_config
+ynh_config_add_systemd
 
 # Add Mumble as a YunoHost service
 yunohost service add $app --description="Mumble server" --log="/var/log/mumble-server/$app.log" --needs_exposed_ports="$port"
@@ -131,12 +115,12 @@ yunohost service add $app --description="Mumble server" --log="/var/log/mumble-s
 #=================================================
 # START SYSTEMD SERVICE
 #=================================================
-ynh_script_progression --message="Starting a systemd service..." --weight=3
+ynh_script_progression "Starting $app's systemd service..."
 
-ynh_systemd_action --service_name=$app --action=restart --log_path="/var/log/mumble-server/$app.log"
+ynh_systemctl --service=$app --action=restart --log_path="/var/log/mumble-server/$app.log"
 
 #=================================================
 # END OF SCRIPT
 #=================================================
 
-ynh_script_progression --message="Upgrade of $app completed" --last
+ynh_script_progression "Upgrade of $app completed"
