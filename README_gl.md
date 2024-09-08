@@ -5,7 +5,7 @@ NON debe editarse manualmente.
 
 # Mumble Server para YunoHost
 
-[![Nivel de integración](https://dash.yunohost.org/integration/mumbleserver.svg)](https://dash.yunohost.org/appci/app/mumbleserver) ![Estado de funcionamento](https://ci-apps.yunohost.org/ci/badges/mumbleserver.status.svg) ![Estado de mantemento](https://ci-apps.yunohost.org/ci/badges/mumbleserver.maintain.svg)
+[![Nivel de integración](https://dash.yunohost.org/integration/mumbleserver.svg)](https://ci-apps.yunohost.org/ci/apps/mumbleserver/) ![Estado de funcionamento](https://ci-apps.yunohost.org/ci/badges/mumbleserver.status.svg) ![Estado de mantemento](https://ci-apps.yunohost.org/ci/badges/mumbleserver.maintain.svg)
 
 [![Instalar Mumble Server con YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=mumbleserver)
 
