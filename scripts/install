@@ -34,8 +34,9 @@ mkdir -p "$install_dir"
 
 ynh_config_add --template="mumble-server.ini" --destination="$install_dir/mumble-server.ini"
 
-#REMOVEME? Assuming the install dir is setup using ynh_setup_source, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chmod -R 770 "$install_dir"
-#REMOVEME? Assuming the install dir is setup using ynh_setup_source, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chown -R :mumble-server "$install_dir"
+chmod -R 770 "$install_dir"
+chown -R :mumble-server "$install_dir"
+
 #=================================================
 # ADD USER TO SSL-CERT
 #=================================================
@@ -58,7 +59,6 @@ usermod --append --groups ssl-cert mumble-server
 systemctl stop mumble-server
 systemctl disable mumble-server --quiet
 
-# Create a dedicated systemd config
 ynh_config_add_systemd
 
 yunohost service add $app --description="Mumble server" --log="/var/log/mumble-server/$app.log" --needs_exposed_ports="$port"

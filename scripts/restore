@@ -1,11 +1,8 @@
 #!/bin/bash
 
-# Keep this path for calling _common.sh inside the execution's context of backup and restore scripts
 source ../settings/scripts/_common.sh
 source /usr/share/yunohost/helpers
 
-#=================================================
-# STANDARD RESTORATION STEPS
 #=================================================
 # RESTORE THE APP MAIN DIR
 #=================================================
@@ -13,13 +10,9 @@ ynh_script_progression "Restoring the app main directory..."
 
 ynh_restore "$install_dir"
 
-#=================================================
-# RESTORE USER RIGHTS
-#=================================================
+chmod -R 770 "$install_dir"
+chown -R :mumble-server "$install_dir"
 
-# Restore permissions on app files
-#REMOVEME? Assuming the install dir is setup using ynh_setup_source, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chmod -R 770 "$install_dir"
-#REMOVEME? Assuming the install dir is setup using ynh_setup_source, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chown -R :mumble-server "$install_dir"
 #=================================================
 # Add user to ssl-cert so it can read certificates
 #=================================================
