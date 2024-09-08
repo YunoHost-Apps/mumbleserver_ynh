@@ -5,7 +5,7 @@
 
 # YunoHost 上的 Mumble Server
 
-[![集成程度](https://dash.yunohost.org/integration/mumbleserver.svg)](https://dash.yunohost.org/appci/app/mumbleserver) ![工作状态](https://ci-apps.yunohost.org/ci/badges/mumbleserver.status.svg) ![维护状态](https://ci-apps.yunohost.org/ci/badges/mumbleserver.maintain.svg)
+[![集成程度](https://dash.yunohost.org/integration/mumbleserver.svg)](https://ci-apps.yunohost.org/ci/apps/mumbleserver/) ![工作状态](https://ci-apps.yunohost.org/ci/badges/mumbleserver.status.svg) ![维护状态](https://ci-apps.yunohost.org/ci/badges/mumbleserver.maintain.svg)
 
 [![使用 YunoHost 安装 Mumble Server](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=mumbleserver)
 
@@ -19,7 +19,7 @@
 Mumble is a free, open source, low latency, high quality voice chat application. Mumble was the first VoIP application to establish true low latency voice communication over a decade ago. But low latency and gaming are not the only use cases it shines in.
 
 
-**分发版本：** 1.3.4~ynh2
+**分发版本：** 1.3.4~ynh3
 
 ## 截图
 
