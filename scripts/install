@@ -24,8 +24,6 @@ ynh_app_setting_set --key=su_passwd --value="$su_passwd"
 ynh_app_setting_set --key=instance_id --value="$instance_id"
 
 #=================================================
-# SPECIFIC SETUP
-#=================================================
 # ADD A CONFIGURATION
 #=================================================
 ynh_script_progression "Adding $app's configuration..."
