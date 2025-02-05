@@ -5,7 +5,9 @@ No se debe editar a mano.
 
 # Mumble Server para Yunohost
 
-[![Nivel de integración](https://dash.yunohost.org/integration/mumbleserver.svg)](https://ci-apps.yunohost.org/ci/apps/mumbleserver/) ![Estado funcional](https://ci-apps.yunohost.org/ci/badges/mumbleserver.status.svg) ![Estado En Mantención](https://ci-apps.yunohost.org/ci/badges/mumbleserver.maintain.svg)
+[![Nivel de integración](https://apps.yunohost.org/badge/integration/mumbleserver)](https://ci-apps.yunohost.org/ci/apps/mumbleserver/)
+![Estado funcional](https://apps.yunohost.org/badge/state/mumbleserver)
+![Estado En Mantención](https://apps.yunohost.org/badge/maintained/mumbleserver)
 
 [![Instalar Mumble Server con Yunhost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=mumbleserver)
 
@@ -19,7 +21,7 @@ No se debe editar a mano.
 Mumble is a free, open source, low latency, high quality voice chat application. Mumble was the first VoIP application to establish true low latency voice communication over a decade ago. But low latency and gaming are not the only use cases it shines in.
 
 
-**Versión actual:** 1.3.4~ynh3
+**Versión actual:** 1.5.7~ynh1
 
 ## Capturas
 
@@ -35,7 +37,7 @@ Mumble is a free, open source, low latency, high quality voice chat application.
 
 ## Información para desarrolladores
 
-Por favor enviar sus correcciones a la [`branch testing`](https://github.com/YunoHost-Apps/mumbleserver_ynh/tree/testing
+Por favor enviar sus correcciones a la [rama `testing`](https://github.com/YunoHost-Apps/mumbleserver_ynh/tree/testing).
 
 Para probar la rama `testing`, sigue asÍ:
 
