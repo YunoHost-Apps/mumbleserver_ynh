@@ -5,7 +5,7 @@ name = "Mumble Server"
 description.en = "Low-latency, high quality voice chat software (VoIP)"
 description.fr = "Logiciel libre de voix sur IP (VoIP)"
 
-version = "1.3.4~ynh3"
+version = "1.5.7~ynh1"
 
 maintainers = []
 
@@ -16,13 +16,12 @@ admindoc = "https://wiki.mumble.info/wiki/Main_Page"
 code = "https://github.com/mumble-voip/mumble"
 
 [integration]
-yunohost = ">= 11.2.30"
+yunohost = ">= 12.0.9"
 helpers_version = "2.1"
 architectures = "all"
 multi_instance = true
 
 ldap = "not_relevant"
-
 sso = "not_relevant"
 
 disk = "50M"
