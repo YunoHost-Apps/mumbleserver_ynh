@@ -5,7 +5,9 @@ Hij mag NIET handmatig aangepast worden.
 
 # Mumble Server voor Yunohost
 
-[![Integratieniveau](https://dash.yunohost.org/integration/mumbleserver.svg)](https://ci-apps.yunohost.org/ci/apps/mumbleserver/) ![Mate van functioneren](https://ci-apps.yunohost.org/ci/badges/mumbleserver.status.svg) ![Onderhoudsstatus](https://ci-apps.yunohost.org/ci/badges/mumbleserver.maintain.svg)
+[![Integratieniveau](https://apps.yunohost.org/badge/integration/mumbleserver)](https://ci-apps.yunohost.org/ci/apps/mumbleserver/)
+![Mate van functioneren](https://apps.yunohost.org/badge/state/mumbleserver)
+![Onderhoudsstatus](https://apps.yunohost.org/badge/maintained/mumbleserver)
 
 [![Mumble Server met Yunohost installeren](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=mumbleserver)
 
@@ -19,7 +21,7 @@ Hij mag NIET handmatig aangepast worden.
 Mumble is a free, open source, low latency, high quality voice chat application. Mumble was the first VoIP application to establish true low latency voice communication over a decade ago. But low latency and gaming are not the only use cases it shines in.
 
 
-**Geleverde versie:** 1.3.4~ynh3
+**Geleverde versie:** 1.5.7~ynh1
 
 ## Schermafdrukken
 
