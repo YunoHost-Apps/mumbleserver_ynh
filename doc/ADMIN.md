@@ -4,8 +4,14 @@ This package installs the Debian package and configures it with given settings. 
 
 - [Add the admin](http://wiki.mumble.info/wiki/Murmurguide#Connecting_to_Murmur_Server)
 
-## Config
+## Super user password change
+
 If you need to change password of the server/superuser
 1- edit `__INSTALL_DIR__/mumble-server.ini`
 2- remove (or change) the password for serverpassword=
 3- restart mumbleserver
+
+or
+
+`/usr/sbin/murmurd -ini __INSTALL_DIR__/mumble-server.ini -supw YourStrongPassword`
+
