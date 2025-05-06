@@ -5,7 +5,7 @@ name = "Mumble Server"
 description.en = "Low-latency, high quality voice chat software (VoIP)"
 description.fr = "Logiciel libre de voix sur IP (VoIP)"
 
-version = "1.5.7~ynh1"
+version = "1.5.7~ynh2"
 
 maintainers = []
 

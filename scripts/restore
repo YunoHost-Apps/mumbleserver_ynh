@@ -34,11 +34,6 @@ ynh_script_progression "Restoring $app's systemd service..."
 ynh_restore "/etc/systemd/system/$app.service"
 systemctl enable $app.service --quiet
 
-#=================================================
-# INTEGRATE SERVICE IN YUNOHOST
-#=================================================
-ynh_script_progression "Integrating service in YunoHost..."
-
 yunohost service add $app --description="Mumble server" --log="/var/log/mumble-server/$app.log" --needs_exposed_ports="$port"
 
 #=================================================
