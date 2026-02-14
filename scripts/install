@@ -2,7 +2,6 @@
 
 # doc: https://wiki.mumble.info/wiki/Running_Murmur
 
-source _common.sh
 source /usr/share/yunohost/helpers
 
 #=================================================
