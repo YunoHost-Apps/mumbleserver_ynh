@@ -51,7 +51,6 @@ if [ -z "${server_password:-}" ]; then
 fi
 
 ynh_app_setting_set_default --key=no_sso --value="true"
-ynh_app_setting_set_default --key=instance_id --value=$YNH_APP_INSTANCE_NUMBER
 ynh_app_setting_set_default --key=registername --value=$(ynh_app_setting_get "$app" registerName)
 
 #=================================================

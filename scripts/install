@@ -20,7 +20,6 @@ ynh_script_progression "Storing installation settings..."
 ynh_app_setting_set --key=no_sso --value="true"
 ynh_app_setting_set --key=server_password --value="$server_password"
 ynh_app_setting_set --key=su_passwd --value="$su_passwd"
-ynh_app_setting_set --key=instance_id --value="$instance_id"
 
 #=================================================
 # ADD A CONFIGURATION
