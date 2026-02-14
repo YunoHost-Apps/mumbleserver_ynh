@@ -1,0 +1,23 @@
+[Unit]
+Description=Mumble Server: voice chat application
+Requires=network-online.target
+After=network.target
+
+[Service]
+User=mumble-server
+Group=mumble-server
+Type=forking
+RuntimeDirectory=mumble-server
+ExecStart=/usr/bin/mumble-server -ini __INSTALL_DIR__/mumble-server.ini
+PIDFile=/run/mumble-server/__APP__.pid
+ExecReload=/bin/kill -s HUP $MAINPID
+PrivateDevices=true
+PrivateTmp=true
+ProtectHome=true
+ProtectSystem=strict
+ProtectControlGroups=yes
+ProtectKernelModules=yes
+ReadWritePaths=__INSTALL_DIR__ /var/log/mumble-server /var/run/mumble-server
+
+[Install]
+WantedBy=multi-user.target
