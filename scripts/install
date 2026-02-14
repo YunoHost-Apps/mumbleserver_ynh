@@ -11,7 +11,6 @@ source /usr/share/yunohost/helpers
 
 server_password=$(ynh_string_random)
 su_passwd=$(ynh_string_random)
-instance_id=$YNH_APP_INSTANCE_NUMBER
 
 #=================================================
 # STORE SETTINGS FROM MANIFEST
@@ -30,7 +29,12 @@ ynh_script_progression "Adding $app's configuration..."
 
 mkdir -p "$install_dir"
 
-ynh_config_add --template="mumble-server.ini" --destination="$install_dir/mumble-server.ini"
+if [[ $YNH_DEBIAN_VERSION == "trixie" ]]
+then
+    ynh_config_add --template="mumble-server-trixie.ini" --destination="$install_dir/mumble-server.ini"
+else
+    ynh_config_add --template="mumble-server.ini" --destination="$install_dir/mumble-server.ini"
+fi
 
 chmod -R 770 "$install_dir"
 chown -R :mumble-server "$install_dir"
@@ -50,10 +54,9 @@ usermod --append --groups ssl-cert mumble-server
 # https://github.com/mumble-voip/mumble/issues/3911
 if [[ $YNH_DEBIAN_VERSION == "trixie" ]]
 then
-    ynh_hide_warnings mumble-server -ini "$install_dir/mumble-server.ini" -supw "$su_passwd" "$instance_id"s
+    ynh_hide_warnings mumble-server -ini "$install_dir/mumble-server.ini" -supw $su_passwd
 else
-    ynh_hide_warnings murmurd -ini "$install_dir/mumble-server.ini" -supw "$su_passwd" "$instance_id" || true
-
+    ynh_hide_warnings murmurd -ini "$install_dir/mumble-server.ini" -supw $su_passwd || true
 fi
 
 #=================================================
