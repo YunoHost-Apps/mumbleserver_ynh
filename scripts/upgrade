@@ -92,7 +92,12 @@ systemctl disable mumble-server --quiet
 #=================================================
 ynh_script_progression "Upgrading systemd configuration..."
 
-ynh_config_add_systemd
+if [[ $YNH_DEBIAN_VERSION == "trixie" ]]
+then
+	ynh_config_add_systemd --template="systemd-trixie.service"
+else
+    ynh_config_add_systemd
+fi
 
 yunohost service add $app --description="Mumble server" --log="/var/log/mumble-server/$app.log" --needs_exposed_ports="$port"
 
