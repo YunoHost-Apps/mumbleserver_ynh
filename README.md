@@ -11,12 +11,16 @@ It shall NOT be edited by hand.
 Low-latency, high quality voice chat software (VoIP)
 
 [![🌐 Official app website](https://img.shields.io/badge/Official_app_website-darkgreen?style=for-the-badge)](https://mumble.info)
-[![Version: 1.5.7~ynh2](https://img.shields.io/badge/Version-1.5.7~ynh2-rgba(0,150,0,1)?style=for-the-badge)](https://ci-apps.yunohost.org/ci/apps/mumbleserver/)
+[![Version: 1.5.7~ynh2](https://img.shields.io/badge/Version-1.5.7~ynh2-rgb(18,138,11)?style=for-the-badge)](https://ci-apps.yunohost.org/ci/apps/mumbleserver/)
 
 <div align="center">
 <a href="https://apps.yunohost.org/app/mumbleserver"><img height="100px" src="https://github.com/YunoHost/yunohost-artwork/raw/refs/heads/main/badges/neopossum-badges/badge_more_info_on_the_appstore.svg"/></a>
 <a href="https://github.com/YunoHost-Apps/mumbleserver_ynh/issues"><img height="100px" src="https://github.com/YunoHost/yunohost-artwork/raw/refs/heads/main/badges/neopossum-badges/badge_report_an_issue.svg"/></a>
 </div>
+
+
+## Screenshots
+![Screenshot of Mumble Server](./doc/screenshots/Mumble.png)
 
 ## 📦 Developer info
 
